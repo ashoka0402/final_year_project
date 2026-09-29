@@ -184,7 +184,7 @@ flowchart LR
 | **Interventions** | `/interventions` | ROI-ranked leaderboard, expandable counterfactuals, one-click dispatch → dossier PDF, GRAP Autopilot card |
 | **Inspector** | `/inspector` | Mobile order list, evidence checklist, dossier download, mark-executed |
 | **Verify** | `/verify` | Difference-in-differences: predicted vs. observed, with a confidence interval |
-| **Pune spatial analysis** | `/Pune spatial areas` | Pune wards and surrounding airshed, each with a versioned daily bulletin |
+| **Pune spatial analysis** | Pune spatial view | Pune wards and surrounding airshed, each with a versioned daily bulletin |
 | **Citizen report** | `/report` | Submit a pollution photo or sensor reading; Gemini + satellite/fire cross-check it |
 | **Public Citizen view** | `/citizen` | Public AQI + clean-hours + health advisories in **English, हिंदी, ਪੰਜਾਬੀ** |
 | **Methodology** | `/methodology` | Backtest tables, formulas, and a limitations section written for a skeptical judge |
@@ -386,12 +386,12 @@ as instantaneous.
 **Nine independent models**, not one. `QUANTILES = {p10: 0.1, p50: 0.5, p90: 0.9}`
 × `HORIZONS = (24, 48, 72)` — each an `LGBMRegressor` with fixed hyperparameters
 (`num_leaves=64, learning_rate=0.05, n_estimators=600` — "don't tune long,"
-per the code's own TRD reference), trained on all three cities pooled via a
+per the code's own TRD reference), trained on Pune dataset pooled via a
 `city_code` feature.
 
 **The model predicts a residual, not a level.** The docstring cites a
 measured failure of the level-target version: it lost to plain persistence by
-**53% on RMSE**, because holdout stubble-season means (205 µg/m³) run 3.6×
+**53% on RMSE**, because holdout seasonal means (205 µg/m³) run 3.6×
 hotter than training means (57 µg/m³) — trees cannot extrapolate past leaves
 they saw in training. Predicting `y − pm25(t)` and adding it back to a live
 anchor sidesteps that ceiling entirely.
@@ -530,7 +530,7 @@ Pango/Cairo dependency chain isn't available on a clean macOS without
 Homebrew, a documented deviation) contains: headline impact table, a
 schematic (not photographic) locator map with source pin, ward polygon, wind
 vector and scale bar, an evidence table, a regulation citation with an
-explicit *"abridged restatement — verify against the current CAQM order"*
+explicit *"abridged restatement — verify against the applicable current Maharashtra/Pune order or guideline"*
 warning, full data-source and method provenance, and a blank signature block —
 *"Aeris recommends; a human authorises."* Every page is watermarked
 **"PROTOTYPE — not an official document."**
@@ -870,38 +870,37 @@ VAL now see the full range of pollution regimes the season actually has.
 
 ## The dataset
 
-| | |
-|---|---:|
-| National satellite grid rows | **3,936,738** |
-| National fire detections (`fire_grid`) | **23,456** |
-| Pune fire detections (`fires`) | depends on selected dates and source coverage |
-| Pune monitoring stations | dataset-dependent |
-| Wards | Pune administrative boundaries (dataset-dependent) |
-| HCHO hotspot z-score threshold | 2.5σ (shared with citizen corroboration) |
-| CNN-LSTM training samples | 3,727 station-days |
-| Predicted `aqi_grid` rows written | 466 |
+The repository's original bundled database and evaluation artifacts were created for the earlier multi-city version. They must **not** be presented as Pune measurements. For an Aeris Pune build, regenerate the dataset from Pune-specific sources and record its provenance.
+
+| Dataset component | Pune version |
+|---|---|
+| Pune ward boundaries | Use the selected PMC boundary dataset; record its source and version |
+| Monitoring stations | Pune-area station registry with IDs, coordinates, pollutants, and active dates |
+| Ground observations | CPCB/MPCB/OpenAQ records that are actually available for Pune |
+| Weather | Pune-area historical and forecast variables with timestamps |
+| Satellite/fire data | Filtered to Pune and the selected study period |
+| Model training samples | Report only after building the Pune-specific training set |
+| Forecast evaluation | Pune holdout period, baseline, metrics, and data coverage |
+| Synthetic fixtures | Clearly labelled; excluded from real-world validation |
 
 ## Data sources & API keys
 
-Every layer is real data from a free or freely-tiered source. Anything
-modelled rather than measured says so — in the database (`source` column),
-in the API (`data_status`), and on a pill in the UI. **Every key below is
-optional** — the app runs fully with none set (`make seed && make dev`).
+The integrations below are available in the project, but **availability of a connector does not guarantee complete Pune coverage**. Check each source's station list, dates, spatial resolution, terms, and response schema. Any non-measured output must be labelled in the database, API, and UI.
 
-| Layer | Source | Key needed? |
+| Layer | Source / approach | Key needed? |
 |---|---|---|
-| Ward boundaries — 290 Pune, 112 Pune | DataMeet municipal spatial data | no |
-| Station identity + current AQI | CPCB CAAQMS via data.gov.in | no (ships with the portal's public demo key) |
-| Historical hourly AQ | ECMWF CAMS reanalysis via Open-Meteo | no |
-| Weather (history + forecast) | Open-Meteo | no |
-| Roads / industry / schools | OpenStreetMap (Overpass) | no |
-| National satellite grid — HCHO, SO₂, O₃, AOD | DLR Sentinel-5P L3 STAC | no |
-| National satellite grid — NO₂, CO, MODIS/MAIAC AOD | Google Earth Engine | `GEE_SERVICE_ACCOUNT_JSON` |
-| Fire detections (city + national) | NASA FIRMS VIIRS | `FIRMS_API_KEY` (falls back to a bundled 7-day CSV) |
-| Measured station history *(upgrade)* | OpenAQ v3 | `OPENAQ_API_KEY` |
-| Citizen photo classification, advisories | Google Gemini | `GOOGLE_API_KEY` (or `GOOGLE_CLOUD_PROJECT` for Vertex) |
+| Pune ward boundaries | PMC / Pune GIS or a verified municipal boundary dataset | Depends on source |
+| Station identity + AQI | CPCB CAAQMS / data.gov.in; verify Pune station coverage | Usually no / public API key may apply |
+| Maharashtra monitoring data | MPCB published monitoring data | Depends on access method |
+| Historical air quality | Available CPCB/MPCB station archives; OpenAQ where coverage exists | OpenAQ key for API |
+| Weather history + forecast | Open-Meteo; IMD data where available and licensed | Usually no for Open-Meteo |
+| Roads / industry / schools | OpenStreetMap (Overpass) filtered to Pune | No |
+| Satellite indicators | Sentinel-5P / other supported satellite products clipped to Pune | Some pipelines may require GEE credentials |
+| Fire detections | NASA FIRMS VIIRS filtered to Pune and chosen dates | FIRMS key for live API |
+| Citizen photo classification | Google Gemini | Google API key / Vertex configuration |
+| Synthetic/demo records | Generated locally for UI and pipeline testing | No |
 
----
+Do not describe CAMS reanalysis as a station measurement, satellite columns as ground-level AQI, or interpolated ward values as directly observed readings.
 
 ## Deployment
 
@@ -1028,11 +1027,10 @@ make dev          # API :8000 · web :3000
 ```
 
 Open **http://localhost:3000**. No API keys required, no signup — the app
-runs fully offline against bundled real data. Setting `GOOGLE_API_KEY` and
-`GEE_SERVICE_ACCOUNT_JSON` upgrades the citizen Gemini analysis and the
-national NO₂/CO satellite layers from absent to live.
+can run against bundled data, which must be checked and labelled according to its actual geographic provenance. Setting `GOOGLE_API_KEY` and
+`GEE_SERVICE_ACCOUNT_JSON` enables Gemini analysis and the configured satellite ingestion where the corresponding services and Pune coverage are available.
 
-### 4 · (Optional) Train the national CNN-LSTM
+### 4 · (Optional) Train the CNN-LSTM
 
 A training/offline-scoring-only path, never imported by the live API —
 install PyTorch separately so the deployed container never carries its
@@ -1059,7 +1057,7 @@ Full reference in [`.env.example`](.env.example). The short version:
 | `GOOGLE_API_KEY` | — | Enables Gemini: citizen photo classification, generated advisories |
 | `GEMINI_MODEL` | `gemini-3.6-flash` | Pinned, not `-latest` — see the code comment on why |
 | `GOOGLE_CLOUD_PROJECT` / `GOOGLE_CLOUD_LOCATION` | — / `asia-south1` | Vertex AI path instead of an AI Studio key |
-| `GEE_SERVICE_ACCOUNT_JSON` | — | Path to a GCP service-account key — enables the national NO₂/CO/AOD (GEE) satellite ingestion |
+| `GEE_SERVICE_ACCOUNT_JSON` | — | Path to a GCP service-account key — enables GEE-based satellite ingestion for the configured Pune area |
 | `NEXT_PUBLIC_MAPPLS_KEY` | — | Official India-boundary basemap (Mappls/MapmyIndia); falls back to Carto + Esri |
 | `VAYU_DB_PATH` | `data/vayu.duckdb` | Which DuckDB file the app reads/writes |
 
@@ -1127,7 +1125,7 @@ vayu/
 ## Testing
 
 ```bash
-make test        # pytest — 324 passing
+make test        # pytest — current suite
 make lint        # ruff + tsc
 ```
 
@@ -1170,27 +1168,31 @@ the live instance.
 
 ## Known limitations
 
-Stated plainly — every one is verifiable on the live URL.
+These limitations are especially important when adapting the original multi-city implementation to Pune.
 
-| # | Limitation | Detail |
+| # | Limitation | Implication for Aeris Pune |
 |---|---|---|
-| 1 | **The CNN-LSTM doesn't beat persistence** on RMSE | It does show a strong R = 0.838. Stated in `docs/surface_aqi_evaluation.json`, not hidden. |
-| 2 | **National coverage ≠ validated coverage** | The satellite grid is genuinely national; ground-truth CPCB + reanalysis history to *validate* a model against exists only for Pune/Pune. Extending validated coverage is a region-config change, not a rewrite — but it hasn't happened yet. |
-| 3 | **Live CPCB fetch is blocked from Cloud Run's network** | `services/pipeline/live.py` was built, tested, and works correctly against real data — but `api.data.gov.in` rejects connections from Google Cloud's IP ranges specifically (works locally, fails identically for every city when deployed). For Pune, keep demo mode visibly labelled until ingestion is connected to verified Pune observations. Needs a different egress path, not a code change. |
-| 4 | **The corridor/satellite view is a historical case study, not a live feed** | Stated explicitly on `/Pune spatial areas` itself. There's no standing scheduled ingestion job yet; every deploy bakes in a snapshot built at that moment. |
-| 5 | **Heat grid is a stub** (`Phase 6`) | Visibly marked "Soon" in the UI rather than a silently-dead toggle. |
-| 6 | **Attribution `SCALE` constants are calibrated, not fitted** | No per-ward ground truth exists to fit against; they are tuned so mean shares land inside published IITM DSS/SAFAR ranges. Documented in `docs/attribution_crosscheck.json`. |
-| 7 | **O₃ is excluded from the CNN-LSTM's training inputs** | Its ingestion gaps would otherwise halve the usable 5-day training window; see [Roadmap](#roadmap). |
+| 1 | **Pune model performance is not established by legacy metrics** | Existing CNN-LSTM or forecasting metrics from the previous dataset cannot be claimed as Pune results. Train/evaluate on Pune data and report the holdout period and baseline. |
+| 2 | **Coverage is not the same as validation** | Satellite products may cover Pune, but ground-truth station observations may be sparse or unevenly distributed. State the coverage and uncertainty for each ward. |
+| 3 | **Live ingestion depends on source access** | Test CPCB/MPCB endpoints from the actual runtime environment. If access fails, show the data as unavailable or use clearly labelled cached/demo data. |
+| 4 | **Ward-level values may be estimates** | IDW or other spatial interpolation can fill map gaps, but cannot create ground truth. Mark estimated areas and confidence. |
+| 5 | **Satellite products have limits** | Cloud cover, revisit frequency, pixel size, and product latency can affect Pune-area analysis. A satellite signal is not automatically a surface AQI measurement. |
+| 6 | **Attribution is evidence-based, not definitive** | Source shares depend on assumptions, inventories, meteorology, and calibration. Present uncertainty and avoid claiming causal certainty without validation. |
+| 7 | **Intervention impact requires evaluation** | A predicted impact is not a verified outcome. Use a suitable comparison period/control and report uncertainty before making effectiveness claims. |
+| 8 | **Legacy data and code may remain multi-city** | The README's Pune scope does not itself change the code, bundled database, city configuration, or UI. These must be migrated and tested separately. |
 
 ## Roadmap
 
 | Priority | Item |
 |---|---|
-| 1 | **Heat grid** — a continuous density surface over the Pune spatial grid, not just discrete hotspot cells |
-| 2 | **A standing daily ingestion job** (Cloud Scheduler + Cloud Run Jobs) so the corridor/satellite view stops being a fixed historical snapshot — latency-bound by the satellite products themselves (1–3+ day processing lag), not by Aeris's own pipeline |
-| 3 | **A different egress path for live CPCB** (a residential-IP proxy or a different hosting network) now that `api.data.gov.in`'s cloud-IP block is the confirmed blocker, not the already-working `services/pipeline/live.py` code itself |
-| 4 | **National ground truth** — extending the CNN-LSTM's *validated* scope beyond Pune needs national CPCB history + ERA5/IMDAA reanalysis access, architecturally a region-config addition, already proven out by `config/regions/india.json` |
-| 5 | **O₃ back into the CNN-LSTM's training set** once its ingestion gaps close enough to stop halving the usable 5-day training window |
+| 1 | Add and validate Pune Municipal Corporation boundary and ward IDs |
+| 2 | Build a Pune station registry and ingest available CPCB/MPCB observations |
+| 3 | Add Pune weather history and forecast features |
+| 4 | Filter satellite products, fire detections, roads, and land-use context to Pune |
+| 5 | Train or recalibrate forecasting models on Pune data; evaluate against a baseline |
+| 6 | Calibrate source attribution using Pune-specific inventory and evidence |
+| 7 | Replace city-specific intervention rules with applicable Maharashtra/Pune context |
+| 8 | Add provenance labels and tests preventing Delhi/other-city data from appearing as Pune observations |
 
 ## Hackathon requirement coverage
 
@@ -1200,12 +1202,12 @@ Climate Resilience. The requirement checklist and where Aeris answers it:
 | Requirement | Where |
 |---|---|
 | Mandatory Google AI integration | Gemini Vision classifies every citizen photo report (`vayu_core/google_ai/`) |
-| Federated platform combining citizen data + satellite + meteorology | `/report` (citizen photo/sensor intake) + Pune-region satellite layer + Open-Meteo, fused per corridor |
-| Detect hidden pollution hotspots | HCHO hotspot detection against a 60-day rolling per-cell baseline (`vayu_core/national/hotspots.py`) |
-| Forecast spikes across major economic Pune spatial areas | LightGBM city forecaster + 5 Pune ward-level summaries (`/Pune spatial areas`) |
-| Interoperability across states | Versioned, self-describing `vayu.corridor.v1` bulletins over plain HTTP — no shared database or model required |
+| Federated platform combining citizen data + satellite + meteorology | `/report` (citizen photo/sensor intake) + Pune-filtered satellite data + Open-Meteo, where coverage is available |
+| Detect hidden pollution hotspots | HCHO hotspot detection against a rolling per-cell baseline (`vayu_core/national/hotspots.py`), filtered to Pune where supported |
+| Forecast spikes across major economic Pune spatial areas | LightGBM forecaster trained/evaluated on Pune data + ward-level summaries |
+| Interoperability across states | Pune-scoped API outputs with explicit schema, provenance, and data-status fields |
 | Pune-only study area | Pune-focused map and analysis; validation depends on available Pune ground truth |
-| Deployed link | [vayu-802568501157.asia-south1.run.app](http://localhost:3000) |
+| Deployed link | Local development: `http://localhost:3000` |
 
 ## Pune data provenance
 
@@ -1224,11 +1226,9 @@ like to use it and a license hasn't been added yet.
 **Built for Build with AI: Code for Communities · Track 2 — Clean Air & Climate Resilience**
 
 *Prototype. Not an official government system. Regulation text is an abridged
-restatement for demonstration — verify against the current CAQM order before
+restatement for demonstration — verify against the applicable current Maharashtra/Pune order or guideline before
 any real enforcement.*
 
-[Live Application](http://localhost:3000) ·
-[API Docs](http://localhost:3000/docs) ·
-[Methodology](http://localhost:3000/methodology)
+Local app: `http://localhost:3000` · API docs: `http://localhost:8000/docs` (if running locally)
 
 </div>
