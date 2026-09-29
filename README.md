@@ -624,7 +624,7 @@ is deliberately excluded from training; see [Known limitations](#known-limitatio
 into a spatial embedding; an LSTM reads a **5-day sequence** of that embedding
 plus meteorology and yesterday's PM2.5 into a predicted PM2.5 today. Trained
 and evaluated on the one corridor with real matched ground truth (Pune,
-Pune, Pune — 3,727 station-days), with a genuine time-based holdout
+Pune, Pune — 3,727 legacy station-days (not a Pune evaluation)), with a genuine time-based holdout
 and a persistence baseline as the honesty check:
 
 | | RMSE (µg/m³) | MAE (µg/m³) | Pearson r |
@@ -632,11 +632,10 @@ and a persistence baseline as the honesty check:
 | **CNN-LSTM v1** | 51.14 | 39.01 | **0.838** |
 | Persistence baseline | 43.37 | — | — |
 
-Read honestly: **R = 0.838 is a genuinely strong satellite-driven signal**,
+Read honestly: **the legacy evaluation reported R = 0.838; this is not a Pune result**,
 but the model does not yet beat "today looks like yesterday" on RMSE for this
 holdout — reported in `docs/surface_aqi_evaluation.json` rather than hidden.
-The satellite inputs are national; the *validated* claim is scoped to the one
-corridor with real CPCB + reanalysis history to check it against — extending
+The satellite inputs can be spatially filtered to Pune; the legacy evaluation does not establish Pune model performance against — extending
 that is a region-config change, not a rewrite (every other national layer in
 this codebase already works that way). The random-day-interleaved validation
 split that got this model to R = 0.838 (up from **−0.51** with a naive
@@ -711,11 +710,11 @@ blob.
 
 | Dataset | Rows | Origin |
 |---|---:|---|
-| `satellite_grid` (national) | **3,936,738** | DLR S5P L3 + Google Earth Engine, unified schema |
-| `fires` (city-scoped) | **74,386** | NASA FIRMS VIIRS |
-| `fire_grid` (national) | **23,456** | NASA FIRMS VIIRS |
+| `satellite_grid` (national) | legacy bundle: 3,936,738 rows (not Pune-specific) | DLR S5P L3 + Google Earth Engine, unified schema |
+| `fires` (city-scoped) | legacy bundle: 74,386 rows (not Pune-specific) | NASA FIRMS VIIRS |
+| `fire_grid` (national) | legacy bundle: 23,456 rows (not Pune-specific) | NASA FIRMS VIIRS |
 | `measurements` | 9 years hourly, per station | CPCB CAAQMS + ECMWF CAMS reanalysis (Open-Meteo) |
-| `stations` | **270** across 3 cities | CPCB CAAQMS metadata |
+| `stations` | legacy bundle: 270 stations across 3 cities (not Pune-specific) | CPCB CAAQMS metadata |
 | `wards` | 290 Pune · 333 Pune · 112 Pune | DataMeet municipal spatial data |
 | `aqi_grid` (CNN-LSTM output) | 466 | trained + scored by `scripts/train_surface_aqi.py` |
 | citizen `reports` | grows live | citizen photo/sensor submissions |
@@ -770,7 +769,7 @@ live feed (see [Known limitations](#known-limitations)).
 | Model | Algorithm | Task | Training data | Held-out result |
 |---|---|---|---|---|
 | Short-term forecaster | **LightGBM** (quantile, ×9) | PM2.5, p10/p50/p90 @ 24/48/72h | station history + weather + fires | RMSE 85.9 vs. persistence 86.1 @ 24h |
-| Surface-AQI CNN-LSTM | **PyTorch CNN → LSTM** | PM2.5 from satellite alone | 3,727 station-days, Pune/NCR/Pune | RMSE 51.14 · **Pearson r 0.838** |
+| Surface-AQI CNN-LSTM | **PyTorch CNN → LSTM** | PM2.5 from satellite alone | 3,727 legacy station-days (not a Pune evaluation), Pune/NCR/Pune | RMSE 51.14 · **Pearson r 0.838** |
 | Source attribution | rule-based evidence fusion | 5-category source share | fire/NO2/OSM/trajectory, calibrated (not fitted) vs. published IITM/SAFAR ranges | — |
 | ROI ranking | Gaussian plume (Briggs 1973) | intervention impact + ranking | attributed clusters + emission-rate physics | monotonic, refuses upwind/out-of-range sources |
 | Outcome verification | difference-in-differences | did an order work? | pre/post CPCB history, 3 matched controls | 6h block bootstrap, 500 resamples, seed 42 |
@@ -954,7 +953,7 @@ Two non-obvious things the deploy scripts handle for you:
 | Measurement | ✅ | ✅ | ✅ | ✅ | ✅ |
 | Forecast | — | ✅ (4 cities) | ✅ | some | ✅ |
 | Source attribution | — | — | ✅ (Pune, winter) | — | ✅ |
-| **National satellite grid** | — | — | — | — | ✅ (15,360 cells) |
+| **Pune-filtered satellite data** | — | — | — | — | ✅ (Pune extent; coverage depends on source) |
 | **Surface AQI from satellite alone** | — | — | — | — | ✅ (CNN-LSTM) |
 | **Citizen photo → verified evidence** | — | — | — | — | ✅ (Gemini + corroboration) |
 | **Federated Pune ward-level summaries** | — | — | — | — | ✅ (Pune ward-level outputs) |
@@ -1160,7 +1159,7 @@ the live instance.
 | `verification` | difference-in-differences results for dispatched orders |
 | `citizen` | public advisory surfaces |
 | `citizen_reports` | `POST /citizen/report/photo`, `POST /citizen/report/sensor`, `GET /citizen/reports` |
-| `Pune spatial areas` | `GET /Pune spatial areas`, `GET /Pune spatial areas/{id}/bulletin?date=` |
+| Pune spatial outputs | use the configured Pune API routes |
 | `grap` | GRAP-stage autopilot + approval flow |
 | `audit` | `GET /audit` — SSE stream of every automated decision |
 
