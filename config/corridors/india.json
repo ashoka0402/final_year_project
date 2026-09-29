@@ -1,0 +1,48 @@
+{
+  "region": "india",
+  "note": "Economic corridors as analysis units. Pollution follows freight and wind, not municipal boundaries, so a corridor spanning several states is the natural unit for a shared forecast. Waypoints are approximate centre-lines; the buffer sets the width sampled around them.",
+  "corridors": [
+    {
+      "id": "dmic",
+      "name": "Delhi–Mumbai Industrial Corridor",
+      "states": ["Delhi", "Haryana", "Rajasthan", "Gujarat", "Maharashtra"],
+      "buffer_deg": 0.75,
+      "waypoints": [
+        [77.10, 28.60], [76.60, 27.20], [75.80, 26.90], [74.60, 25.40],
+        [73.20, 24.60], [72.60, 23.02], [72.80, 21.70], [72.90, 20.00], [72.88, 19.08]
+      ]
+    },
+    {
+      "id": "agra_kanpur_igp",
+      "name": "Amritsar–Delhi–Kolkata Corridor (IGP spine)",
+      "states": ["Punjab", "Haryana", "Delhi", "Uttar Pradesh", "Bihar", "Jharkhand", "West Bengal"],
+      "buffer_deg": 0.75,
+      "waypoints": [
+        [74.87, 31.63], [75.85, 30.90], [76.78, 30.73], [77.10, 28.60],
+        [78.02, 27.18], [80.35, 26.45], [82.99, 25.32], [85.14, 25.60],
+        [86.98, 23.68], [88.36, 22.57]
+      ]
+    },
+    {
+      "id": "cbic",
+      "name": "Chennai–Bengaluru Industrial Corridor",
+      "states": ["Tamil Nadu", "Andhra Pradesh", "Karnataka"],
+      "buffer_deg": 0.6,
+      "waypoints": [[80.27, 13.08], [79.13, 12.92], [78.14, 12.97], [77.59, 12.97]]
+    },
+    {
+      "id": "vcic",
+      "name": "Visakhapatnam–Chennai Industrial Corridor",
+      "states": ["Andhra Pradesh", "Tamil Nadu"],
+      "buffer_deg": 0.6,
+      "waypoints": [[83.30, 17.69], [82.24, 16.99], [81.14, 16.51], [80.65, 16.51], [80.27, 13.08]]
+    },
+    {
+      "id": "bmec",
+      "name": "Bengaluru–Mumbai Economic Corridor",
+      "states": ["Karnataka", "Maharashtra"],
+      "buffer_deg": 0.6,
+      "waypoints": [[77.59, 12.97], [76.85, 15.15], [75.71, 16.85], [74.24, 17.68], [73.86, 18.52], [72.88, 19.08]]
+    }
+  ]
+}

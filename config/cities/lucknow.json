@@ -1,0 +1,29 @@
+{
+  "id": "lucknow",
+  "name": "Lucknow",
+  "timezone": "Asia/Kolkata",
+  "bbox": [80.83, 26.74, 81.07, 26.94],
+  "map_center": [80.946, 26.846],
+  "map_zoom": 11.2,
+  "grap_applicable": false,
+  "languages": ["en", "hi", "ur"],
+  "weather_grid": { "nx": 5, "ny": 5 },
+  "wards": {
+    "geojson": "data/samples/wards_lucknow.geojson",
+    "source_url": "https://raw.githubusercontent.com/datameet/Municipal_Spatial_Data/master/Lucknow/Lucknow_ward_boundary.geojson",
+    "attribution": "DataMeet Municipal Spatial Data (Lucknow ward boundary)",
+    "id_property": "Ward Num",
+    "name_property": "Ward Name",
+    "use_h3": false,
+    "h3_resolution": 7
+  },
+  "population": {
+    "total": 2817105,
+    "source": "Census of India 2011 - Lucknow Municipal Corporation",
+    "method": "city total split equally across wards (UP Municipal Corporation Act 1959: ward populations are delimited to be equal so far as practicable). Estimate, not a per-ward Census count."
+  },
+  "sources": {
+    "cpcb_city_filter": "Lucknow",
+    "openaq_country": "IN"
+  }
+}

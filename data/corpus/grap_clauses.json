@@ -1,0 +1,166 @@
+{
+  "_about": {
+    "purpose": "Structured regulation corpus for VAYU's Enforcer. Every intervention dossier cites a clause from here, so a field inspector carries a legal basis rather than an opinion.",
+    "provenance": "Typed from publicly published Indian regulation: the Commission for Air Quality Management (CAQM) Graded Response Action Plan schedule for Delhi-NCR, the Air (Prevention and Control of Pollution) Act 1981, and the Environment (Protection) Act 1986.",
+    "IMPORTANT": "GRAP has been revised repeatedly since 2017 (notably the 2022 revised schedule and later amendments). These clauses are a faithful but ABRIDGED restatement for a prototype, not a certified legal text. Any real deployment must load the current CAQM order PDF into data/corpus/ and verify clause numbering before an order is issued. Dossiers carry a PROTOTYPE watermark for exactly this reason.",
+    "verify_against": [
+      "https://caqm.nic.in/ — CAQM orders and the current GRAP schedule",
+      "https://cpcb.nic.in/ — CPCB, Air Act rules and standards",
+      "The Air (Prevention and Control of Pollution) Act, 1981 (Act 14 of 1981)"
+    ],
+    "aqi_stage_thresholds": {
+      "I": "AQI 201-300 (Poor)",
+      "II": "AQI 301-400 (Very Poor)",
+      "III": "AQI 401-450 (Severe)",
+      "IV": "AQI > 450 (Severe+)"
+    }
+  },
+
+  "clauses": [
+    {
+      "id": "GRAP-I-OPEN-BURNING",
+      "instrument": "CAQM Graded Response Action Plan (Delhi-NCR)",
+      "stage": 1,
+      "clause": "Stage I — Poor (AQI 201-300)",
+      "title": "Prohibition on open burning of solid waste and biomass",
+      "text": "Ensure a strict ban on open burning of solid waste, garbage and biomass in and around the NCR, and impose environmental compensation on violators. Enforcement teams are to patrol identified burning hotspots.",
+      "applies_to": ["open_burning"],
+      "action_supported": "halt_burning",
+      "citation": "CAQM GRAP Schedule, Stage I — measure on open burning of waste/biomass",
+      "penalty_reference": "Environmental compensation under CAQM directions; prosecution under s.19/s.31A Air Act 1981"
+    },
+    {
+      "id": "GRAP-I-DUST-CD",
+      "instrument": "CAQM Graded Response Action Plan (Delhi-NCR)",
+      "stage": 1,
+      "clause": "Stage I — Poor (AQI 201-300)",
+      "title": "Dust mitigation at construction and demolition sites",
+      "text": "Ensure that construction and demolition sites implement prescribed dust-mitigation measures — anti-smog guns, water sprinkling, covering of loose material, wheel washing and covered transport of debris. Sites above the notified area threshold must be registered on the web portal and remain compliant.",
+      "applies_to": ["construction"],
+      "action_supported": "stop_work_construction",
+      "citation": "CAQM GRAP Schedule, Stage I — C&D dust-mitigation measures"
+    },
+    {
+      "id": "GRAP-I-ROAD-DUST",
+      "instrument": "CAQM Graded Response Action Plan (Delhi-NCR)",
+      "stage": 1,
+      "clause": "Stage I — Poor (AQI 201-300)",
+      "title": "Road dust suppression",
+      "text": "Undertake periodic mechanised sweeping and water sprinkling on roads and their right-of-way to suppress re-suspended road dust.",
+      "applies_to": ["traffic", "construction"],
+      "action_supported": "road_dust_suppression",
+      "citation": "CAQM GRAP Schedule, Stage I — road dust measures"
+    },
+    {
+      "id": "GRAP-II-CD-INSPECTION",
+      "instrument": "CAQM Graded Response Action Plan (Delhi-NCR)",
+      "stage": 2,
+      "clause": "Stage II — Very Poor (AQI 301-400)",
+      "title": "Intensified inspection of dust-generating activities",
+      "text": "Intensify inspection and enforcement at construction and demolition sites and other dust-generating activities; stop work at sites found in violation of dust-control norms.",
+      "applies_to": ["construction"],
+      "action_supported": "stop_work_construction",
+      "citation": "CAQM GRAP Schedule, Stage II — intensified C&D enforcement"
+    },
+    {
+      "id": "GRAP-II-COAL-FIREWOOD",
+      "instrument": "CAQM Graded Response Action Plan (Delhi-NCR)",
+      "stage": 2,
+      "clause": "Stage II — Very Poor (AQI 301-400)",
+      "title": "Ban on coal and firewood in eateries; DG set restrictions",
+      "text": "Enforce a ban on the use of coal and firewood, including in tandoors at hotels, restaurants and open eateries, and regulate the operation of diesel generator sets except for essential and emergency services.",
+      "applies_to": ["industry", "open_burning"],
+      "action_supported": "industrial_curb",
+      "citation": "CAQM GRAP Schedule, Stage II — coal/firewood and DG set measures"
+    },
+    {
+      "id": "GRAP-II-TRANSPORT",
+      "instrument": "CAQM Graded Response Action Plan (Delhi-NCR)",
+      "stage": 2,
+      "clause": "Stage II — Very Poor (AQI 301-400)",
+      "title": "Demand management on private transport",
+      "text": "Augment public transport services and introduce differential rates to encourage off-peak travel; increase parking fees to discourage private transport in identified corridors.",
+      "applies_to": ["traffic"],
+      "action_supported": "traffic_restriction",
+      "citation": "CAQM GRAP Schedule, Stage II — parking fee and public transport measures"
+    },
+    {
+      "id": "GRAP-III-CONSTRUCTION-BAN",
+      "instrument": "CAQM Graded Response Action Plan (Delhi-NCR)",
+      "stage": 3,
+      "clause": "Stage III — Severe (AQI 401-450)",
+      "title": "Ban on non-essential construction and demolition",
+      "text": "Enforce a ban on non-essential construction and demolition activity, and close operations at stone crushers and mining activity in the NCR. Essential public projects and specified categories are exempt as notified.",
+      "applies_to": ["construction"],
+      "action_supported": "stop_work_construction",
+      "citation": "CAQM GRAP Schedule, Stage III — construction & demolition ban"
+    },
+    {
+      "id": "GRAP-III-VEHICLE-RESTRICTION",
+      "instrument": "CAQM Graded Response Action Plan (Delhi-NCR)",
+      "stage": 3,
+      "clause": "Stage III — Severe (AQI 401-450)",
+      "title": "Restriction on older vehicles",
+      "text": "Impose restrictions on the plying of specified older-standard light motor vehicles in Delhi and adjoining NCR districts, as notified by the Commission.",
+      "applies_to": ["traffic"],
+      "action_supported": "traffic_restriction",
+      "citation": "CAQM GRAP Schedule, Stage III — vehicle restrictions"
+    },
+    {
+      "id": "GRAP-IV-INDUSTRY",
+      "instrument": "CAQM Graded Response Action Plan (Delhi-NCR)",
+      "stage": 4,
+      "clause": "Stage IV — Severe+ (AQI > 450)",
+      "title": "Closure of industries not on clean fuel",
+      "text": "Close industrial operations not running on approved clean fuels, other than those in exempted categories such as milk and dairy units and those manufacturing life-saving medical equipment.",
+      "applies_to": ["industry"],
+      "action_supported": "industrial_curb",
+      "citation": "CAQM GRAP Schedule, Stage IV — industrial closure measures"
+    },
+    {
+      "id": "GRAP-IV-TRUCK-ENTRY",
+      "instrument": "CAQM Graded Response Action Plan (Delhi-NCR)",
+      "stage": 4,
+      "clause": "Stage IV — Severe+ (AQI > 450)",
+      "title": "Restriction on truck entry into Delhi",
+      "text": "Restrict the entry of truck traffic into Delhi other than those carrying essential commodities or providing essential services, and other than CNG, LNG, electric and BS-VI diesel vehicles.",
+      "applies_to": ["traffic"],
+      "action_supported": "traffic_restriction",
+      "citation": "CAQM GRAP Schedule, Stage IV — truck entry restrictions"
+    },
+    {
+      "id": "AIR-ACT-1981-S31A",
+      "instrument": "The Air (Prevention and Control of Pollution) Act, 1981",
+      "stage": null,
+      "clause": "Section 31A",
+      "title": "Power to give directions",
+      "text": "The Central Board or a State Board may issue directions in writing to any person, officer or authority, who shall be bound to comply — including directions for the closure, prohibition or regulation of any industry, operation or process, or the stoppage or regulation of supply of electricity, water or any other service.",
+      "applies_to": ["industry", "construction", "open_burning"],
+      "action_supported": "industrial_curb",
+      "citation": "Air (Prevention and Control of Pollution) Act 1981, s.31A"
+    },
+    {
+      "id": "AIR-ACT-1981-S22",
+      "instrument": "The Air (Prevention and Control of Pollution) Act, 1981",
+      "stage": null,
+      "clause": "Section 22",
+      "title": "Emission in excess of standards prohibited",
+      "text": "No person operating any industrial plant in an air pollution control area shall discharge or cause or permit to be discharged the emission of any air pollutant in excess of the standards laid down by the State Board.",
+      "applies_to": ["industry"],
+      "action_supported": "industrial_curb",
+      "citation": "Air (Prevention and Control of Pollution) Act 1981, s.22",
+      "penalty_reference": "s.37 — contravention punishable with imprisonment and fine"
+    },
+    {
+      "id": "EPA-1986-S5",
+      "instrument": "The Environment (Protection) Act, 1986",
+      "stage": null,
+      "clause": "Section 5",
+      "title": "Power to give directions",
+      "text": "The Central Government may, in the exercise of its powers under this Act, issue directions in writing to any person, officer or authority, who shall be bound to comply, including directions for closure, prohibition or regulation of any industry, operation or process, or stoppage or regulation of supply of electricity, water or any other service.",
+      "applies_to": ["industry", "construction", "open_burning", "traffic"],
+      "action_supported": "industrial_curb",
+      "citation": "Environment (Protection) Act 1986, s.5"
+    }
+  ]
+}

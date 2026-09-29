@@ -1,0 +1,106 @@
+{
+  "id": "india",
+  "name": "India",
+  "timezone": "Asia/Kolkata",
+  "bbox": [68.0, 6.0, 98.0, 38.0],
+  "map_center": [78.9, 22.5],
+  "map_zoom": 4.2,
+  "grid_deg": 0.25,
+  "seasons": {
+    "kharif_burning": {
+      "label": "Post-monsoon (paddy residue)",
+      "months": [10, 11],
+      "note": "Punjab/Haryana paddy stubble; the Delhi-NCR smog season."
+    },
+    "rabi_burning": {
+      "label": "Pre-monsoon (wheat residue + forest fires)",
+      "months": [4, 5],
+      "note": "Wheat residue in the IGP plus the peak Indian forest-fire season."
+    }
+  },
+  "source_regions": [
+    {
+      "id": "igp_northwest",
+      "name": "North-west IGP (Punjab · Haryana)",
+      "bbox": [73.8, 28.8, 77.6, 32.6],
+      "kind": "agricultural_residue"
+    },
+    {
+      "id": "igp_central",
+      "name": "Central IGP (Uttar Pradesh)",
+      "bbox": [77.0, 24.0, 84.7, 30.4],
+      "kind": "agricultural_residue"
+    },
+    {
+      "id": "igp_east",
+      "name": "Eastern IGP (Bihar · West Bengal)",
+      "bbox": [83.3, 21.5, 89.9, 27.5],
+      "kind": "agricultural_residue"
+    },
+    {
+      "id": "central_forest",
+      "name": "Central Indian forest belt (MP · Chhattisgarh · Odisha)",
+      "bbox": [74.0, 17.8, 87.0, 26.9],
+      "kind": "forest_fire"
+    },
+    {
+      "id": "northeast_forest",
+      "name": "North-east forest belt",
+      "bbox": [89.6, 21.9, 97.5, 29.5],
+      "kind": "forest_fire"
+    },
+    {
+      "id": "western_ghats",
+      "name": "Western Ghats",
+      "bbox": [72.6, 8.0, 77.5, 21.0],
+      "kind": "forest_fire"
+    },
+    {
+      "id": "peninsular",
+      "name": "Peninsular India",
+      "bbox": [74.0, 8.0, 84.0, 17.8],
+      "kind": "mixed"
+    }
+  ],
+  "products": {
+    "hcho": {
+      "collection": "COPERNICUS/S5P/OFFL/L3_HCHO",
+      "band": "tropospheric_HCHO_column_number_density",
+      "unit": "mol/m^2",
+      "qa_band": "HCHO_slant_column_number_density",
+      "label": "Formaldehyde (HCHO)"
+    },
+    "no2": {
+      "collection": "COPERNICUS/S5P/OFFL/L3_NO2",
+      "band": "tropospheric_NO2_column_number_density",
+      "unit": "mol/m^2",
+      "label": "Nitrogen dioxide (NO₂)"
+    },
+    "so2": {
+      "collection": "COPERNICUS/S5P/OFFL/L3_SO2",
+      "band": "SO2_column_number_density",
+      "unit": "mol/m^2",
+      "label": "Sulphur dioxide (SO₂)"
+    },
+    "co": {
+      "collection": "COPERNICUS/S5P/OFFL/L3_CO",
+      "band": "CO_column_number_density",
+      "unit": "mol/m^2",
+      "label": "Carbon monoxide (CO)"
+    },
+    "o3": {
+      "collection": "COPERNICUS/S5P/OFFL/L3_O3",
+      "band": "O3_column_number_density",
+      "unit": "mol/m^2",
+      "label": "Ozone (O₃)"
+    },
+    "aod": {
+      "collection": "MODIS/061/MCD19A2_GRANULES",
+      "band": "Optical_Depth_055",
+      "unit": "unitless",
+      "scale": 0.001,
+      "label": "Aerosol Optical Depth",
+      "note": "INSAT-3D AOD (MOSDAC) is the stated source but is not machine-readable without a MOSDAC account; MODIS MAIAC AOD is the open, GEE-hosted equivalent at 1 km. Swap in INSAT-3D via services/pipeline/insat.py when credentials exist."
+    }
+  }
+}

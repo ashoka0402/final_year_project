@@ -1,0 +1,79 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html,
+  body {
+    height: 100%;
+  }
+
+  body {
+    @apply bg-base text-slate-200 antialiased;
+    font-feature-settings: "cv11", "ss01";
+  }
+
+  /* Keyboard users must be able to see where they are (PRD: WCAG AA,
+     keyboard navigable). Focus is visible on the map controls too. */
+  :focus-visible {
+    @apply outline-none ring-2 ring-data ring-offset-2 ring-offset-base;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-edge;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+@layer components {
+  .panel {
+    @apply rounded-lg border border-edge bg-surface/85 backdrop-blur-md;
+  }
+
+  .numeral {
+    @apply font-mono tabular-nums tracking-tight;
+  }
+}
+
+/* MapLibre chrome, restyled to match the command centre rather than fight it. */
+.maplibregl-ctrl-attrib {
+  @apply !bg-surface/80 !text-[10px] !text-slate-500 backdrop-blur;
+}
+.maplibregl-ctrl-attrib a {
+  @apply !text-slate-400;
+}
+.maplibregl-ctrl-group {
+  @apply !overflow-hidden !rounded-md !border !border-edge !bg-surface !shadow-none;
+}
+.maplibregl-ctrl-group button + button {
+  @apply !border-t !border-edge;
+}
+.maplibregl-ctrl-group button .maplibregl-ctrl-icon {
+  filter: invert(85%);
+}
+.maplibregl-popup-content {
+  @apply !rounded-lg !border !border-edge !bg-surface !p-0 !text-slate-200 !shadow-xl;
+}
+.maplibregl-popup-tip {
+  @apply !border-t-surface;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

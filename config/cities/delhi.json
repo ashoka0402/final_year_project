@@ -1,0 +1,29 @@
+{
+  "id": "delhi",
+  "name": "Delhi",
+  "timezone": "Asia/Kolkata",
+  "bbox": [76.84, 28.4, 77.35, 28.88],
+  "map_center": [77.1, 28.64],
+  "map_zoom": 10.3,
+  "grap_applicable": true,
+  "languages": ["en", "hi", "ur"],
+  "weather_grid": { "nx": 5, "ny": 5 },
+  "wards": {
+    "geojson": "data/samples/wards_delhi.geojson",
+    "source_url": "https://raw.githubusercontent.com/datameet/Municipal_Spatial_Data/master/Delhi/Delhi_Wards.geojson",
+    "attribution": "DataMeet Municipal Spatial Data (Delhi wards)",
+    "id_property": "Ward_No",
+    "name_property": "Ward_Name",
+    "use_h3": false,
+    "h3_resolution": 7
+  },
+  "population": {
+    "total": 16787941,
+    "source": "Census of India 2011 - NCT of Delhi",
+    "method": "city total split equally across wards (Delhi Municipal Corporation Act 1957 s.5: ward populations are delimited to be equal so far as practicable). Estimate, not a per-ward Census count."
+  },
+  "sources": {
+    "cpcb_city_filter": "Delhi",
+    "openaq_country": "IN"
+  }
+}

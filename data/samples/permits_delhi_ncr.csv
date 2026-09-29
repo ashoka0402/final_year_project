@@ -1,0 +1,31 @@
+city,permit_id,name,site_type,lat,lon,status,dust_control_compliant,last_inspected,source
+delhi_ncr,DE-CNS-001,Road widening — site 1,Road widening,28.4434,76.9676,active,True,2026-05-23,sample
+delhi_ncr,DE-CNS-002,Metro corridor extension — site 2,Metro corridor extension,28.494291,77.496286,active,True,2026-06-03,sample
+delhi_ncr,DE-CNS-003,Metro corridor extension — site 3,Metro corridor extension,28.469536,77.092813,active,False,2026-05-31,sample
+delhi_ncr,DE-CNS-004,Metro corridor extension — site 4,Metro corridor extension,28.566592,77.080252,active,True,2026-05-27,sample
+delhi_ncr,DE-CNS-005,Residential complex — site 5,Residential complex,28.653786,77.474671,active,True,2026-06-23,sample
+delhi_ncr,DE-CNS-006,Commercial tower — site 6,Commercial tower,28.424241,77.095958,active,True,2026-05-08,sample
+delhi_ncr,DE-CNS-007,Commercial tower — site 7,Commercial tower,28.505896,77.409094,active,True,2026-06-11,sample
+delhi_ncr,DE-CNS-008,Redevelopment block — site 8,Redevelopment block,28.446023,76.962093,active,False,2026-07-16,sample
+delhi_ncr,DE-CNS-009,Residential complex — site 9,Residential complex,28.586348,77.440439,active,True,2026-04-29,sample
+delhi_ncr,DE-CNS-010,Metro corridor extension — site 10,Metro corridor extension,28.566592,77.080252,active,True,2026-05-23,sample
+delhi_ncr,DE-CNS-011,Residential complex — site 11,Residential complex,28.548929,77.113776,active,False,2026-06-09,sample
+delhi_ncr,DE-CNS-012,Flyover works — site 12,Flyover works,28.424026,77.09828,active,True,2026-06-26,sample
+delhi_ncr,DE-CNS-013,Commercial tower — site 13,Commercial tower,28.450719,77.046695,active,False,2026-05-21,sample
+delhi_ncr,DE-CNS-014,Commercial tower — site 14,Commercial tower,28.525856,77.362496,active,False,2026-07-16,sample
+delhi_ncr,DE-CNS-015,Residential complex — site 15,Residential complex,28.585916,77.440716,active,True,2026-07-02,sample
+delhi_ncr,DE-CNS-016,Metro corridor extension — site 16,Metro corridor extension,28.521151,77.360597,active,True,2026-07-08,sample
+delhi_ncr,DE-CNS-017,Metro corridor extension — site 17,Metro corridor extension,28.39896,77.074547,active,False,2026-07-01,sample
+delhi_ncr,DE-CNS-018,Commercial tower — site 18,Commercial tower,28.499466,77.417055,active,True,2026-06-27,sample
+delhi_ncr,DE-CNS-019,Metro corridor extension — site 19,Metro corridor extension,28.59227,77.162837,active,False,2026-04-25,sample
+delhi_ncr,DE-CNS-020,Metro corridor extension — site 20,Metro corridor extension,28.577364,77.190518,active,True,2026-07-17,sample
+delhi_ncr,DE-CNS-021,Residential complex — site 21,Residential complex,28.40455,76.970575,active,True,2026-05-04,sample
+delhi_ncr,DE-CNS-022,Flyover works — site 22,Flyover works,28.523936,77.02667,active,True,2026-05-30,sample
+delhi_ncr,DE-CNS-023,Road widening — site 23,Road widening,28.586541,77.441795,active,True,2026-06-04,sample
+delhi_ncr,DE-CNS-024,Metro corridor extension — site 24,Metro corridor extension,28.58555,77.441332,active,True,2026-07-12,sample
+delhi_ncr,DE-CNS-025,Residential complex — site 25,Residential complex,28.55692,77.050541,active,False,2026-05-10,sample
+delhi_ncr,DE-CNS-026,Commercial tower — site 26,Commercial tower,28.735965,77.10876,active,True,2026-04-21,sample
+delhi_ncr,DE-CNS-027,Nextra Commercial Site,Metro corridor extension,28.618796,77.28822,active,True,2026-04-27,sample
+delhi_ncr,DE-CNS-028,Metro corridor extension — site 28,Metro corridor extension,28.461912,77.490625,active,True,2026-05-05,sample
+delhi_ncr,DE-CNS-029,Road widening — site 29,Road widening,28.388477,77.018054,active,False,2026-05-25,sample
+delhi_ncr,DE-CNS-030,Hostels (under construction),Commercial tower,28.521698,77.572425,active,True,2026-04-21,sample

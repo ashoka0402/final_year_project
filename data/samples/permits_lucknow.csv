@@ -1,0 +1,31 @@
+city,permit_id,name,site_type,lat,lon,status,dust_control_compliant,last_inspected,source
+lucknow,LU-CNS-001,Gadi Peer Khan,Metro corridor extension,26.865633,80.894035,active,False,2026-07-11,sample
+lucknow,LU-CNS-002,Chitragupt Nagar,Flyover works,26.799383,80.885073,active,False,2026-04-27,sample
+lucknow,LU-CNS-003,Ramjilal Nagar,Road widening,26.812586,80.896546,active,True,2026-04-27,sample
+lucknow,LU-CNS-004,Mallahi Tola 2nd,Commercial tower,26.87997,80.893762,active,True,2026-05-30,sample
+lucknow,LU-CNS-005,Nishat Ganj,Metro corridor extension,26.866968,80.954006,active,False,2026-05-23,sample
+lucknow,LU-CNS-006,Hussainabad,Flyover works,26.878083,80.907009,active,False,2026-05-04,sample
+lucknow,LU-CNS-007,Airport,Redevelopment block,26.763443,80.884108,active,False,2026-05-17,sample
+lucknow,LU-CNS-008,Netaji Subhash Chandra Bose,Metro corridor extension,26.868135,80.916338,active,False,2026-05-01,sample
+lucknow,LU-CNS-009,Vidyavati 2nd,Road widening,26.787745,80.903691,active,False,2026-04-21,sample
+lucknow,LU-CNS-010,Rafi Ahmad Kidwai,Commercial tower,26.849425,80.982403,active,False,2026-05-01,sample
+lucknow,LU-CNS-011,Rajaji Puram,Metro corridor extension,26.835723,80.883838,active,False,2026-05-15,sample
+lucknow,LU-CNS-012,Babu Kunj Bihari Lal Ward,Metro corridor extension,26.820346,80.915167,active,True,2026-05-07,sample
+lucknow,LU-CNS-013,Ambedkar Nagar 2nd,Residential complex,26.833081,80.899028,active,False,2026-05-25,sample
+lucknow,LU-CNS-014,Kundri Rakab Ganj,Commercial tower,26.853271,80.91148,active,False,2026-05-03,sample
+lucknow,LU-CNS-015,Airport,Metro corridor extension,26.763443,80.884108,active,True,2026-06-22,sample
+lucknow,LU-CNS-016,Ayodhyadas,Metro corridor extension,26.880701,80.917906,active,False,2026-07-03,sample
+lucknow,LU-CNS-017,Ganesh Ganj,Flyover works,26.84017,80.922878,active,False,2026-04-20,sample
+lucknow,LU-CNS-018,Vivekanand Puri,Commercial tower,26.875106,80.952507,active,True,2026-04-23,sample
+lucknow,LU-CNS-019,Mahanagar,Road widening,26.87983,80.961341,active,True,2026-05-24,sample
+lucknow,LU-CNS-020,Babu Kunj Bihari Lal Ward,Commercial tower,26.820346,80.915167,active,False,2026-06-15,sample
+lucknow,LU-CNS-021,Kadam Rasul,Residential complex,26.875454,80.922876,active,True,2026-05-13,sample
+lucknow,LU-CNS-022,Begum Hazrat Mehal,Redevelopment block,26.885251,80.954664,active,True,2026-05-06,sample
+lucknow,LU-CNS-023,Cantonment,Metro corridor extension,26.810784,80.949948,active,False,2026-04-23,sample
+lucknow,LU-CNS-024,Bhartendu Harish Chandra,Road widening,26.90327,80.947715,active,False,2026-04-19,sample
+lucknow,LU-CNS-025,Kharika,Flyover works,26.782615,80.94951,active,False,2026-05-27,sample
+lucknow,LU-CNS-026,Maulana Kalbey Abid 2nd,Metro corridor extension,26.857285,80.886208,active,True,2026-05-04,sample
+lucknow,LU-CNS-027,Nazer Bagh,Residential complex,26.84367,80.933329,active,False,2026-05-09,sample
+lucknow,LU-CNS-028,Gurunanak Nagar,Road widening,26.805113,80.902025,active,True,2026-07-11,sample
+lucknow,LU-CNS-029,Ambedkar Nagar 1st,Flyover works,26.838455,80.899509,active,True,2026-06-15,sample
+lucknow,LU-CNS-030,Haidar Ganj 2nd,Road widening,26.860492,80.851885,active,True,2026-06-12,sample

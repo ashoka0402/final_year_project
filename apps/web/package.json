@@ -1,0 +1,38 @@
+{
+  "name": "vayu-web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3000",
+    "build": "next build",
+    "start": "next start -p 3000",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@deck.gl/mapbox": "^9.3.7",
+    "@deck.gl/react": "^9.3.7",
+    "@tanstack/react-query": "^5.101.2",
+    "clsx": "^2.1.1",
+    "deck.gl": "^9.3.7",
+    "framer-motion": "^12.42.2",
+    "lucide-react": "^1.24.0",
+    "maplibre-gl": "^5.24.0",
+    "next": "^16.2.10",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "recharts": "^3.9.2",
+    "tailwind-merge": "^3.6.0",
+    "zustand": "^5.0.14"
+  },
+  "devDependencies": {
+    "@types/geojson": "^7946.0.16",
+    "@types/node": "^26.1.1",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "autoprefixer": "^10.5.4",
+    "postcss": "^8.5.19",
+    "tailwindcss": "^3.4.19",
+    "typescript": "^6.0.3"
+  }
+}

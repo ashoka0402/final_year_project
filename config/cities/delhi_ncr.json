@@ -1,0 +1,27 @@
+{
+  "id": "delhi_ncr",
+  "name": "Delhi-NCR",
+  "timezone": "Asia/Kolkata",
+  "bbox": [76.60, 28.10, 77.75, 29.10],
+  "map_center": [77.15, 28.6],
+  "map_zoom": 8.8,
+  "grap_applicable": true,
+  "languages": ["en", "hi", "pa", "ur"],
+  "weather_grid": { "nx": 7, "ny": 7 },
+  "wards": {
+    "geojson": "data/samples/wards_delhi_ncr.geojson",
+    "attribution": "H3 analysis zones (res 6) — NCR has no single ward dataset across its 19 municipalities",
+    "id_property": "zone_id",
+    "name_property": "zone_name",
+    "use_h3": true,
+    "h3_resolution": 6
+  },
+  "population": {
+    "total": 26000000,
+    "source": "Census of India 2011 — NCR core municipalities (Delhi + Gurugram, Faridabad, Ghaziabad, Gautam Buddh Nagar, Sonipat, Baghpat, Palwal fringes within the peripheral ring)",
+    "method": "city total split equally across analysis zones. H3 zones are equal-area, so equal split is area-consistent. An NCR-core ESTIMATE, not a per-zone Census count."
+  },
+  "sources": {
+    "openaq_country": "IN"
+  }
+}
