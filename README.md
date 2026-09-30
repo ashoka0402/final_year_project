@@ -15,7 +15,7 @@
 
 **Pune study area** · **Ward-level analysis** · **Air-quality forecasting**
 
-*Build with AI: Code for Communities · Track 2 — Clean Air & Climate Resilience*
+
 
 `air-quality` · `environmental-monitoring` · `machine-learning` · `computer-vision` · `satellite-imagery`
 `google-gemini` · `google-earth-engine` · `sentinel-5p` · `lightgbm` · `pytorch` · `cnn-lstm` · `duckdb`
