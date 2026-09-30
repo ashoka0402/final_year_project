@@ -1,0 +1,30 @@
+{
+  "id": "pune",
+  "name": "Pune",
+  "timezone": "Asia/Kolkata",
+  "bbox": [73.73193, 18.38539, 74.01838, 18.62185],
+  "map_center": [73.875, 18.505],
+  "map_zoom": 11,
+  "grap_applicable": true,
+  "languages": ["en", "mr", "hi"],
+  "weather_grid": {
+    "nx": 5,
+    "ny": 5
+  },
+  "wards": {
+    "geojson": "data/samples/wards_pune.geojson",
+    "id_property": "wardnum",
+    "name_property": "Name1",
+    "use_h3": false,
+    "h3_resolution": 7
+  },
+  "population": {
+    "total": 0,
+    "source": "TODO",
+    "method": "TODO"
+  },
+  "sources": {
+    "cpcb_city_filter": "Pune",
+    "openaq_country": "IN"
+  }
+}
