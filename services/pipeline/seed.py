@@ -125,17 +125,21 @@ def seed_city(city: CityConfig, force: bool = False) -> dict[str, str]:
     history = pd.DataFrame()
     hist_status = "sample"
 
-    if not force and me_path.exists():
+    # Reuse the bundle only when it is compatible with the active station registry.
+    # If OpenAQ supplied the registry, fetch matching measured history first; this
+    # avoids mixing OpenAQ station IDs with an unrelated bundled station table.
+    if not force and me_path.exists() and station_source != "openaq":
         history = _read_parquet(me_path)
         if not history.empty:
             logger.info(f"[{city.id}] reusing bundled series ({len(history):,} rows) — use --force to refresh")
             hist_status = "sample"
 
     if history.empty:
-        if openaq.available():
+        if station_source == "openaq" and openaq.available():
             try:
                 history = openaq.fetch_measurements(city, stations, start, end)
-                hist_status = "live"
+                if not history.empty:
+                    hist_status = "live"
             except FetchError as exc:
                 logger.warning(f"[{city.id}] OpenAQ history failed: {exc}")
         if history.empty:
