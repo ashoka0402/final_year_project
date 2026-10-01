@@ -162,6 +162,7 @@ def fetch_current(city: CityConfig, at=None) -> tuple[pd.DataFrame, pd.DataFrame
     skipped = 0
 
     for loc in locations:
+        loc_id = int(loc["id"])
         coords = loc.get("coordinates") or {}
         lat, lon = coords.get("latitude"), coords.get("longitude")
         if lat is None or lon is None:
