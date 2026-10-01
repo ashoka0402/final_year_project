@@ -37,7 +37,7 @@
 
 @layer components {
   .panel {
-    @apply rounded-lg border border-edge bg-surface/85 backdrop-blur-md;
+    @apply rounded-xl border border-edge/90 bg-surface/90 shadow-[0_18px_45px_rgba(0,0,0,0.24)] backdrop-blur-md;
   }
 
   .numeral {
