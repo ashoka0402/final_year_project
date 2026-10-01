@@ -10,7 +10,7 @@ import { ClockControl } from "./ClockControl";
 import { DataPills } from "./DataPills";
 
 /**
- * Top nav (App Flow §1): VAYU ◆ [City switcher] | Command | Interventions |
+ * Top nav (App Flow §1): Aeris ◆ [City switcher] | Command | Interventions |
  * Verify | Methodology + data pills.
  *
  * Routes for phases not yet built are rendered disabled with their phase noted,
@@ -118,7 +118,7 @@ export function TopNav({
       <div className="flex items-center gap-3">
         <div className="flex items-center gap-1.5">
           <Wind className="h-4 w-4 text-data" aria-hidden />
-          <span className="text-sm font-bold tracking-tight text-slate-50">VAYU</span>
+          <span className="text-sm font-bold tracking-tight text-slate-50">Aeris</span>
           <span className="text-data" aria-hidden>
             ◆
           </span>
