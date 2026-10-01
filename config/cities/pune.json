@@ -5,7 +5,7 @@
   "bbox": [73.73193, 18.38539, 74.01838, 18.62185],
   "map_center": [73.875, 18.505],
   "map_zoom": 11,
-  "grap_applicable": true,
+  "grap_applicable": false,
   "languages": ["en", "mr", "hi"],
   "weather_grid": {
     "nx": 5,
