@@ -205,11 +205,17 @@ class Forecaster:
         import lightgbm as lgb
 
         self.models: dict[tuple[int, str], "lgb.Booster"] = {}
+        self.invalid_artifacts: list[Path] = []
         for h in HORIZONS:
             for q in QUANTILES:
                 p = _artifact(h, q, artifact_dir)
-                if p.exists():
+                if not p.exists() or p.stat().st_size == 0:
+                    continue
+                try:
                     self.models[(h, q)] = lgb.Booster(model_file=str(p))
+                except Exception as exc:  # noqa: BLE001 - caller can retrain invalid artifacts
+                    self.invalid_artifacts.append(p)
+                    logger.warning(f"invalid LightGBM artifact {p}: {exc}")
         self.version = MODEL_VERSION
 
     @property
