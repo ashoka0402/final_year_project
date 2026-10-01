@@ -172,23 +172,6 @@ export function MapCanvas({
   const readingsRef = useRef(readings);
   readingsRef.current = readings;
 
-  const wardGeoJSON = useMemo(() => ({
-    type: "FeatureCollection" as const,
-    features: (wards?.features ?? []).map((feature) => {
-      const wardId = feature.properties.ward_id;
-      const reading = readings.get(wardId);
-      return {
-        ...feature,
-        properties: {
-          ...feature.properties,
-          aqi: reading?.aqi ?? null,
-          color: reading?.color ?? null,
-          selected: wardId === selectedWardId,
-        },
-      };
-    }),
-  }), [wards, readings, selectedWardId]);
-
   const stationGeoJSON = useMemo(
     () => ({
       type: "FeatureCollection" as const,
@@ -255,7 +238,7 @@ export function MapCanvas({
       setStyleReady(0);
     };
     // Init-only: a city change flies the camera rather than rebuilding the GL
-    // context, so Delhi → Pune stays instant (PRD G1).
+    // context, so Delhi -> Lucknow stays instant (PRD G1).
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -292,15 +275,15 @@ export function MapCanvas({
         paint: {
           "fill-color": [
             "case",
-            ["==", ["get", "color"], null],
+            ["==", ["feature-state", "aqi"], null],
             "#334155",
-            ["get", "color"],
+            AQI_STEP_EXPRESSION,
           ] as unknown as maplibregl.ExpressionSpecification,
           "fill-opacity": [
             "case",
             ["boolean", ["feature-state", "hover"], false],
             0.85,
-            ["==", ["get", "color"], null],
+            ["==", ["feature-state", "aqi"], null],
             0.35,
             0.68,
           ] as unknown as maplibregl.ExpressionSpecification,
@@ -315,13 +298,13 @@ export function MapCanvas({
         paint: {
           "line-color": [
             "case",
-            ["boolean", ["get", "selected"], false],
+            ["boolean", ["feature-state", "selected"], false],
             "#22D3EE",
             "#1F2A44",
           ] as unknown as maplibregl.ExpressionSpecification,
           "line-width": [
             "case",
-            ["boolean", ["get", "selected"], false],
+            ["boolean", ["feature-state", "selected"], false],
             2.5,
             0.6,
           ] as unknown as maplibregl.ExpressionSpecification,
@@ -444,19 +427,30 @@ export function MapCanvas({
     };
   }, [styleReady, hoverWard, selectWard]);
 
-  // ---- push ward geometry + AQI values -------------------------------
+  // ---- push ward geometry -------------------------------------------------
   useEffect(() => {
     const m = map.current;
     if (!m || !styleReady) return;
     const src = m.getSource(SRC_WARDS) as maplibregl.GeoJSONSource | undefined;
     if (!src) return;
+    src.setData(
+      wards?.features?.length
+        ? ({ type: "FeatureCollection", features: wards.features } as GeoJSON.FeatureCollection)
+        : { type: "FeatureCollection", features: [] },
+    );
+  }, [wards, styleReady]);
 
-    const data = wardGeoJSON.features.length
-      ? wardGeoJSON
-      : { type: "FeatureCollection" as const, features: [] };
-    src.setData(data as GeoJSON.FeatureCollection);
-    m.triggerRepaint();
-  }, [wardGeoJSON, styleReady]);
+  // ---- push ward values as feature-state ----------------------------------
+  useEffect(() => {
+    const m = map.current;
+    if (!m || !styleReady || !wards?.features?.length) return;
+    // removeFeatureState clears stale values from the previous city before the
+    // new ones land — otherwise a ward id present in both would keep its colour.
+    m.removeFeatureState({ source: SRC_WARDS });
+    readings.forEach((w, id) => {
+      m.setFeatureState({ source: SRC_WARDS, id }, { aqi: w.aqi ?? null });
+    });
+  }, [readings, wards, styleReady]);
 
   // ---- selection outline --------------------------------------------------
   const prevSelected = useRef<string | null>(null);
