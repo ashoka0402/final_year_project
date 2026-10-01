@@ -196,14 +196,27 @@ def _fetch_current_latest(city: CityConfig, target) -> tuple[pd.DataFrame, pd.Da
         if lat is None or lon is None:
             continue
 
+        sensor_parameter_map = {}
+        for sensor in loc.get("sensors", []) or []:
+            sensor_id = sensor.get("id")
+            raw_param = ((sensor.get("parameter") or {}).get("name") or "").lower()
+            param = PARAM_MAP.get(raw_param)
+            if sensor_id is not None and param is not None:
+                sensor_parameter_map[int(sensor_id)] = param
+
         best: dict[str, tuple[pd.Timestamp, float, int]] = {}
         for row in latest_payload.get("results", []) or []:
-            raw_param = ((row.get("parameter") or {}).get("name") or "").lower()
-            param = PARAM_MAP.get(raw_param)
             value = row.get("value")
             sensor_id = row.get("sensorsId")
             raw_ts = ((row.get("datetime") or {}).get("utc"))
-            if param is None or value is None or sensor_id is None or not raw_ts:
+            if value is None or sensor_id is None or not raw_ts:
+                continue
+
+            raw_param = ((row.get("parameter") or {}).get("name") or "").lower()
+            param = PARAM_MAP.get(raw_param)
+            if param is None:
+                param = sensor_parameter_map.get(int(sensor_id))
+            if param is None:
                 continue
 
             try:
