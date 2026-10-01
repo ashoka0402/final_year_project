@@ -5,10 +5,7 @@ so nine models. The quantiles are the point: a commissioner deciding whether to
 halt a construction site needs the *band*, not a single number pretending to
 certainty — p90 crossing 300 is an operational fact even when p50 does not.
 
-Models are pooled across cities with a `city_code` feature (TRD 5.1). This is
-what makes a new city viable on day one: Lucknow contributes ~6 stations, far
-too few to learn a seasonal cycle alone, but it inherits the pooled model and
-its own features still steer the prediction.
+Models are pooled across the two configured study cities with a `city_code` feature (TRD 5.1). Delhi and Pune share the production model while each city's own features steer the prediction.
 
 RESIDUAL TARGET — the single most important design decision here.
 The models predict the *change* from the current reading, `y - pm25(t)`, and the
