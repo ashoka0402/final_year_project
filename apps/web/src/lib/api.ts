@@ -25,6 +25,7 @@ import type {
  * the API. One origin => no CORS preflight on the hot path.
  */
 const BASE = "/api/v1";
+const WARD_GEOMETRY_VERSION = "v4";
 
 export class ApiError extends Error {
   constructor(
@@ -109,7 +110,7 @@ export const api = {
   health: () => get<Health>("/health"),
   cities: () => get<City[]>("/cities"),
   current: (cityId: string) => get<Current>(`/cities/${cityId}/current`),
-  wards: (cityId: string) => get<WardCollection>(`/cities/${cityId}/wards.geojson`),
+  wards: (cityId: string) => get<WardCollection>(`/cities/${cityId}/wards.geojson?version=${WARD_GEOMETRY_VERSION}`),
   forecast: (cityId: string, h: number) => get<Forecast>(`/cities/${cityId}/forecast?h=${h}`),
   alerts: (cityId: string) => get<HazardAlert[]>(`/cities/${cityId}/alerts`),
   explain: (cityId: string, wardId: string, h: number) =>
@@ -194,7 +195,7 @@ export const queryKeys = {
   notableDates: (cityId: string) => ["notableDates", cityId] as const,
   cities: ["cities"] as const,
   current: (cityId: string) => ["current", cityId] as const,
-  wards: (cityId: string) => ["wards", cityId] as const,
+  wards: (cityId: string) => ["wards", cityId, WARD_GEOMETRY_VERSION] as const,
   forecast: (cityId: string, h: number) => ["forecast", cityId, h] as const,
   alerts: (cityId: string) => ["alerts", cityId] as const,
   explain: (cityId: string, wardId: string, h: number) => ["explain", cityId, wardId, h] as const,
