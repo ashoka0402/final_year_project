@@ -83,37 +83,62 @@ def seed_city(city: CityConfig, force: bool = False) -> dict[str, str]:
 
     start, end = airquality.demo_window(now)
 
-    try:
-        stations, current = cpcb.fetch_stations(city)
-        if not stations.empty and not current.empty:
-            aq_status = "live"
-            aq_detail = "Official CPCB CAAQMS observation"
-            station_source = "official"
-        else:
-            stations = pd.DataFrame()
-            current = pd.DataFrame()
-            raise FetchError("CPCB returned no usable current measurements")
-    except FetchError as exc:
-        logger.warning(f"[{city.id}] official CPCB unavailable: {exc}")
-        if openaq.available():
-            try:
-                stations, current = openaq.fetch_current(city, now)
-                if not stations.empty and not current.empty:
-                    aq_status = "live"
-                    aq_detail = "OpenAQ v3 measured observation (secondary source)"
-                    station_source = "openaq"
-                else:
-                    stations = pd.DataFrame()
-                    current = pd.DataFrame()
-                    logger.warning(f"[{city.id}] OpenAQ returned no usable current measurements")
-            except FetchError as oa_exc:
-                logger.warning(f"[{city.id}] OpenAQ current fallback failed: {oa_exc}")
+    if not settings.demo_mode:
+        try:
+            stations, current = cpcb.fetch_stations(city)
+            if not stations.empty and not current.empty:
+                aq_status = "live"
+                aq_detail = "Official CPCB CAAQMS observation"
+                station_source = "official"
+            else:
+                stations = pd.DataFrame()
+                current = pd.DataFrame()
+                raise FetchError("CPCB returned no usable current measurements")
+        except FetchError as exc:
+            logger.warning(f"[{city.id}] official CPCB unavailable: {exc}")
+            if openaq.available():
+                try:
+                    stations, current = openaq.fetch_current(city, now)
+                    if not stations.empty and not current.empty:
+                        aq_status = "live"
+                        aq_detail = "OpenAQ v3 measured observation (secondary source)"
+                        station_source = "openaq"
+                    else:
+                        stations = pd.DataFrame()
+                        current = pd.DataFrame()
+                        logger.warning(f"[{city.id}] OpenAQ returned no usable current measurements")
+                except FetchError as oa_exc:
+                    logger.warning(f"[{city.id}] OpenAQ current fallback failed: {oa_exc}")
 
-        if stations.empty:
-            stations = _read_parquet(st_path)
-            aq_status = "sample"
-            aq_detail = "Bundled offline sample; official and OpenAQ feeds unavailable"
-            station_source = "sample"
+            if stations.empty:
+                try:
+                    stations = _read_parquet(st_path)
+                    current = airquality.fetch_history(city, stations, now.date(), now.date())
+                    current["ts"] = pd.to_datetime(current["ts"], utc=True)
+                    current = current[
+                        (current["ts"] <= pd.Timestamp(now))
+                        & (current["ts"] >= pd.Timestamp(now) - pd.Timedelta(hours=6))
+                    ]
+                    if not current.empty:
+                        aq_status = "cams"
+                        aq_detail = "CAMS/Open-Meteo modelled current fallback"
+                        station_source = "cams"
+                    else:
+                        stations = pd.DataFrame()
+                        current = pd.DataFrame()
+                except FetchError as cams_exc:
+                    logger.warning(f"[{city.id}] CAMS current fallback failed: {cams_exc}")
+
+            if stations.empty:
+                stations = _read_parquet(st_path)
+                aq_status = "sample"
+                aq_detail = "Bundled offline sample; measured feeds and CAMS unavailable"
+                station_source = "sample"
+    else:
+        stations = _read_parquet(st_path)
+        aq_status = "sample"
+        aq_detail = "Bundled offline sample (DEMO_MODE=true)"
+        station_source = "sample"
 
     if stations.empty:
         logger.error(f"[{city.id}] no stations from official, OpenAQ, or bundled sources — skipping city")
@@ -178,7 +203,7 @@ def seed_city(city: CityConfig, force: bool = False) -> dict[str, str]:
     if not measurements.empty:
         measurements = measurements.drop_duplicates(subset=["city", "station_id", "param", "ts"], keep="last")
         measurements.to_parquet(me_path, index=False)
-    measurements_status = "live" if not current.empty else hist_status
+    measurements_status = aq_status if not current.empty else hist_status
     statuses["measurements"] = measurements_status
 
     # ---- 4. Weather ---------------------------------------------------------
