@@ -81,7 +81,7 @@ BATCH = 25  # the 5x5 city grid fits in a single request
 # Open-Meteo is free and key-less but weights a request by (locations x hours x
 # variables), so one 276-day x 25-point x 9-variable call is enormous and earns a
 # 429. Chunking by time keeps each call small, and the limiter spaces them out.
-# Getting this wrong is silent-partial again: Lucknow came back with 0 weather
+# Getting this wrong is silent-partial again: a configured city can return 0 weather
 # rows while Delhi succeeded, purely because Delhi ran first.
 DAYS_PER_REQUEST = 45
 _limiter = RateLimiter(1.5)
