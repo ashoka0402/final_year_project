@@ -24,7 +24,7 @@ from vayu_core.geo import (
 
 def test_both_demo_cities_are_configured():
     ids = {c.id for c in list_cities()}
-    assert {"delhi", "lucknow"} <= ids
+    assert {"delhi", "pune"} <= ids
 
 
 @pytest.mark.parametrize("city", list_cities(), ids=lambda c: c.id)
@@ -54,9 +54,9 @@ def test_weather_grid_points_lie_inside_bbox_and_are_unique():
 
 
 def test_haversine_against_known_distance():
-    # Delhi (Connaught Place) -> Lucknow, ~ 420 km great-circle.
-    d = haversine_km(28.6315, 77.2167, 26.8467, 80.9462)
-    assert 400 < d < 440
+    # Delhi (Connaught Place) -> Pune, roughly 1,170 km great-circle.
+    d = haversine_km(28.6315, 77.2167, 18.5204, 73.8567)
+    assert 1150 < d < 1200
 
 
 def test_bearing_cardinal_directions():
