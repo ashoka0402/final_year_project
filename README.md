@@ -1051,7 +1051,7 @@ Full reference in [`.env.example`](.env.example). The short version:
 | `DEMO_MODE` | `true` | `true` = bundled data, clock pinned to `DEMO_NOW`, deterministic/rehearsable demo. `false` = live wall clock + a periodic live CPCB refresh for the ground-truth cities |
 | `DEMO_NOW` | configured value | The pinned demo time; any bundled snapshot must be labelled demo data, not a Pune measurement |
 | `DATA_GOV_IN_API_KEY` | *(public demo key)* | Your own data.gov.in rate limit for the CPCB CAAQMS feed |
-| `OPENAQ_API_KEY` | — | Upgrades station history from CAMS reanalysis to OpenAQ v3 measurements |
+| `OPENAQ_API_KEY` | — | Enables OpenAQ v3 as the measured secondary source when official current data is unavailable; also supplies measured history when OpenAQ is the active station registry |
 | `FIRMS_API_KEY` | — | Live NASA FIRMS fire detections (else a bundled 7-day CSV) |
 | `GOOGLE_API_KEY` | — | Enables Gemini: citizen photo classification, generated advisories |
 | `GEMINI_MODEL` | `gemini-3.6-flash` | Pinned, not `-latest` — see the code comment on why |
