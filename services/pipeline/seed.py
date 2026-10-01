@@ -79,6 +79,7 @@ def seed_city(city: CityConfig, force: bool = False) -> dict[str, str]:
     current = pd.DataFrame()
     aq_status = "sample"
     aq_detail = "Bundled offline sample"
+    station_source = "sample"
 
     start, end = airquality.demo_window(now)
 
@@ -87,6 +88,7 @@ def seed_city(city: CityConfig, force: bool = False) -> dict[str, str]:
         if not stations.empty and not current.empty:
             aq_status = "live"
             aq_detail = "Official CPCB CAAQMS observation"
+            station_source = "official"
         else:
             stations = pd.DataFrame()
             current = pd.DataFrame()
@@ -99,6 +101,7 @@ def seed_city(city: CityConfig, force: bool = False) -> dict[str, str]:
                 if not stations.empty and not current.empty:
                     aq_status = "live"
                     aq_detail = "OpenAQ v3 measured observation (secondary source)"
+                    station_source = "openaq"
                 else:
                     stations = pd.DataFrame()
                     current = pd.DataFrame()
@@ -109,7 +112,8 @@ def seed_city(city: CityConfig, force: bool = False) -> dict[str, str]:
         if stations.empty:
             stations = _read_parquet(st_path)
             aq_status = "sample"
-            aq_detail = "Bundled offline sample; official feeds unavailable"
+            aq_detail = "Bundled offline sample; official and OpenAQ feeds unavailable"
+            station_source = "sample"
 
     if stations.empty:
         logger.error(f"[{city.id}] no stations from official, OpenAQ, or bundled sources — skipping city")
