@@ -128,7 +128,7 @@ def record_cascade(city: CityConfig) -> None:
         return
 
     # The drawer is a system-wide feed across both cities, so every entry names
-    # its city — otherwise a Lucknow cascade reads as Delhi's while the operator
+    # its city — otherwise one city's cascade could be read as another city's while the operator
     # is looking at Delhi.
     c = city.name
 
