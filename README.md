@@ -889,9 +889,9 @@ The integrations below are available in the project, but **availability of a con
 | Layer | Source / approach | Key needed? |
 |---|---|---|
 | Delhi and Pune ward boundaries | PMC / Pune GIS or a verified municipal boundary dataset | Depends on source |
-| Station identity + AQI | CPCB CAAQMS / data.gov.in; verify Pune station coverage | Usually no / public API key may apply |
-| Maharashtra monitoring data | MPCB published monitoring data | Depends on access method |
-| Historical air quality | Available CPCB/MPCB station archives; OpenAQ where coverage exists | OpenAQ key for API |
+| Current station observations | Official CPCB CAAQMS / data.gov.in first; OpenAQ v3 measured fallback | CPCB public demo key or own key; OpenAQ key for fallback |
+| Maharashtra monitoring data | MPCB published monitoring data where a stable machine-readable feed is available | Depends on access method |
+| Historical air quality | OpenAQ v3 where measured coverage exists; CAMS reanalysis only when measured history is unavailable | OpenAQ key for API |
 | Weather history + forecast | Open-Meteo; IMD data where available and licensed | Usually no for Open-Meteo |
 | Roads / industry / schools | OpenStreetMap (Overpass) filtered to Pune | No |
 | Satellite indicators | Sentinel-5P / other supported satellite products clipped to Pune | Some pipelines may require GEE credentials |
@@ -1207,6 +1207,14 @@ Climate Resilience. The requirement checklist and where Aeris answers it:
 | Interoperability across states | Pune-scoped API outputs with explicit schema, provenance, and data-status fields |
 | Delhi and Pune study area | Delhi and Pune-focused map and analysis; validation depends on available Delhi and Pune ground truth |
 | Deployed link | Local development: `http://localhost:3000` |
+
+## Air-quality source priority
+
+For current measured observations, Aeris follows an explicit provenance hierarchy:
+
+`Official CPCB/MPCB observation → OpenAQ v3 measured observation → bundled/last-known fallback`
+
+CPCB is the current official machine-readable path implemented in this repository. OpenAQ is used as a secondary measured source when the official current feed is unavailable. For historical training data, the available measured archive is preferred; CAMS/Open-Meteo reanalysis is used only when measured history cannot be fetched. Modeled/reanalysis values are never labelled as station measurements.
 
 ## Pune data provenance
 
