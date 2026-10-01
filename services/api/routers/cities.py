@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 
 import pandas as pd
-from fastapi import APIRouter, Response
+from fastapi import APIRouter, HTTPException, Response
 
 from vayu_core.config import get_settings, list_cities
 from vayu_core.db import read_conn
