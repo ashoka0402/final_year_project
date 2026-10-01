@@ -35,6 +35,13 @@ NOTABLE_DATES: dict[str, list[dict]] = {
         {"at": "2025-11-03T06:00:00Z", "label": "Flagship severe episode", "aqi": 373, "category": "Very Poor"},
         {"at": "2025-11-24T00:00:00Z", "label": "Peak of the season", "aqi": 405, "category": "Severe"},
     ],
+    "pune": [
+        {"at": "2025-10-24T10:30:00Z", "label": "Post-Diwali recovery", "aqi": 55, "category": "Satisfactory"},
+        {"at": "2025-11-03T10:30:00Z", "label": "Clean spell", "aqi": 44, "category": "Good"},
+        {"at": "2025-11-15T10:30:00Z", "label": "Mid-November rise", "aqi": 149, "category": "Moderate"},
+        {"at": "2025-11-24T10:30:00Z", "label": "Late-November improvement", "aqi": 113, "category": "Moderate"},
+        {"at": "2025-11-30T10:30:00Z", "label": "Month-end peak", "aqi": 179, "category": "Moderate"},
+    ],
 }
 
 
