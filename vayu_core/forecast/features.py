@@ -242,7 +242,7 @@ def _add_time(df: pd.DataFrame, city: CityConfig) -> pd.DataFrame:
     try:
         import holidays as _holidays
 
-        subdiv = {"delhi": "DL", "lucknow": "UP"}.get(city.id)
+        subdiv = {"delhi": "DL", "pune": "MH"}.get(city.id)
         years = sorted(local.dt.year.unique().tolist())
         cal = _holidays.India(years=years, subdiv=subdiv)
         dates = local.dt.date
