@@ -75,7 +75,7 @@ FRP_TO_Q_PM25 = FUEL_PER_MW_KG_S * PM25_PER_KG_FUEL_G  # ≈ 2.32 g/s per MW
 # Industry: emission per km² of industrial land, NOT per mapped feature.
 #
 # Anchored to SAFAR's high-resolution emission inventory for Delhi (IITM, 2018),
-# which puts the industrial sector at 24.10 Gg/yr of PM2.5 across the Delhi-NCR
+# which anchors the Delhi industrial-sector inventory used by this prototype
 # domain = ~764 g/s. Spread over the 82.5 km² of industrial landuse OSM maps in
 # the Delhi airshed, that is ~9.3 g/s per km².
 #
