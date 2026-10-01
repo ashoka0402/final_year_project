@@ -58,8 +58,10 @@ def train_and_score(force_train: bool = False) -> int:
         logger.error("nothing to train on — run the ingest step first")
         return 1
 
-    if force_train or not Forecaster().available:
-        logger.info("training forecast models…")
+    existing = Forecaster()
+    if force_train or not existing.available or existing.invalid_artifacts:
+        reason = "forced" if force_train else ("missing" if not existing.available else "invalid artifacts detected")
+        logger.info(f"training forecast models ({reason})…")
         train(frames, weathers)
     else:
         logger.info(f"reusing trained models in {ARTIFACT_DIR.name}/ (use --retrain to rebuild)")
