@@ -132,7 +132,6 @@ interface Props {
   evidence?: AttributionEvidence[];
   hoveredEvidence?: AttributionEvidence | null;
   flyTo?: { lon: number; lat: number } | null;
-  selectedWardId?: string | null;
 }
 
 type HoverInfo = { x: number; y: number; ward: Ward } | null;
@@ -145,7 +144,6 @@ export function MapCanvas({
   evidence,
   hoveredEvidence,
   flyTo,
-  selectedWardId,
 }: Props) {
   const container = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
