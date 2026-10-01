@@ -157,7 +157,10 @@ export function MapCanvas({
   const [mapError, setMapError] = useState<string | null>(null);
   const [hover, setHover] = useState<HoverInfo>(null);
 
-  const layersOn = useCommandStore((s) => s.layers);
+  const showWardAqi = useCommandStore((s) => s.layers.wardChoropleth);
+  const showStations = useCommandStore((s) => s.layers.stations);
+  const showTrajectories = useCommandStore((s) => s.layers.trajectories);
+  const showEvidence = useCommandStore((s) => s.layers.fires);
   const basemap = useCommandStore((s) => s.basemap);
   const selectWard = useCommandStore((s) => s.selectWard);
   const selectedWardId = useCommandStore((s) => s.selectedWardId);
@@ -291,6 +294,9 @@ export function MapCanvas({
         id: LYR_WARD_FILL,
         type: "fill",
         source: SRC_WARDS,
+        layout: {
+          visibility: showWardAqi ? "visible" : "none",
+        },
         paint: {
           "fill-color": [
             "case",
@@ -314,6 +320,9 @@ export function MapCanvas({
         id: LYR_WARD_LINE,
         type: "line",
         source: SRC_WARDS,
+        layout: {
+          visibility: showWardAqi ? "visible" : "none",
+        },
         paint: {
           "line-color": [
             "case",
@@ -589,31 +598,21 @@ export function MapCanvas({
   // ---- layer toggles ------------------------------------------------------
   useEffect(() => {
     const m = map.current;
-    if (!m || !styleReady) return;
+    if (!m || !styleReady || !m.isStyleLoaded()) return;
 
-    // Keep layer visibility synchronized after both UI toggles and city/style
-    // changes. MapLibre can defer style mutations until its next render pass;
-    // syncing once immediately and again on idle prevents the Delhi choropleth
-    // from getting visually out of sync with Zustand after a city switch.
-    const syncLayerVisibility = () => {
-      if (!m.isStyleLoaded()) return;
-      const set = (id: string, on: boolean) => {
-        if (m.getLayer(id)) {
-          m.setLayoutProperty(id, "visibility", on ? "visible" : "none");
-        }
-      };
-      set(LYR_WARD_FILL, layersOn.wardChoropleth);
-      set(LYR_WARD_LINE, layersOn.wardChoropleth);
-      set(LYR_STATIONS, layersOn.stations);
-      set(LYR_TRAJ, layersOn.trajectories);
-      set(LYR_CONE, layersOn.trajectories);
-      set(LYR_EVIDENCE, layersOn.fires);
+    const set = (id: string, on: boolean) => {
+      if (m.getLayer(id)) {
+        m.setLayoutProperty(id, "visibility", on ? "visible" : "none");
+      }
     };
 
-    syncLayerVisibility();
-    m.on("idle", syncLayerVisibility);
-    return () => m.off("idle", syncLayerVisibility);
-  }, [layersOn, city.id, styleReady]);
+    set(LYR_WARD_FILL, showWardAqi);
+    set(LYR_WARD_LINE, showWardAqi);
+    set(LYR_STATIONS, showStations);
+    set(LYR_TRAJ, showTrajectories);
+    set(LYR_CONE, showTrajectories);
+    set(LYR_EVIDENCE, showEvidence);
+  }, [showWardAqi, showStations, showTrajectories, showEvidence, styleReady]);
 
   // ---- city switch: fly, don't rebuild ------------------------------------
   useEffect(() => {
