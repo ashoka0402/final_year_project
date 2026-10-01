@@ -3,8 +3,9 @@
 When OPENAQ_API_KEY is present this becomes the *preferred* source for station
 identity and history, because it is measured rather than modelled: it upgrades
 the historical series from CAMS reanalysis to real CPCB/DPCC observations.
-Without a key, every call here is skipped and the seeder falls back to
-cpcb.py (identity + current) + airquality.py (CAMS history).
+Without a key, every call here is skipped. The pipeline first tries the
+official CPCB path, then uses OpenAQ as the measured secondary source, and
+finally falls back to CAMS reanalysis when measured data is unavailable.
 
 Free key: https://openaq.org — no cost, instant.
 """
