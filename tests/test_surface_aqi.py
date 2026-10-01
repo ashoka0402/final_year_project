@@ -96,10 +96,10 @@ def test_build_dataset_produces_time_ordered_consecutive_windows(isolated_db):
     row-consecutive — a station with a gap in its readings must not silently
     stitch together two different weeks into one 'sequence'."""
     region = load_region("india")
-    city = load_city("lucknow")
+    city = load_city("pune")
 
     days = [dt.date(2025, 10, 1) + dt.timedelta(days=i) for i in range(10)]
-    glat, glon = region.snap(26.85, 80.95)
+    glat, glon = region.snap(18.52, 73.86)
     cells = [(round(glat + a * region.grid_deg, 4), round(glon + b * region.grid_deg, 4))
              for a in (-1, 0, 1) for b in (-1, 0, 1)]
 
@@ -107,12 +107,12 @@ def test_build_dataset_produces_time_ordered_consecutive_windows(isolated_db):
         _seed_satellite(con, "india", list(SA.ALL_SAT_CHANNELS[:2]), cells, days)
         con.execute(
             "INSERT INTO stations (city, station_id, name, lat, lon, provider) VALUES (?,?,?,?,?,?)",
-            ["lucknow", "test:station1", "Test Station", 26.85, 80.95, "test"],
+            ["pune", "test:station1", "Test Station", 18.52, 73.86, "test"],
         )
         for i, d in enumerate(days):
             con.execute(
                 "INSERT INTO measurements (city, station_id, param, ts, value, unit, source) VALUES (?,?,?,?,?,?,?)",
-                ["lucknow", "test:station1", "pm25", dt.datetime.combine(d, dt.time(6)), 50.0 + i, "ug/m3", "test"],
+                ["pune", "test:station1", "pm25", dt.datetime.combine(d, dt.time(6)), 50.0 + i, "ug/m3", "test"],
             )
         for i, d in enumerate(days):
             for j, (gi, gj, glat_c, glon_c) in enumerate(city.grid_points()):
@@ -121,11 +121,11 @@ def test_build_dataset_produces_time_ordered_consecutive_windows(isolated_db):
                        (city, grid, grid_i, grid_j, ts, temp_c, rh, wind_speed_10m, wind_dir_10m,
                         wind_speed_100m, wind_dir_100m, pblh, precip, pressure, kind)
                        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
-                    ["lucknow", "city", gi, gj, dt.datetime.combine(d, dt.time(6)),
+                    ["pune", "city", gi, gj, dt.datetime.combine(d, dt.time(6)),
                      25.0, 50.0, 2.0, 180.0, 3.0, 180.0, 800.0, 0.0, 1000.0, "hist"],
                 )
 
-    ds = SA.build_dataset(region, cities=("lucknow",), channels=SA.ALL_SAT_CHANNELS[:2])
+    ds = SA.build_dataset(region, cities=("pune",), channels=SA.ALL_SAT_CHANNELS[:2])
     assert len(ds.y) == 10 - SA.LOOKBACK_DAYS, "one sample per day once a full lookback window exists"
     assert list(ds.dates) == sorted(ds.dates), "samples must come out in date order"
     for i in range(1, len(ds.dates)):
