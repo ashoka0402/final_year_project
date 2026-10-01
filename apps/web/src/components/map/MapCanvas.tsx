@@ -272,6 +272,9 @@ export function MapCanvas({
         id: LYR_WARD_FILL,
         type: "fill",
         source: SRC_WARDS,
+        layout: {
+          visibility: layersOn.wardChoropleth ? "visible" : "none",
+        },
         paint: {
           "fill-color": [
             "case",
@@ -295,6 +298,9 @@ export function MapCanvas({
         id: LYR_WARD_LINE,
         type: "line",
         source: SRC_WARDS,
+        layout: {
+          visibility: layersOn.wardChoropleth ? "visible" : "none",
+        },
         paint: {
           "line-color": [
             "case",
@@ -438,6 +444,7 @@ export function MapCanvas({
         ? ({ type: "FeatureCollection", features: wards.features } as GeoJSON.FeatureCollection)
         : { type: "FeatureCollection", features: [] },
     );
+    m.triggerRepaint();
   }, [wards, styleReady]);
 
   // ---- push ward values as feature-state ----------------------------------
