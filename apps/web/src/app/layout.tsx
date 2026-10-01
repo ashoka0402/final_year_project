@@ -9,9 +9,9 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "sw
 const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono", display: "swap" });
 
 export const metadata: Metadata = {
-  title: "VAYU — Verifiable Airshed Intelligence & Enforcement",
+  title: "Aeris — Delhi & Pune Airshed Intelligence",
   description:
-    "Dashboards measure pollution. VAYU prosecutes it. Evidence-backed intervention orders for Indian cities.",
+    "Ward-level air-quality intelligence, forecasting, source attribution, and evidence-led interventions for Delhi and Pune.",
 };
 
 export const viewport: Viewport = {
