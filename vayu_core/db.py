@@ -120,7 +120,7 @@ CREATE TABLE IF NOT EXISTS permits(
 -- Per-source freshness backing the honesty pills (PRD F2). The UI never guesses
 -- whether a layer is live; it reads what the ingestor recorded.
 CREATE TABLE IF NOT EXISTS data_status(
-  city TEXT, source TEXT, status TEXT,             -- live|cached|sample|unavailable
+  city TEXT, source TEXT, status TEXT,             -- live|cached|sample|cams|unavailable
   detail TEXT, rows_loaded INT, fetched_ts TIMESTAMPTZ,
   PRIMARY KEY(city, source));
 
