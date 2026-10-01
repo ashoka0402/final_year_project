@@ -89,8 +89,8 @@ def available_channels(con, region_id: str, wanted: tuple[str, ...] = ALL_SAT_CH
 
 def _station_daily_pm25(con, cities: tuple[str, ...]) -> pd.DataFrame:
     """One row per (station_id, date): the day's mean PM2.5, deduped across
-    overlapping city configs (a station inside both delhi and delhi_ncr's bbox
-    is the same physical sensor, not two samples)."""
+    overlapping city configurations (a station represented in both study areas is the
+    same physical sensor, not two samples)."""
     df = con.execute(
         f"""SELECT m.station_id, s.lat, s.lon, date_trunc('day', m.ts) AS date,
                    avg(m.value) AS pm25
@@ -203,7 +203,7 @@ def build_dataset(
         weather_by_city = {c: _city_daily_weather(con, load_city(c)) for c in cities}
 
         # A station's readings can be tagged to more than one city config
-        # (delhi + delhi_ncr overlap); take whichever city has weather for it.
+        # (study-area overlap); take whichever configured city has weather for it.
         X_sat, X_met, y, dates, sids = [], [], [], [], []
         for station_id, g in pm25.groupby("station_id"):
             g = g.sort_values("date").reset_index(drop=True)
