@@ -1,9 +1,9 @@
 """Ward boundary ingestion.
 
 Real municipal ward polygons for both demo cities come from DataMeet's
-Municipal_Spatial_Data (Delhi: 290 wards, Lucknow: 112 wards). Because real
+the bundled municipal boundary datasets (Delhi: 290 wards; Pune: 58 wards). Because real
 boundaries exist for both, VAYU does not need the H3 "analysis zones" fallback
-for Delhi or Lucknow — but the fallback is implemented anyway, since the claim
+for the two configured cities — but the fallback is implemented anyway, since the claim
 "a new city is one config file" is only true if a city *without* published
 boundaries still works.
 
@@ -181,7 +181,7 @@ def _estimate_population(df: pd.DataFrame, city: CityConfig) -> pd.Series:
     to hold EQUAL population. Delhi Municipal Corporation Act 1957 s.5 requires
     the area be divided "in such manner that the population of each of the wards
     shall, so far as practicable, be the same"; UP's Municipal Corporation Act
-    1959 governs Lucknow's wards on the same principle. So an equal split is not
+    Pune has the same explicit equal-split estimate because per-ward Census counts are not mapped to the bundled boundary data. So an equal split is not
     a shrug — it is the statute that drew these boundaries, and it is the best
     estimator available without per-ward Census tables.
 
