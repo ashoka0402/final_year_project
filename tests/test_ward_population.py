@@ -53,17 +53,17 @@ def test_per_ward_population_is_plausible_for_delhi():
     assert 30_000 < per < 100_000, f"implausible per-ward population {per:,}"
 
 
-def test_lucknow_uses_its_own_total():
+def test_pune_uses_its_own_total():
     delhi = _estimate_population(_wards([5.0] * 290), load_city("delhi"))
-    lko = _estimate_population(_wards([5.0] * 112), load_city("lucknow"))
-    assert int(lko.iloc[0]) < int(delhi.iloc[0])
-    assert int(lko.iloc[0]) > 10_000
+    pune = _estimate_population(_wards([5.0] * 58), load_city("pune"))
+    assert int(pune.iloc[0]) < int(delhi.iloc[0])
+    assert int(pune.iloc[0]) > 10_000
 
 
 def test_provenance_states_the_method_not_just_the_source():
     """PRD F2: every number carries how it was derived. A reader must be able to
     tell this is an estimate from a delimitation principle, not a Census count."""
-    for cid in ("delhi", "lucknow"):
+    for cid in ("delhi", "pune"):
         m = load_city(cid).population.method.lower()
         assert "equal" in m
         assert "estimate" in m
