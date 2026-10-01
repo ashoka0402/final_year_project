@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import maplibregl, { type MapGeoJSONFeature, type MapMouseEvent } from "maplibre-gl";
 
-import { AQI_BANDS } from "@/lib/aqi";
 import type {
   AttributionEvidence,
   City,
