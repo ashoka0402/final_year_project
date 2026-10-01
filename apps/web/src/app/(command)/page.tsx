@@ -134,7 +134,6 @@ export default function CommandCenter() {
       <main id="main" className="relative flex-1">
         {city && !dataError && (
           <MapCanvas
-            key={city.id}
             city={city}
             current={current.data}
             wards={wards.data}
