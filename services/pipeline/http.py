@@ -92,7 +92,7 @@ def fetch_text(
     hit = _cached(key, ".txt", ttl)
     if hit and hit.fresh:
         logger.debug(f"cache hit {url}")
-        return hit.path.read_text()
+        return hit.path.read_text(encoding="utf-8")
 
     last: Exception | None = None
     for attempt in range(1, tries + 1):
@@ -107,7 +107,7 @@ def fetch_text(
             ) as client:
                 r = client.get(url, params=params)
                 r.raise_for_status()
-                _cache_path(key, ".txt").write_text(r.text)
+                _cache_path(key, ".txt").write_text(r.text, encoding="utf-8")
                 return r.text
         except Exception as exc:  # noqa: BLE001 - any failure means "try again, then fall back"
             last = exc
