@@ -76,6 +76,15 @@ export default function CommandCenter() {
     enabled: Boolean(selectedWardId),
     retry: false,
   });
+
+  // Force a fresh trajectory fetch when a ward is selected. This avoids a stale
+  // failed/empty query cache leaving the map source empty even though the API
+  // endpoint itself is healthy.
+  useEffect(() => {
+    if (selectedWardId && !trajectory.data && !trajectory.isFetching) {
+      void trajectory.refetch();
+    }
+  }, [selectedWardId, trajectory.data, trajectory.isFetching, trajectory.refetch]);
   const attribution = useQuery({
     queryKey: queryKeys.attribution(cityId, selectedWardId ?? "", trajectoryHours),
     queryFn: () => api.attribution(cityId, selectedWardId!, trajectoryHours),
