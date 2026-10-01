@@ -32,10 +32,15 @@ export default function MethodologyPage() {
         <header className="mb-8">
           <h1 className="text-2xl font-semibold text-slate-100">Methodology</h1>
           <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-400">
-            VAYU converts a bad air-quality reading into an evidence-backed enforcement order and
+            Aeris converts a bad air-quality reading into an evidence-backed enforcement order and
             then checks whether it worked. Everything below is how — the models, the formulas, the
             numbers we beat and the ones we don&rsquo;t, and the limitations we&rsquo;d want a
             reviewer to know before trusting a single order.
+          </p>
+          <p className="mt-3 max-w-2xl text-[11px] leading-relaxed text-slate-500">
+            <span className="text-slate-300">Study scope:</span> Delhi and Pune only. City-specific
+            forecasts, ward analysis, source attribution, interventions, and verification are interpreted
+            within these two configured study areas.
           </p>
         </header>
 
@@ -94,7 +99,7 @@ function Backtest({ evalQ, loading }: { evalQ?: Evaluation; loading: boolean }) 
           <MetricTable metrics={evalQ.metrics} horizon={24} />
           <p className="mt-3 text-[11px] leading-relaxed text-slate-500">
             Read this honestly: at 24h, persistence is a genuinely strong baseline for PM2.5, and
-            VAYU beats it by a narrow margin on error while doing better on the thing that matters
+            Aeris beats it by a narrow margin on error while doing better on the thing that matters
             for enforcement — recall on AQI-300 crossings, the hazard events an operator must not
             miss. We report the close race rather than cherry-pick a horizon.
           </p>
@@ -177,7 +182,7 @@ function Attribution() {
   return (
     <Section icon={<FlaskConical className="h-4 w-4" />} title="Source attribution">
       <p className="text-sm leading-relaxed text-slate-400">
-        For a ward, VAYU walks the air back along the wind (a back-trajectory cone) and scores each
+        For a ward, Aeris walks the air back along the wind (a back-trajectory cone) and scores each
         source it passes through. The share of each source is its score over the total:
       </p>
       <pre className="mt-3 overflow-x-auto rounded-lg border border-white/8 bg-black/30 p-4 text-[11px] leading-relaxed text-slate-300">
@@ -205,7 +210,7 @@ function Plume() {
   return (
     <Section icon={<FlaskConical className="h-4 w-4" />} title="Dispersion &amp; ROI">
       <p className="text-sm leading-relaxed text-slate-400">
-        To decide what an action is worth, VAYU runs a Gaussian plume counterfactual: source
+        To decide what an action is worth, Aeris runs a Gaussian plume counterfactual: source
         running vs. source halted, stepped through the 48h wind forecast. The µg/m³ averted × people
         protected ÷ teams-required gives the ROI that ranks the leaderboard. Emission rates come
         from published factors — fire radiative power via Wooster (2005) and Andreae &amp; Merlet
@@ -213,7 +218,7 @@ function Plume() {
       </p>
       <p className="mt-2 text-[11px] leading-relaxed text-slate-500">
         Hard limit: a steady-state plume is only trusted to 50 km (EPA&rsquo;s AERMOD ceiling).
-        Beyond that VAYU refuses to size a source and issues an escalation advisory instead — which
+        Beyond that Aeris refuses to size a source and issues an escalation advisory instead — which
         is exactly why Delhi&rsquo;s November stubble shows up as &ldquo;not yours to fix, escalate
         to CAQM&rdquo; rather than a fabricated averted-µg/m³ number.
       </p>
@@ -226,7 +231,7 @@ function Verification() {
     <Section icon={<Scale className="h-4 w-4" />} title="Verification (difference-in-differences)">
       <p className="text-sm leading-relaxed text-slate-400">
         After an order is executed, the ward&rsquo;s PM2.5 falls — but air moves for reasons that
-        have nothing to do with enforcement. VAYU subtracts what would have happened anyway,
+        have nothing to do with enforcement. Aeris subtracts what would have happened anyway,
         estimated from control wards matched on their pre-period behaviour only:
       </p>
       <pre className="mt-3 overflow-x-auto rounded-lg border border-white/8 bg-black/30 p-4 text-[11px] text-slate-300">
@@ -293,10 +298,10 @@ function DataSources({ statuses }: { statuses: DataStatus[] }) {
 
 function Limitations() {
   const items = [
-    ["Ward population is an equal split", "Municipal wards are delimited to equal population (Delhi Municipal Corporation Act 1957 s.5; UP Act 1959), so the Census city total is split equally — not apportioned by area, which would invert it. Real wards vary ±15%; per-ward Census figures exist in delimitation orders and are the upgrade path."],
+    ["Ward population is an equal split", "Municipal ward populations are estimated by equal split for the configured Delhi and Pune city totals because per-ward population has not been mapped to the bundled boundary datasets; this is an estimate — not apportioned by area, which would invert it. Real wards vary ±15%; per-ward Census figures exist in delimitation orders and are the upgrade path."],
     ["The plume is a screening model", "Steady-state, straight-line, no chemistry or deposition. Trusted to 50 km; concentrations are an upper bound. Good for ranking local actions, not for regulatory-grade dispersion."],
     ["Industry emissions are uncertain", "Published Delhi inventories disagree on industry's PM2.5 share by ~8× (SAFAR 22%, TERI 3%). We use the SAFAR figure; any industrial averted-µg/m³ could be several times off."],
-    ["Ward AQI is interpolated", "~52 stations for 290 Delhi wards, so most ward values are IDW-interpolated (p=2, k=5). Wards far from a monitor are watermarked low-confidence."],
+    ["Ward AQI is interpolated", "Ward values for both Delhi and Pune are IDW-interpolated (p=2, k=5) from the stations that actually report for the selected time window. Wards far from a monitor are watermarked low-confidence."],
     ["Construction permits are sample data", "A representative synthetic permit set stands in for a live municipal feed; flagged as sample in the data-status pills."],
     ["Regulation text is abridged", "The GRAP corpus is a faithful but shortened restatement for a prototype. Verify against the current CAQM order before issuing anything."],
   ];
@@ -318,11 +323,10 @@ function CostComparison() {
   return (
     <Section icon={<Scale className="h-4 w-4" />} title="Cost to run">
       <p className="text-sm leading-relaxed text-slate-400">
-        India&rsquo;s existing decision-support (IITM DSS) is Delhi-only, winter-only, and
-        supercomputer-bound. VAYU runs the full loop — forecast, attribution, dispersion,
-        verification — for a new city from a single config file, on a laptop, with free public data
-        and no API keys required. Onboarding a city is one file, demonstrated live (Delhi → Lucknow
-        in under two seconds).
+        The deployed study scope is limited to Delhi and Pune. Aeris runs the full loop — forecast, attribution, dispersion,
+        verification — for these two configured cities on a laptop, using public data where available and
+        explicit sample fallbacks where a live source is unavailable. Delhi uses the GRAP workflow;
+        Pune does not, because the Pune configuration marks GRAP as not applicable.
       </p>
     </Section>
   );
