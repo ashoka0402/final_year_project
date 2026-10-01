@@ -28,14 +28,14 @@ def test_health_reports_mode_and_seed_state():
     body = r.json()
     assert body["status"] in {"ok", "degraded"}
     assert isinstance(body["demo_mode"], bool)
-    assert "delhi" in body["cities"] and "lucknow" in body["cities"]
+    assert "delhi" in body["cities"] and "pune" in body["cities"]
 
 
 def test_cities_lists_both_demo_cities_from_config():
     r = client.get("/api/v1/cities")
     assert r.status_code == 200
     cities = {c["id"]: c for c in r.json()}
-    assert {"delhi", "lucknow"} <= cities.keys()
+    assert {"delhi", "pune"} <= cities.keys()
     for c in cities.values():
         assert len(c["bbox"]) == 4
         assert c["population"] > 0
@@ -51,7 +51,7 @@ def test_unknown_city_is_rfc7807_problem_json():
     assert body["status"] == 404
 
 
-@pytest.mark.parametrize("city", ["delhi", "lucknow"])
+@pytest.mark.parametrize("city", ["delhi", "pune"])
 def test_current_returns_wards_and_stations(city, seeded):
     if not seeded:
         pytest.skip("run `make seed` first")
@@ -77,7 +77,7 @@ def test_current_returns_wards_and_stations(city, seeded):
         assert s["status"] in {"live", "cached", "sample", "cams", "h3-fallback", "unavailable"}
 
 
-@pytest.mark.parametrize("city", ["delhi", "lucknow"])
+@pytest.mark.parametrize("city", ["delhi", "pune"])
 def test_city_aqi_is_population_weighted_and_in_range(city, seeded):
     if not seeded:
         pytest.skip("run `make seed` first")
@@ -89,7 +89,7 @@ def test_city_aqi_is_population_weighted_and_in_range(city, seeded):
     assert min(ward_aqis) <= b["aqi"] <= max(ward_aqis)
 
 
-@pytest.mark.parametrize("city", ["delhi", "lucknow"])
+@pytest.mark.parametrize("city", ["delhi", "pune"])
 def test_ward_geojson_is_valid_and_matches_current(city, seeded):
     if not seeded:
         pytest.skip("run `make seed` first")
@@ -131,7 +131,7 @@ def _first_ward(city: str) -> str:
     return client.get(f"/api/v1/cities/{city}/current").json()["wards"][0]["ward_id"]
 
 
-@pytest.mark.parametrize("city", ["delhi", "lucknow"])
+@pytest.mark.parametrize("city", ["delhi", "pune"])
 def test_trajectory_returns_a_line_and_a_cone(city, seeded):
     if not seeded:
         pytest.skip("run `make seed` first")
