@@ -170,7 +170,8 @@ def seed_city(city: CityConfig, force: bool = False) -> dict[str, str]:
     if not measurements.empty:
         measurements = measurements.drop_duplicates(subset=["city", "station_id", "param", "ts"], keep="last")
         measurements.to_parquet(me_path, index=False)
-    statuses["measurements"] = hist_status
+    measurements_status = "live" if not current.empty else hist_status
+    statuses["measurements"] = measurements_status
 
     # ---- 4. Weather ---------------------------------------------------------
     wx_path = _sample(f"weather_{city.id}.parquet")
@@ -285,7 +286,7 @@ def seed_city(city: CityConfig, force: bool = False) -> dict[str, str]:
         detail = {
             "wards": f"{n_w} wards · {city.wards.attribution or 'bundled'}",
             "stations": f"{n_s} stations · {stations['provider'].iloc[0] if n_s else 'n/a'}",
-            "measurements": f"{n_m:,} rows · {', '.join(sorted(measurements['source'].dropna().unique())) if n_m else 'none'}",
+            "measurements": f"{n_m:,} rows · {', '.join(sorted(measurements['source'].dropna().unique())) if n_m else 'none'} · {aq_detail}; historical: {hist_status}",
             "weather": f"{n_x:,} rows · Open-Meteo",
             "fires": f"{n_f} detections · NASA FIRMS VIIRS",
             "osm": "OpenStreetMap via Overpass",
