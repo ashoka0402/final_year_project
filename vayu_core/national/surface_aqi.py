@@ -50,7 +50,7 @@ from vayu_core.config import CityConfig, RegionConfig
 # Which cities' station+weather data back the validated corridor. Extending
 # this list (plus the matching national ground truth) is the entire path to
 # scaling the claim beyond the corridor — no architecture change needed.
-GROUND_TRUTH_CITIES = ("delhi", "delhi_ncr", "lucknow")
+GROUND_TRUTH_CITIES = ("delhi", "pune")
 
 PATCH = 1          # cells either side of the station's own cell -> 3x3
 LOOKBACK_DAYS = 5  # LSTM sequence length
