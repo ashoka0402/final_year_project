@@ -181,7 +181,7 @@ def fetch_current(city: CityConfig, at=None) -> tuple[pd.DataFrame, pd.DataFrame
 
         try:
             latest = fetch_json(
-                f"{BASE}/locations/{int(loc["id"])}/latest",
+                f"{BASE}/locations/{loc_id}/latest",
                 params={
                     "limit": 1000,
                     "datetime_min": cutoff.isoformat().replace("+00:00", "Z"),
@@ -191,7 +191,7 @@ def fetch_current(city: CityConfig, at=None) -> tuple[pd.DataFrame, pd.DataFrame
                 limiter=_limiter,
             )
         except FetchError as exc:
-            logger.warning(f"OpenAQ latest for location {loc["id"]}: {exc}")
+            logger.warning(f"OpenAQ latest for location {loc_id}: {exc}")
             skipped += 1
             continue
 
@@ -212,7 +212,7 @@ def fetch_current(city: CityConfig, at=None) -> tuple[pd.DataFrame, pd.DataFrame
                 ts = ts.tz_convert("UTC")
             if ts < cutoff or ts > target_ts:
                 continue
-            station_id = f"{city.id}:oaq{loc["id"]}"
+            station_id = f"{city.id}:oaq{loc_id}"
             measurement_rows.append({
                 "city": city.id,
                 "station_id": station_id,
@@ -227,7 +227,7 @@ def fetch_current(city: CityConfig, at=None) -> tuple[pd.DataFrame, pd.DataFrame
         if location_measurements:
             station_rows.append({
                 "city": city.id,
-                "station_id": f"{city.id}:oaq{loc["id"]}",
+                "station_id": f"{city.id}:oaq{loc_id}",
                 "name": (loc.get("name") or f"OpenAQ {loc["id"]}").strip(),
                 "lat": float(lat),
                 "lon": float(lon),
