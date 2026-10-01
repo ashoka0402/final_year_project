@@ -62,7 +62,7 @@ async def lifespan(_: FastAPI):
         # instead would block the event loop (and Cloud Run's readiness
         # check) for as long as the CPCB feed takes, which the smoke test
         # showed can be tens of seconds under rate-limit backoff for
-        # delhi_ncr's full-national-feed pagination. next_run_time=now fires
+        # the full-national-feed pagination. next_run_time=now fires
         # the first run through the same non-blocking path instead of
         # duplicating the call inline.
         scheduler = AsyncIOScheduler()
