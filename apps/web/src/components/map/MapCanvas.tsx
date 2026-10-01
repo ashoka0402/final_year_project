@@ -590,16 +590,30 @@ export function MapCanvas({
   useEffect(() => {
     const m = map.current;
     if (!m || !styleReady) return;
-    const set = (id: string, on: boolean) => {
-      if (m.getLayer(id)) m.setLayoutProperty(id, "visibility", on ? "visible" : "none");
+
+    // Keep layer visibility synchronized after both UI toggles and city/style
+    // changes. MapLibre can defer style mutations until its next render pass;
+    // syncing once immediately and again on idle prevents the Delhi choropleth
+    // from getting visually out of sync with Zustand after a city switch.
+    const syncLayerVisibility = () => {
+      if (!m.isStyleLoaded()) return;
+      const set = (id: string, on: boolean) => {
+        if (m.getLayer(id)) {
+          m.setLayoutProperty(id, "visibility", on ? "visible" : "none");
+        }
+      };
+      set(LYR_WARD_FILL, layersOn.wardChoropleth);
+      set(LYR_WARD_LINE, layersOn.wardChoropleth);
+      set(LYR_STATIONS, layersOn.stations);
+      set(LYR_TRAJ, layersOn.trajectories);
+      set(LYR_CONE, layersOn.trajectories);
+      set(LYR_EVIDENCE, layersOn.fires);
     };
-    set(LYR_WARD_FILL, layersOn.wardChoropleth);
-    set(LYR_WARD_LINE, layersOn.wardChoropleth);
-    set(LYR_STATIONS, layersOn.stations);
-    set(LYR_TRAJ, layersOn.trajectories);
-    set(LYR_CONE, layersOn.trajectories);
-    set(LYR_EVIDENCE, layersOn.fires);
-  }, [layersOn, styleReady]);
+
+    syncLayerVisibility();
+    m.on("idle", syncLayerVisibility);
+    return () => m.off("idle", syncLayerVisibility);
+  }, [layersOn, city.id, styleReady]);
 
   // ---- city switch: fly, don't rebuild ------------------------------------
   useEffect(() => {
