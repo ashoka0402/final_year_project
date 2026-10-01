@@ -114,14 +114,6 @@ const LYR_TRAJ = "vayu-traj-line";
 const LYR_TRAJ_HEAD = "vayu-traj-head";
 const LYR_EVIDENCE = "vayu-evidence-pts";
 
-/** CPCB bands as a MapLibre `step` expression over the ward AQI property. */
-const AQI_STEP_EXPRESSION: maplibregl.ExpressionSpecification = [
-  "step",
-  ["get", "aqi"],
-  AQI_BANDS[0].color,
-  ...AQI_BANDS.slice(1).flatMap((b) => [b.min, b.color] as [number, string]),
-] as unknown as maplibregl.ExpressionSpecification;
-
 interface Props {
   city: City;
   current?: Current;
@@ -184,6 +176,7 @@ export function MapCanvas({
         properties: {
           ...feature.properties,
           aqi: reading?.aqi ?? null,
+          color: reading?.color ?? null,
           selected: wardId === selectedWardId,
         },
       };
@@ -300,9 +293,9 @@ export function MapCanvas({
         paint: {
           "fill-color": [
             "case",
-            ["==", ["get", "aqi"], null],
+            ["==", ["get", "color"], null],
             "#334155",
-            AQI_STEP_EXPRESSION,
+            ["get", "color"],
           ] as unknown as maplibregl.ExpressionSpecification,
           "fill-opacity": [
             "case",
