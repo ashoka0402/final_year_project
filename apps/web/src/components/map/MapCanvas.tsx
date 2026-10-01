@@ -37,6 +37,18 @@ import { WardTooltip } from "./WardTooltip";
  * without adding a second renderer.
  */
 
+/** CPCB bands as a MapLibre `step` expression over ward feature-state AQI. */
+const AQI_STEP_EXPRESSION: maplibregl.ExpressionSpecification = [
+  "step",
+  ["feature-state", "aqi"],
+  "#009865",
+  51, "#A3C853",
+  101, "#FFF833",
+  201, "#F29C33",
+  301, "#E93F33",
+  401, "#AF2D24",
+] as unknown as maplibregl.ExpressionSpecification;
+
 const EVIDENCE_COLOR: Record<string, string> = {
   fire: "#EF4444",
   industry: "#22D3EE",
@@ -166,26 +178,8 @@ export function MapCanvas({
   const readingsRef = useRef(readings);
   readingsRef.current = readings;
 
-  const wardGeoJSON = useMemo(() => {
-    const features = (wards?.features ?? []).map((feature) => {
-      const wardId = feature.properties.ward_id;
-      const reading = readings.get(wardId);
-      return {
-        ...feature,
-        properties: {
-          ...feature.properties,
-          aqi: reading?.aqi ?? null,
-          color: reading?.color ?? null,
-          selected: wardId === selectedWardId,
-        },
-      };
-    });
-    return {
-      type: "FeatureCollection" as const,
-      features,
-    };
-  }, [wards, readings, selectedWardId]);
-
+  // Ward geometry remains immutable; AQI is written separately as feature-state.
+  // This is important for Delhi because the geometry endpoint is cached forever.
   const stationGeoJSON = useMemo(
     () => ({
       type: "FeatureCollection" as const,
@@ -286,15 +280,12 @@ export function MapCanvas({
         id: LYR_WARD_FILL,
         type: "fill",
         source: SRC_WARDS,
-        layout: {
-          visibility: showWardAqi ? "visible" : "none",
-        },
         paint: {
           "fill-color": [
             "case",
-            ["==", ["get", "color"], null],
+            ["==", ["feature-state", "aqi"], null],
             "#334155",
-            ["get", "color"],
+            AQI_STEP_EXPRESSION,
           ] as unknown as maplibregl.ExpressionSpecification,
           "fill-opacity": [
             "case",
@@ -312,9 +303,6 @@ export function MapCanvas({
         id: LYR_WARD_LINE,
         type: "line",
         source: SRC_WARDS,
-        layout: {
-          visibility: showWardAqi ? "visible" : "none",
-        },
         paint: {
           "line-color": [
             "case",
@@ -447,14 +435,35 @@ export function MapCanvas({
     };
   }, [styleReady, hoverWard, selectWard]);
 
-  // ---- push ward geometry + values -----------------------------------------
+  // ---- push ward geometry -------------------------------------------------
   useEffect(() => {
     const m = map.current;
     if (!m || !styleReady) return;
     const src = m.getSource(SRC_WARDS) as maplibregl.GeoJSONSource | undefined;
     if (!src) return;
-    src.setData(wardGeoJSON as unknown as GeoJSON.FeatureCollection);
-  }, [wardGeoJSON, styleReady]);
+    src.setData(
+      wards?.features?.length
+        ? ({ type: "FeatureCollection", features: wards.features } as GeoJSON.FeatureCollection)
+        : { type: "FeatureCollection", features: [] },
+    );
+  }, [wards, styleReady]);
+
+  // ---- push ward AQI values as feature-state -------------------------------
+  useEffect(() => {
+    const m = map.current;
+    if (!m || !styleReady || !wards?.features?.length) return;
+
+    // Clear the previous city's AQI state before applying the new city.
+    m.removeFeatureState({ source: SRC_WARDS });
+    readings.forEach((ward, id) => {
+      m.setFeatureState(
+        { source: SRC_WARDS, id },
+        { aqi: ward.aqi ?? null },
+      );
+    });
+    // Force a render so the freshly applied feature-state is visible immediately.
+    m.triggerRepaint();
+  }, [readings, wards, styleReady]);
 
   // ---- selection outline --------------------------------------------------
   const prevSelected = useRef<string | null>(null);
