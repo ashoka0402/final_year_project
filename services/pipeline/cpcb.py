@@ -83,11 +83,10 @@ def fetch_stations(city: CityConfig) -> tuple[pd.DataFrame, pd.DataFrame]:
     """
     settings = get_settings()
     # Two selection modes:
-    #   * cpcb_city_filter set  -> server-side filter by one city name (Delhi,
-    #     Lucknow). Fast: the feed returns only that city.
-    #   * not set (NCR)         -> fetch the whole national feed and select by the
-    #     config bbox below. NCR spans ~19 municipalities under different city
-    #     names, so a single name filter can't capture it; the bbox can.
+    #   * cpcb_city_filter set  -> server-side filter by one city name (Delhi, Pune).
+    #     Fast: the feed returns only that city.
+    #   * not set              -> fetch the whole national feed and select by the
+    #     config bbox below. This fallback is retained for future city configs.
     city_filter = city.sources.get("cpcb_city_filter")
     bbox_mode = not city_filter
     # The national feed is ~3,500 records; a single city is a few dozen. Page
