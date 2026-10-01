@@ -1,8 +1,8 @@
 """Historical hourly air quality from Open-Meteo's CAMS reanalysis.
 
 Why this source exists in VAYU:
-India's measured station archive (OpenAQ v3, CPCB's own portal) is key-gated,
-and the CPCB real-time feed is a *snapshot* — it has no history at all. But the
+India's measured station archive can be incomplete or key-gated, while the CPCB
+CAAQMS feed implemented here is a *snapshot* — it has no history endpoint. But the
 Forecaster needs a long hourly series per station to learn from, and the demo
 must run offline. Open-Meteo's air-quality API serves the ECMWF CAMS global
 reanalysis hourly, at any coordinate, with no key and no signup.
