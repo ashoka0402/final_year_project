@@ -1,0 +1,2416 @@
+{
+  "type": "FeatureCollection",
+  "metadata": {
+    "city": "pune",
+    "source": "synthetic",
+    "description": "Synthetic Pune OSM-context layer for demonstration/testing. Not derived from OpenStreetMap records."
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/001",
+        "kind": "school",
+        "name": "Synthetic Pune School 001",
+        "lat": 18.556587,
+        "lon": 73.892676,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.892676,
+          18.556587
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/002",
+        "kind": "school",
+        "name": "Synthetic Pune School 002",
+        "lat": 18.530532,
+        "lon": 73.975369,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.975369,
+          18.530532
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/003",
+        "kind": "school",
+        "name": "Synthetic Pune School 003",
+        "lat": 18.621466,
+        "lon": 73.735016,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.735016,
+          18.621466
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/004",
+        "kind": "school",
+        "name": "Synthetic Pune School 004",
+        "lat": 18.408669,
+        "lon": 73.966164,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.966164,
+          18.408669
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/005",
+        "kind": "school",
+        "name": "Synthetic Pune School 005",
+        "lat": 18.441869,
+        "lon": 73.736843,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.736843,
+          18.441869
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/006",
+        "kind": "school",
+        "name": "Synthetic Pune School 006",
+        "lat": 18.533108,
+        "lon": 73.870151,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.870151,
+          18.533108
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/007",
+        "kind": "school",
+        "name": "Synthetic Pune School 007",
+        "lat": 18.449667,
+        "lon": 73.81908,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.81908,
+          18.449667
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/008",
+        "kind": "school",
+        "name": "Synthetic Pune School 008",
+        "lat": 18.527813,
+        "lon": 73.836113,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.836113,
+          18.527813
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/009",
+        "kind": "school",
+        "name": "Synthetic Pune School 009",
+        "lat": 18.445446,
+        "lon": 73.797148,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.797148,
+          18.445446
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/010",
+        "kind": "school",
+        "name": "Synthetic Pune School 010",
+        "lat": 18.522349,
+        "lon": 73.94345,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.94345,
+          18.522349
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/011",
+        "kind": "school",
+        "name": "Synthetic Pune School 011",
+        "lat": 18.45567,
+        "lon": 73.868426,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.868426,
+          18.45567
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/012",
+        "kind": "school",
+        "name": "Synthetic Pune School 012",
+        "lat": 18.498473,
+        "lon": 73.84129,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.84129,
+          18.498473
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/013",
+        "kind": "school",
+        "name": "Synthetic Pune School 013",
+        "lat": 18.409342,
+        "lon": 73.976424,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.976424,
+          18.409342
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/014",
+        "kind": "school",
+        "name": "Synthetic Pune School 014",
+        "lat": 18.616796,
+        "lon": 73.968628,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.968628,
+          18.616796
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/015",
+        "kind": "school",
+        "name": "Synthetic Pune School 015",
+        "lat": 18.519511,
+        "lon": 73.913153,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.913153,
+          18.519511
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/016",
+        "kind": "school",
+        "name": "Synthetic Pune School 016",
+        "lat": 18.482403,
+        "lon": 74.00656,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          74.00656,
+          18.482403
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/017",
+        "kind": "school",
+        "name": "Synthetic Pune School 017",
+        "lat": 18.56198,
+        "lon": 73.935342,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.935342,
+          18.56198
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/018",
+        "kind": "school",
+        "name": "Synthetic Pune School 018",
+        "lat": 18.535166,
+        "lon": 73.732464,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.732464,
+          18.535166
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/019",
+        "kind": "school",
+        "name": "Synthetic Pune School 019",
+        "lat": 18.58258,
+        "lon": 73.826493,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.826493,
+          18.58258
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/020",
+        "kind": "school",
+        "name": "Synthetic Pune School 020",
+        "lat": 18.615728,
+        "lon": 73.785863,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.785863,
+          18.615728
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/021",
+        "kind": "school",
+        "name": "Synthetic Pune School 021",
+        "lat": 18.450271,
+        "lon": 73.828249,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.828249,
+          18.450271
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/022",
+        "kind": "school",
+        "name": "Synthetic Pune School 022",
+        "lat": 18.453444,
+        "lon": 73.752704,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.752704,
+          18.453444
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/023",
+        "kind": "school",
+        "name": "Synthetic Pune School 023",
+        "lat": 18.50961,
+        "lon": 73.824328,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.824328,
+          18.50961
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/024",
+        "kind": "school",
+        "name": "Synthetic Pune School 024",
+        "lat": 18.569273,
+        "lon": 73.827573,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.827573,
+          18.569273
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/025",
+        "kind": "school",
+        "name": "Synthetic Pune School 025",
+        "lat": 18.556936,
+        "lon": 73.734437,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.734437,
+          18.556936
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/026",
+        "kind": "school",
+        "name": "Synthetic Pune School 026",
+        "lat": 18.448367,
+        "lon": 73.89294,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.89294,
+          18.448367
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/027",
+        "kind": "school",
+        "name": "Synthetic Pune School 027",
+        "lat": 18.424718,
+        "lon": 73.792432,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.792432,
+          18.424718
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/028",
+        "kind": "school",
+        "name": "Synthetic Pune School 028",
+        "lat": 18.487136,
+        "lon": 73.854146,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.854146,
+          18.487136
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/029",
+        "kind": "school",
+        "name": "Synthetic Pune School 029",
+        "lat": 18.431691,
+        "lon": 73.776353,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.776353,
+          18.431691
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/030",
+        "kind": "school",
+        "name": "Synthetic Pune School 030",
+        "lat": 18.432677,
+        "lon": 73.854503,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.854503,
+          18.432677
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/031",
+        "kind": "school",
+        "name": "Synthetic Pune School 031",
+        "lat": 18.619057,
+        "lon": 73.920532,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.920532,
+          18.619057
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/032",
+        "kind": "school",
+        "name": "Synthetic Pune School 032",
+        "lat": 18.528986,
+        "lon": 73.82674,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.82674,
+          18.528986
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/033",
+        "kind": "school",
+        "name": "Synthetic Pune School 033",
+        "lat": 18.404259,
+        "lon": 73.803333,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.803333,
+          18.404259
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/034",
+        "kind": "school",
+        "name": "Synthetic Pune School 034",
+        "lat": 18.481844,
+        "lon": 73.801402,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.801402,
+          18.481844
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/035",
+        "kind": "school",
+        "name": "Synthetic Pune School 035",
+        "lat": 18.476726,
+        "lon": 73.958608,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.958608,
+          18.476726
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/036",
+        "kind": "school",
+        "name": "Synthetic Pune School 036",
+        "lat": 18.483514,
+        "lon": 73.826656,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.826656,
+          18.483514
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/037",
+        "kind": "school",
+        "name": "Synthetic Pune School 037",
+        "lat": 18.583543,
+        "lon": 73.982921,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.982921,
+          18.583543
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/038",
+        "kind": "school",
+        "name": "Synthetic Pune School 038",
+        "lat": 18.492941,
+        "lon": 73.984673,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.984673,
+          18.492941
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/039",
+        "kind": "school",
+        "name": "Synthetic Pune School 039",
+        "lat": 18.526928,
+        "lon": 73.789105,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.789105,
+          18.526928
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/040",
+        "kind": "school",
+        "name": "Synthetic Pune School 040",
+        "lat": 18.426867,
+        "lon": 73.80208,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.80208,
+          18.426867
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/041",
+        "kind": "school",
+        "name": "Synthetic Pune School 041",
+        "lat": 18.529041,
+        "lon": 73.853969,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.853969,
+          18.529041
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/042",
+        "kind": "school",
+        "name": "Synthetic Pune School 042",
+        "lat": 18.414861,
+        "lon": 73.766675,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.766675,
+          18.414861
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/043",
+        "kind": "school",
+        "name": "Synthetic Pune School 043",
+        "lat": 18.540352,
+        "lon": 73.977377,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.977377,
+          18.540352
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/044",
+        "kind": "school",
+        "name": "Synthetic Pune School 044",
+        "lat": 18.489998,
+        "lon": 73.996929,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.996929,
+          18.489998
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/045",
+        "kind": "school",
+        "name": "Synthetic Pune School 045",
+        "lat": 18.581832,
+        "lon": 73.9628,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.9628,
+          18.581832
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/046",
+        "kind": "school",
+        "name": "Synthetic Pune School 046",
+        "lat": 18.413044,
+        "lon": 73.829233,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.829233,
+          18.413044
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/047",
+        "kind": "school",
+        "name": "Synthetic Pune School 047",
+        "lat": 18.598825,
+        "lon": 73.950616,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.950616,
+          18.598825
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/048",
+        "kind": "school",
+        "name": "Synthetic Pune School 048",
+        "lat": 18.400802,
+        "lon": 73.796206,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.796206,
+          18.400802
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/049",
+        "kind": "school",
+        "name": "Synthetic Pune School 049",
+        "lat": 18.413117,
+        "lon": 73.779203,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.779203,
+          18.413117
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/050",
+        "kind": "school",
+        "name": "Synthetic Pune School 050",
+        "lat": 18.499385,
+        "lon": 73.823404,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.823404,
+          18.499385
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/051",
+        "kind": "school",
+        "name": "Synthetic Pune School 051",
+        "lat": 18.434084,
+        "lon": 73.765975,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.765975,
+          18.434084
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/052",
+        "kind": "school",
+        "name": "Synthetic Pune School 052",
+        "lat": 18.504041,
+        "lon": 73.908871,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.908871,
+          18.504041
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/053",
+        "kind": "school",
+        "name": "Synthetic Pune School 053",
+        "lat": 18.407175,
+        "lon": 73.925492,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.925492,
+          18.407175
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/054",
+        "kind": "school",
+        "name": "Synthetic Pune School 054",
+        "lat": 18.587958,
+        "lon": 73.800501,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.800501,
+          18.587958
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/055",
+        "kind": "school",
+        "name": "Synthetic Pune School 055",
+        "lat": 18.57082,
+        "lon": 73.896814,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.896814,
+          18.57082
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/056",
+        "kind": "school",
+        "name": "Synthetic Pune School 056",
+        "lat": 18.568436,
+        "lon": 73.830108,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.830108,
+          18.568436
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/057",
+        "kind": "school",
+        "name": "Synthetic Pune School 057",
+        "lat": 18.403524,
+        "lon": 74.014762,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          74.014762,
+          18.403524
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/058",
+        "kind": "school",
+        "name": "Synthetic Pune School 058",
+        "lat": 18.509043,
+        "lon": 73.971558,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.971558,
+          18.509043
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/059",
+        "kind": "school",
+        "name": "Synthetic Pune School 059",
+        "lat": 18.614086,
+        "lon": 73.995265,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.995265,
+          18.614086
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/060",
+        "kind": "school",
+        "name": "Synthetic Pune School 060",
+        "lat": 18.430019,
+        "lon": 73.830719,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.830719,
+          18.430019
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/061",
+        "kind": "school",
+        "name": "Synthetic Pune School 061",
+        "lat": 18.456293,
+        "lon": 73.818783,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.818783,
+          18.456293
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/062",
+        "kind": "school",
+        "name": "Synthetic Pune School 062",
+        "lat": 18.476489,
+        "lon": 73.815982,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.815982,
+          18.476489
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/063",
+        "kind": "school",
+        "name": "Synthetic Pune School 063",
+        "lat": 18.603295,
+        "lon": 73.996787,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.996787,
+          18.603295
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/064",
+        "kind": "school",
+        "name": "Synthetic Pune School 064",
+        "lat": 18.524989,
+        "lon": 74.012502,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          74.012502,
+          18.524989
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/065",
+        "kind": "school",
+        "name": "Synthetic Pune School 065",
+        "lat": 18.584724,
+        "lon": 73.970842,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.970842,
+          18.584724
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/066",
+        "kind": "school",
+        "name": "Synthetic Pune School 066",
+        "lat": 18.600603,
+        "lon": 73.802299,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.802299,
+          18.600603
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/067",
+        "kind": "school",
+        "name": "Synthetic Pune School 067",
+        "lat": 18.524841,
+        "lon": 73.938332,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.938332,
+          18.524841
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/068",
+        "kind": "school",
+        "name": "Synthetic Pune School 068",
+        "lat": 18.518178,
+        "lon": 73.78564,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.78564,
+          18.518178
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/069",
+        "kind": "school",
+        "name": "Synthetic Pune School 069",
+        "lat": 18.414239,
+        "lon": 73.780425,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.780425,
+          18.414239
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/070",
+        "kind": "school",
+        "name": "Synthetic Pune School 070",
+        "lat": 18.553105,
+        "lon": 73.795665,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.795665,
+          18.553105
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/071",
+        "kind": "school",
+        "name": "Synthetic Pune School 071",
+        "lat": 18.51842,
+        "lon": 73.98025,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.98025,
+          18.51842
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/072",
+        "kind": "school",
+        "name": "Synthetic Pune School 072",
+        "lat": 18.548174,
+        "lon": 73.777998,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.777998,
+          18.548174
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/073",
+        "kind": "school",
+        "name": "Synthetic Pune School 073",
+        "lat": 18.481999,
+        "lon": 73.776299,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.776299,
+          18.481999
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/074",
+        "kind": "school",
+        "name": "Synthetic Pune School 074",
+        "lat": 18.469033,
+        "lon": 73.973799,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.973799,
+          18.469033
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/school/075",
+        "kind": "school",
+        "name": "Synthetic Pune School 075",
+        "lat": 18.442806,
+        "lon": 73.955348,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.955348,
+          18.442806
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/hospital/001",
+        "kind": "hospital",
+        "name": "Synthetic Pune Hospital 001",
+        "lat": 18.447117,
+        "lon": 73.918127,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.918127,
+          18.447117
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/hospital/002",
+        "kind": "hospital",
+        "name": "Synthetic Pune Hospital 002",
+        "lat": 18.590773,
+        "lon": 73.843798,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.843798,
+          18.590773
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/hospital/003",
+        "kind": "hospital",
+        "name": "Synthetic Pune Hospital 003",
+        "lat": 18.493974,
+        "lon": 73.75948,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.75948,
+          18.493974
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/hospital/004",
+        "kind": "hospital",
+        "name": "Synthetic Pune Hospital 004",
+        "lat": 18.521731,
+        "lon": 74.00958,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          74.00958,
+          18.521731
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/hospital/005",
+        "kind": "hospital",
+        "name": "Synthetic Pune Hospital 005",
+        "lat": 18.47118,
+        "lon": 74.00079,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          74.00079,
+          18.47118
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/hospital/006",
+        "kind": "hospital",
+        "name": "Synthetic Pune Hospital 006",
+        "lat": 18.548628,
+        "lon": 73.87823,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.87823,
+          18.548628
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/hospital/007",
+        "kind": "hospital",
+        "name": "Synthetic Pune Hospital 007",
+        "lat": 18.399613,
+        "lon": 73.935804,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.935804,
+          18.399613
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/hospital/008",
+        "kind": "hospital",
+        "name": "Synthetic Pune Hospital 008",
+        "lat": 18.612587,
+        "lon": 73.910502,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.910502,
+          18.612587
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/hospital/009",
+        "kind": "hospital",
+        "name": "Synthetic Pune Hospital 009",
+        "lat": 18.466578,
+        "lon": 73.875174,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.875174,
+          18.466578
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/hospital/010",
+        "kind": "hospital",
+        "name": "Synthetic Pune Hospital 010",
+        "lat": 18.526633,
+        "lon": 73.947294,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.947294,
+          18.526633
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/hospital/011",
+        "kind": "hospital",
+        "name": "Synthetic Pune Hospital 011",
+        "lat": 18.389796,
+        "lon": 73.88621,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.88621,
+          18.389796
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/hospital/012",
+        "kind": "hospital",
+        "name": "Synthetic Pune Hospital 012",
+        "lat": 18.581518,
+        "lon": 73.888399,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.888399,
+          18.581518
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/hospital/013",
+        "kind": "hospital",
+        "name": "Synthetic Pune Hospital 013",
+        "lat": 18.573032,
+        "lon": 73.875665,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.875665,
+          18.573032
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/hospital/014",
+        "kind": "hospital",
+        "name": "Synthetic Pune Hospital 014",
+        "lat": 18.597919,
+        "lon": 73.838217,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.838217,
+          18.597919
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/hospital/015",
+        "kind": "hospital",
+        "name": "Synthetic Pune Hospital 015",
+        "lat": 18.595096,
+        "lon": 73.986422,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.986422,
+          18.595096
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/hospital/016",
+        "kind": "hospital",
+        "name": "Synthetic Pune Hospital 016",
+        "lat": 18.605239,
+        "lon": 73.973916,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.973916,
+          18.605239
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/hospital/017",
+        "kind": "hospital",
+        "name": "Synthetic Pune Hospital 017",
+        "lat": 18.424739,
+        "lon": 73.835791,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.835791,
+          18.424739
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/hospital/018",
+        "kind": "hospital",
+        "name": "Synthetic Pune Hospital 018",
+        "lat": 18.462718,
+        "lon": 73.775507,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.775507,
+          18.462718
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/hospital/019",
+        "kind": "hospital",
+        "name": "Synthetic Pune Hospital 019",
+        "lat": 18.392849,
+        "lon": 73.881417,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.881417,
+          18.392849
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/hospital/020",
+        "kind": "hospital",
+        "name": "Synthetic Pune Hospital 020",
+        "lat": 18.457629,
+        "lon": 73.912519,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.912519,
+          18.457629
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/hospital/021",
+        "kind": "hospital",
+        "name": "Synthetic Pune Hospital 021",
+        "lat": 18.572471,
+        "lon": 73.73821,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.73821,
+          18.572471
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/hospital/022",
+        "kind": "hospital",
+        "name": "Synthetic Pune Hospital 022",
+        "lat": 18.48942,
+        "lon": 73.850771,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.850771,
+          18.48942
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/hospital/023",
+        "kind": "hospital",
+        "name": "Synthetic Pune Hospital 023",
+        "lat": 18.429145,
+        "lon": 74.015406,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          74.015406,
+          18.429145
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/hospital/024",
+        "kind": "hospital",
+        "name": "Synthetic Pune Hospital 024",
+        "lat": 18.585774,
+        "lon": 73.865244,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.865244,
+          18.585774
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/hospital/025",
+        "kind": "hospital",
+        "name": "Synthetic Pune Hospital 025",
+        "lat": 18.530338,
+        "lon": 73.828764,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.828764,
+          18.530338
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/industrial/001",
+        "kind": "industrial",
+        "name": "Synthetic Pune Industrial Area 01",
+        "lat": 18.566,
+        "lon": 73.806,
+        "area_km2": 3.4312,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.799542,
+              18.555219
+            ],
+            [
+              73.812458,
+              18.555219
+            ],
+            [
+              73.812458,
+              18.576781
+            ],
+            [
+              73.799542,
+              18.576781
+            ],
+            [
+              73.799542,
+              18.555219
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/industrial/002",
+        "kind": "industrial",
+        "name": "Synthetic Pune Industrial Area 02",
+        "lat": 18.602,
+        "lon": 73.742,
+        "area_km2": 5.8305,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.731959,
+              18.590217
+            ],
+            [
+              73.752041,
+              18.590217
+            ],
+            [
+              73.752041,
+              18.613783
+            ],
+            [
+              73.731959,
+              18.613783
+            ],
+            [
+              73.731959,
+              18.590217
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/industrial/003",
+        "kind": "industrial",
+        "name": "Synthetic Pune Industrial Area 03",
+        "lat": 18.56,
+        "lon": 73.926,
+        "area_km2": 6.9785,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.912475,
+              18.549531
+            ],
+            [
+              73.939525,
+              18.549531
+            ],
+            [
+              73.939525,
+              18.570469
+            ],
+            [
+              73.912475,
+              18.570469
+            ],
+            [
+              73.912475,
+              18.549531
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/industrial/004",
+        "kind": "industrial",
+        "name": "Synthetic Pune Industrial Area 04",
+        "lat": 18.518,
+        "lon": 73.912,
+        "area_km2": 4.5912,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.903207,
+              18.507406
+            ],
+            [
+              73.920793,
+              18.507406
+            ],
+            [
+              73.920793,
+              18.528594
+            ],
+            [
+              73.903207,
+              18.528594
+            ],
+            [
+              73.903207,
+              18.507406
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/industrial/005",
+        "kind": "industrial",
+        "name": "Synthetic Pune Industrial Area 05",
+        "lat": 18.476,
+        "lon": 73.903,
+        "area_km2": 4.5264,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.892873,
+              18.466931
+            ],
+            [
+              73.913127,
+              18.466931
+            ],
+            [
+              73.913127,
+              18.485069
+            ],
+            [
+              73.892873,
+              18.485069
+            ],
+            [
+              73.892873,
+              18.466931
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/industrial/006",
+        "kind": "industrial",
+        "name": "Synthetic Pune Industrial Area 06",
+        "lat": 18.64,
+        "lon": 73.785,
+        "area_km2": 0.0,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.771047,
+              18.62185
+            ],
+            [
+              73.798953,
+              18.62185
+            ],
+            [
+              73.798953,
+              18.62185
+            ],
+            [
+              73.771047,
+              18.62185
+            ],
+            [
+              73.771047,
+              18.62185
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/industrial/007",
+        "kind": "industrial",
+        "name": "Synthetic Pune Industrial Area 07",
+        "lat": 18.455,
+        "lon": 73.804,
+        "area_km2": 6.507,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.793691,
+              18.442193
+            ],
+            [
+              73.814309,
+              18.442193
+            ],
+            [
+              73.814309,
+              18.467807
+            ],
+            [
+              73.793691,
+              18.467807
+            ],
+            [
+              73.793691,
+              18.442193
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/industrial/008",
+        "kind": "industrial",
+        "name": "Synthetic Pune Industrial Area 08",
+        "lat": 18.536,
+        "lon": 73.97,
+        "area_km2": 2.9482,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.963511,
+              18.526781
+            ],
+            [
+              73.976489,
+              18.526781
+            ],
+            [
+              73.976489,
+              18.545219
+            ],
+            [
+              73.963511,
+              18.545219
+            ],
+            [
+              73.963511,
+              18.526781
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/industrial/009",
+        "kind": "industrial",
+        "name": "Synthetic Pune Industrial Area 09",
+        "lat": 18.398,
+        "lon": 73.81,
+        "area_km2": 4.3706,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.79653,
+              18.391417
+            ],
+            [
+              73.82347,
+              18.391417
+            ],
+            [
+              73.82347,
+              18.404583
+            ],
+            [
+              73.79653,
+              18.404583
+            ],
+            [
+              73.79653,
+              18.391417
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/industrial/010",
+        "kind": "industrial",
+        "name": "Synthetic Pune Industrial Area 10",
+        "lat": 18.587,
+        "lon": 73.884,
+        "area_km2": 6.3351,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              73.871659,
+              18.576584
+            ],
+            [
+              73.896341,
+              18.576584
+            ],
+            [
+              73.896341,
+              18.597416
+            ],
+            [
+              73.871659,
+              18.597416
+            ],
+            [
+              73.871659,
+              18.576584
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/brickyard/001",
+        "kind": "brick_kiln",
+        "name": "Synthetic Brick Kiln 01",
+        "lat": 18.388601,
+        "lon": 73.789069,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.789069,
+          18.388601
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/brickyard/002",
+        "kind": "brick_kiln",
+        "name": "Synthetic Brick Kiln 02",
+        "lat": 18.465873,
+        "lon": 73.87873,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.87873,
+          18.465873
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/brickyard/003",
+        "kind": "brick_kiln",
+        "name": "Synthetic Brick Kiln 03",
+        "lat": 18.49955,
+        "lon": 73.760456,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.760456,
+          18.49955
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/brickyard/004",
+        "kind": "brick_kiln",
+        "name": "Synthetic Brick Kiln 04",
+        "lat": 18.393208,
+        "lon": 73.860691,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.860691,
+          18.393208
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/brickyard/005",
+        "kind": "brick_kiln",
+        "name": "Synthetic Brick Kiln 05",
+        "lat": 18.612586,
+        "lon": 73.916728,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.916728,
+          18.612586
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/brickyard/006",
+        "kind": "brick_kiln",
+        "name": "Synthetic Brick Kiln 06",
+        "lat": 18.404726,
+        "lon": 73.816365,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.816365,
+          18.404726
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/brickyard/007",
+        "kind": "brick_kiln",
+        "name": "Synthetic Brick Kiln 07",
+        "lat": 18.526421,
+        "lon": 73.931344,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.931344,
+          18.526421
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/brickyard/008",
+        "kind": "brick_kiln",
+        "name": "Synthetic Brick Kiln 08",
+        "lat": 18.594764,
+        "lon": 73.782115,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.782115,
+          18.594764
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/brickyard/009",
+        "kind": "brick_kiln",
+        "name": "Synthetic Brick Kiln 09",
+        "lat": 18.565461,
+        "lon": 73.832623,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.832623,
+          18.565461
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/brickyard/010",
+        "kind": "brick_kiln",
+        "name": "Synthetic Brick Kiln 10",
+        "lat": 18.425955,
+        "lon": 73.84963,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.84963,
+          18.425955
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/brickyard/011",
+        "kind": "brick_kiln",
+        "name": "Synthetic Brick Kiln 11",
+        "lat": 18.394262,
+        "lon": 73.738089,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.738089,
+          18.394262
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "osm_id": "synthetic/brickyard/012",
+        "kind": "brick_kiln",
+        "name": "Synthetic Brick Kiln 12",
+        "lat": 18.61166,
+        "lon": 73.810915,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          73.810915,
+          18.61166
+        ]
+      }
+    }
+  ]
+}

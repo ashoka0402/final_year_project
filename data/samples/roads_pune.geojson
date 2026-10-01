@@ -1,0 +1,465 @@
+{
+  "type": "FeatureCollection",
+  "metadata": {
+    "city": "pune",
+    "source": "synthetic",
+    "description": "Synthetic major-road network for pipeline testing. Not derived from OpenStreetMap."
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "road_id": "SYN-R001",
+        "highway": "motorway",
+        "name": "Synthetic Pune Motorway Road 001",
+        "weight": 4.0,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            73.73193,
+            18.396423
+          ],
+          [
+            73.794949,
+            18.403
+          ],
+          [
+            73.875155,
+            18.398
+          ],
+          [
+            73.955361,
+            18.404
+          ],
+          [
+            74.01838,
+            18.4
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "road_id": "SYN-R002",
+        "highway": "trunk",
+        "name": "Synthetic Pune Trunk Road 002",
+        "weight": 3.0,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            73.73193,
+            18.437561
+          ],
+          [
+            73.794949,
+            18.443
+          ],
+          [
+            73.875155,
+            18.438
+          ],
+          [
+            73.955361,
+            18.444
+          ],
+          [
+            74.01838,
+            18.44
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "road_id": "SYN-R003",
+        "highway": "primary",
+        "name": "Synthetic Pune Primary Road 003",
+        "weight": 2.0,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            73.73193,
+            18.476897
+          ],
+          [
+            73.794949,
+            18.483
+          ],
+          [
+            73.875155,
+            18.478
+          ],
+          [
+            73.955361,
+            18.484
+          ],
+          [
+            74.01838,
+            18.48
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "road_id": "SYN-R004",
+        "highway": "secondary",
+        "name": "Synthetic Pune Secondary Road 004",
+        "weight": 1.0,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            73.73193,
+            18.516001
+          ],
+          [
+            73.794949,
+            18.523
+          ],
+          [
+            73.875155,
+            18.518
+          ],
+          [
+            73.955361,
+            18.524
+          ],
+          [
+            74.01838,
+            18.52
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "road_id": "SYN-R005",
+        "highway": "motorway",
+        "name": "Synthetic Pune Motorway Road 005",
+        "weight": 4.0,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            73.73193,
+            18.557137
+          ],
+          [
+            73.794949,
+            18.563
+          ],
+          [
+            73.875155,
+            18.558
+          ],
+          [
+            73.955361,
+            18.564
+          ],
+          [
+            74.01838,
+            18.56
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "road_id": "SYN-R006",
+        "highway": "trunk",
+        "name": "Synthetic Pune Trunk Road 006",
+        "weight": 3.0,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            73.73193,
+            18.597315
+          ],
+          [
+            73.794949,
+            18.603
+          ],
+          [
+            73.875155,
+            18.598
+          ],
+          [
+            73.955361,
+            18.604
+          ],
+          [
+            74.01838,
+            18.6
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "road_id": "SYN-R007",
+        "highway": "trunk",
+        "name": "Synthetic Pune Trunk Road 007",
+        "weight": 3.0,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            73.75,
+            18.38539
+          ],
+          [
+            73.747,
+            18.444505
+          ],
+          [
+            73.752,
+            18.5083492
+          ],
+          [
+            73.748,
+            18.5698288
+          ],
+          [
+            73.75,
+            18.62185
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "road_id": "SYN-R008",
+        "highway": "primary",
+        "name": "Synthetic Pune Primary Road 008",
+        "weight": 2.0,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            73.79,
+            18.38539
+          ],
+          [
+            73.787,
+            18.444505
+          ],
+          [
+            73.792,
+            18.5083492
+          ],
+          [
+            73.788,
+            18.5698288
+          ],
+          [
+            73.79,
+            18.62185
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "road_id": "SYN-R009",
+        "highway": "secondary",
+        "name": "Synthetic Pune Secondary Road 009",
+        "weight": 1.0,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            73.83,
+            18.38539
+          ],
+          [
+            73.827,
+            18.444505
+          ],
+          [
+            73.832,
+            18.5083492
+          ],
+          [
+            73.828,
+            18.5698288
+          ],
+          [
+            73.83,
+            18.62185
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "road_id": "SYN-R010",
+        "highway": "motorway",
+        "name": "Synthetic Pune Motorway Road 010",
+        "weight": 4.0,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            73.87,
+            18.38539
+          ],
+          [
+            73.867,
+            18.444505
+          ],
+          [
+            73.872,
+            18.5083492
+          ],
+          [
+            73.868,
+            18.5698288
+          ],
+          [
+            73.87,
+            18.62185
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "road_id": "SYN-R011",
+        "highway": "trunk",
+        "name": "Synthetic Pune Trunk Road 011",
+        "weight": 3.0,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            73.91,
+            18.38539
+          ],
+          [
+            73.907,
+            18.444505
+          ],
+          [
+            73.912,
+            18.5083492
+          ],
+          [
+            73.908,
+            18.5698288
+          ],
+          [
+            73.91,
+            18.62185
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "road_id": "SYN-R012",
+        "highway": "primary",
+        "name": "Synthetic Pune Primary Road 012",
+        "weight": 2.0,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            73.95,
+            18.38539
+          ],
+          [
+            73.947,
+            18.444505
+          ],
+          [
+            73.952,
+            18.5083492
+          ],
+          [
+            73.948,
+            18.5698288
+          ],
+          [
+            73.95,
+            18.62185
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "road_id": "SYN-R013",
+        "highway": "secondary",
+        "name": "Synthetic Pune Secondary Road 013",
+        "weight": 1.0,
+        "source": "synthetic"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            73.99,
+            18.38539
+          ],
+          [
+            73.987,
+            18.444505
+          ],
+          [
+            73.992,
+            18.5083492
+          ],
+          [
+            73.988,
+            18.5698288
+          ],
+          [
+            73.99,
+            18.62185
+          ]
+        ]
+      }
+    }
+  ]
+}

@@ -30,7 +30,7 @@ from vayu_core.config import REPO_ROOT, CityConfig
 
 from .http import FetchError, fetch_text
 
-ENDPOINT = "https://overpass-api.de/api/interpreter"
+ENDPOINT = "https://overpass.kumi.systems/api/interpreter"
 
 # Emission weight per road class, relative to `secondary` = 1.0. Motorways and
 # trunks carry the heavy-vehicle share that dominates PM from traffic.

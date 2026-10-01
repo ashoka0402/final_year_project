@@ -19,9 +19,10 @@
     "h3_resolution": 7
   },
   "population": {
-    "total": 0,
-    "source": "TODO",
-    "method": "TODO"
+  "total": 3124458,
+  "source": "Pune Municipal Corporation / Census of India 2011",
+  "method": "City total split equally across 58 ward polygons because per-ward population has not yet been mapped to this GeoJSON. Estimate, not a per-ward Census count."
+
   },
   "sources": {
     "cpcb_city_filter": "Pune",

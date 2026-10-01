@@ -1,0 +1,31 @@
+city,permit_id,name,site_type,lat,lon,status,dust_control_compliant,last_inspected,source
+pune,PU-CNS-001,Synthetic Pune Construction Site 001,Commercial tower,18.519491,73.863737,active,False,2026-08-19,synthetic
+pune,PU-CNS-002,Synthetic Pune Construction Site 002,Residential complex,18.537041,73.85292,active,False,2026-08-28,synthetic
+pune,PU-CNS-003,Synthetic Pune Construction Site 003,Redevelopment block,18.503772,73.802894,active,False,2026-07-29,synthetic
+pune,PU-CNS-004,Synthetic Pune Construction Site 004,Residential complex,18.58799,73.910917,active,True,2026-07-25,synthetic
+pune,PU-CNS-005,Synthetic Pune Construction Site 005,Road widening,18.47839,73.881526,active,False,2026-09-07,synthetic
+pune,PU-CNS-006,Synthetic Pune Construction Site 006,Residential complex,18.598418,73.738148,active,True,2026-08-09,synthetic
+pune,PU-CNS-007,Synthetic Pune Construction Site 007,Flyover works,18.456051,73.796579,active,True,2026-08-07,synthetic
+pune,PU-CNS-008,Synthetic Pune Construction Site 008,Metro corridor extension,18.568025,73.799137,active,True,2026-07-17,synthetic
+pune,PU-CNS-009,Synthetic Pune Construction Site 009,Residential complex,18.516943,73.852569,active,True,2026-08-07,synthetic
+pune,PU-CNS-010,Synthetic Pune Construction Site 010,Flyover works,18.536639,73.855469,active,True,2026-09-19,synthetic
+pune,PU-CNS-011,Synthetic Pune Construction Site 011,Residential complex,18.503672,73.806737,active,True,2026-07-27,synthetic
+pune,PU-CNS-012,Synthetic Pune Construction Site 012,Metro corridor extension,18.590537,73.923368,active,False,2026-07-10,synthetic
+pune,PU-CNS-013,Synthetic Pune Construction Site 013,Metro corridor extension,18.464829,73.897005,active,False,2026-08-09,synthetic
+pune,PU-CNS-014,Synthetic Pune Construction Site 014,Commercial tower,18.596839,73.737853,active,True,2026-08-16,synthetic
+pune,PU-CNS-015,Synthetic Pune Construction Site 015,Residential complex,18.450805,73.794566,active,True,2026-09-14,synthetic
+pune,PU-CNS-016,Synthetic Pune Construction Site 016,Flyover works,18.556691,73.798282,active,False,2026-09-23,synthetic
+pune,PU-CNS-017,Synthetic Pune Construction Site 017,Road widening,18.520681,73.852044,active,True,2026-09-14,synthetic
+pune,PU-CNS-018,Synthetic Pune Construction Site 018,Redevelopment block,18.533227,73.839581,active,True,2026-08-10,synthetic
+pune,PU-CNS-019,Synthetic Pune Construction Site 019,Commercial tower,18.501571,73.801598,active,False,2026-08-21,synthetic
+pune,PU-CNS-020,Synthetic Pune Construction Site 020,Redevelopment block,18.587398,73.918677,active,False,2026-07-07,synthetic
+pune,PU-CNS-021,Synthetic Pune Construction Site 021,Residential complex,18.475277,73.880445,active,False,2026-07-23,synthetic
+pune,PU-CNS-022,Synthetic Pune Construction Site 022,Metro corridor extension,18.587409,73.738544,active,False,2026-07-11,synthetic
+pune,PU-CNS-023,Synthetic Pune Construction Site 023,Redevelopment block,18.447212,73.79535,active,False,2026-08-16,synthetic
+pune,PU-CNS-024,Synthetic Pune Construction Site 024,Redevelopment block,18.57311,73.803908,active,True,2026-07-30,synthetic
+pune,PU-CNS-025,Synthetic Pune Construction Site 025,Commercial tower,18.515756,73.853386,active,True,2026-07-28,synthetic
+pune,PU-CNS-026,Synthetic Pune Construction Site 026,Redevelopment block,18.538563,73.839547,active,True,2026-07-30,synthetic
+pune,PU-CNS-027,Synthetic Pune Construction Site 027,Redevelopment block,18.513045,73.800832,active,True,2026-07-25,synthetic
+pune,PU-CNS-028,Synthetic Pune Construction Site 028,Residential complex,18.590388,73.910822,active,True,2026-07-12,synthetic
+pune,PU-CNS-029,Synthetic Pune Construction Site 029,Residential complex,18.461342,73.882673,active,True,2026-08-14,synthetic
+pune,PU-CNS-030,Synthetic Pune Construction Site 030,Redevelopment block,18.587168,73.73193,active,True,2026-08-08,synthetic
