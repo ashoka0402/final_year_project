@@ -114,7 +114,7 @@ const LYR_TRAJ = "vayu-traj-line";
 const LYR_TRAJ_HEAD = "vayu-traj-head";
 const LYR_EVIDENCE = "vayu-evidence-pts";
 
-/** CPCB bands as a MapLibre `step` expression over the ward's feature-state. */
+/** CPCB bands as a MapLibre `step` expression over the ward AQI property. */
 const AQI_STEP_EXPRESSION: maplibregl.ExpressionSpecification = [
   "step",
   ["get", "aqi"],
@@ -323,7 +323,7 @@ export function MapCanvas({
           ] as unknown as maplibregl.ExpressionSpecification,
           "line-width": [
             "case",
-            ["boolean", ["feature-state", "selected"], false],
+            ["boolean", ["get", "selected"], false],
             2.5,
             0.6,
           ] as unknown as maplibregl.ExpressionSpecification,
