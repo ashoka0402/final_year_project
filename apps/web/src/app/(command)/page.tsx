@@ -2,7 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import dynamic from "next/dynamic";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 
 import { AlertStack } from "@/components/AlertStack";
 import { AqiLegend, BasemapSwitcher, ImpactTicker, LayerChips } from "@/components/MapControls";
