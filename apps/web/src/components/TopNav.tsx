@@ -3,6 +3,8 @@
 import { Check, ChevronDown, Wind } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
+import { usePathname } from "next/navigation";
+
 import { cn } from "@/lib/cn";
 import type { City, DataStatus } from "@/lib/types";
 import { useCommandStore } from "@/store/useCommandStore";
@@ -110,16 +112,25 @@ export function TopNav({
   statuses?: DataStatus[];
   loading: boolean;
 }) {
+  const pathname = usePathname();
+
   return (
     // relative z-40: the header's backdrop-blur creates a stacking context, and
     // <main> is a later sibling — without an explicit z the map and KPI rail
     // paint over the open city-switcher dropdown.
-    <header className="relative z-40 flex h-12 shrink-0 items-center justify-between gap-4 border-b border-edge bg-surface/60 px-3 backdrop-blur-md">
-      <div className="flex items-center gap-3">
-        <div className="flex items-center gap-1.5">
-          <Wind className="h-4 w-4 text-data" aria-hidden />
-          <span className="text-sm font-bold tracking-tight text-slate-50">Aeris</span>
-          <span className="text-data" aria-hidden>
+    <header className="relative z-40 flex h-14 shrink-0 items-center justify-between gap-4 border-b border-edge bg-surface/80 px-4 backdrop-blur-md">
+      <div className="flex min-w-0 items-center gap-3">
+        <div className="flex shrink-0 items-center gap-2">
+          <span className="flex h-7 w-7 items-center justify-center rounded-lg border border-data/20 bg-data/10 shadow-sm">
+            <Wind className="h-3.5 w-3.5 text-data" aria-hidden />
+          </span>
+          <span className="leading-none">
+            <span className="block text-sm font-bold tracking-tight text-slate-50">Aeris</span>
+            <span className="mt-0.5 block text-[8px] font-semibold uppercase tracking-[0.16em] text-slate-600">
+              Airshed intelligence
+            </span>
+          </span>
+          <span className="text-data/80" aria-hidden>
             ◆
           </span>
         </div>
@@ -132,14 +143,19 @@ export function TopNav({
 
         <ClockControl />
 
-        <nav className="ml-1 flex items-center gap-0.5" aria-label="Main">
+        <nav className="ml-1 hidden items-center gap-0.5 rounded-lg border border-edge/70 bg-base/30 p-1 lg:flex" aria-label="Main">
           {NAV.map((item) =>
             item.enabled ? (
               <a
                 key={item.label}
                 href={item.href}
-                aria-current="page"
-                className="rounded px-2.5 py-1.5 text-xs font-medium text-slate-100 transition-colors hover:bg-surface-2"
+                aria-current={pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href)) ? "page" : undefined}
+                className={cn(
+                  "rounded-md px-2.5 py-1.5 text-xs font-medium transition-colors",
+                  pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href))
+                    ? "bg-surface-2 text-slate-50 shadow-sm"
+                    : "text-slate-400 hover:bg-surface-2/70 hover:text-slate-200",
+                )}
               >
                 {item.label}
               </a>
@@ -157,7 +173,7 @@ export function TopNav({
               commissioner nav proper (App Flow §1). */}
           <a
             href="/citizen"
-            className="ml-1 rounded px-2.5 py-1.5 text-xs font-medium text-slate-500 transition-colors hover:bg-surface-2 hover:text-slate-300"
+            className="ml-1 hidden rounded-md px-2.5 py-1.5 text-xs font-medium text-slate-500 transition-colors hover:bg-surface-2 hover:text-slate-300 xl:block"
           >
             Citizen ↗
           </a>
