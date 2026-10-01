@@ -10,7 +10,7 @@
     "kharif_burning": {
       "label": "Post-monsoon (paddy residue)",
       "months": [10, 11],
-      "note": "Punjab/Haryana paddy stubble; the Delhi-NCR smog season."
+      "note": "Punjab/Haryana paddy stubble; the post-monsoon regional smog season affecting Delhi."
     },
     "rabi_burning": {
       "label": "Pre-monsoon (wheat residue + forest fires)",
