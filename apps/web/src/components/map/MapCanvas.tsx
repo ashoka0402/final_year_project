@@ -117,7 +117,7 @@ const LYR_EVIDENCE = "vayu-evidence-pts";
 /** CPCB bands as a MapLibre `step` expression over the ward's feature-state. */
 const AQI_STEP_EXPRESSION: maplibregl.ExpressionSpecification = [
   "step",
-  ["feature-state", "aqi"],
+  ["get", "aqi"],
   AQI_BANDS[0].color,
   ...AQI_BANDS.slice(1).flatMap((b) => [b.min, b.color] as [number, string]),
 ] as unknown as maplibregl.ExpressionSpecification;
@@ -132,6 +132,7 @@ interface Props {
   evidence?: AttributionEvidence[];
   hoveredEvidence?: AttributionEvidence | null;
   flyTo?: { lon: number; lat: number } | null;
+  selectedWardId?: string | null;
 }
 
 type HoverInfo = { x: number; y: number; ward: Ward } | null;
@@ -144,6 +145,7 @@ export function MapCanvas({
   evidence,
   hoveredEvidence,
   flyTo,
+  selectedWardId,
 }: Props) {
   const container = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
@@ -171,6 +173,23 @@ export function MapCanvas({
   }, [current]);
   const readingsRef = useRef(readings);
   readingsRef.current = readings;
+
+  const wardGeoJSON = useMemo(() => {
+    const features = (wards?.features ?? []).map((feature) => {
+      const reading = readings.get(feature.properties.ward_id);
+      return {
+        ...feature,
+        properties: {
+          ...feature.properties,
+          aqi: reading?.aqi ?? null,
+        },
+      };
+    });
+    return {
+      type: "FeatureCollection" as const,
+      features,
+    };
+  }, [wards, readings]);
 
   const stationGeoJSON = useMemo(
     () => ({
@@ -238,7 +257,7 @@ export function MapCanvas({
       setStyleReady(0);
     };
     // Init-only: a city change flies the camera rather than rebuilding the GL
-    // context, so Delhi -> Lucknow stays instant (PRD G1).
+    // context, so Delhi -> Pune stays instant (PRD G1).
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -275,7 +294,7 @@ export function MapCanvas({
         paint: {
           "fill-color": [
             "case",
-            ["==", ["feature-state", "aqi"], null],
+            ["==", ["get", "aqi"], null],
             "#334155",
             AQI_STEP_EXPRESSION,
           ] as unknown as maplibregl.ExpressionSpecification,
@@ -283,7 +302,7 @@ export function MapCanvas({
             "case",
             ["boolean", ["feature-state", "hover"], false],
             0.85,
-            ["==", ["feature-state", "aqi"], null],
+            ["==", ["get", "aqi"], null],
             0.35,
             0.68,
           ] as unknown as maplibregl.ExpressionSpecification,
@@ -427,47 +446,14 @@ export function MapCanvas({
     };
   }, [styleReady, hoverWard, selectWard]);
 
-  // ---- push ward geometry -------------------------------------------------
+  // ---- push ward geometry + values -----------------------------------------
   useEffect(() => {
     const m = map.current;
     if (!m || !styleReady) return;
     const src = m.getSource(SRC_WARDS) as maplibregl.GeoJSONSource | undefined;
     if (!src) return;
-    src.setData(
-      wards?.features?.length
-        ? ({ type: "FeatureCollection", features: wards.features } as GeoJSON.FeatureCollection)
-        : { type: "FeatureCollection", features: [] },
-    );
-  }, [wards, styleReady]);
-
-  // ---- push ward values as feature-state ----------------------------------
-  useEffect(() => {
-    const m = map.current;
-    if (!m || !styleReady || !wards?.features?.length) return;
-
-    // GeoJSON setData() is asynchronous. On a large source such as Delhi's
-    // 290 wards, applying feature-state immediately can race the source load:
-    // the state is set before the features exist and the fill then stays on the
-    // "no AQI" grey branch. Re-apply after the source reports that it is loaded.
-    const applyWardState = () => {
-      if (!m.isSourceLoaded(SRC_WARDS)) return;
-      m.removeFeatureState({ source: SRC_WARDS });
-      readingsRef.current.forEach((w, id) => {
-        m.setFeatureState({ source: SRC_WARDS, id }, { aqi: w.aqi ?? null });
-      });
-    };
-
-    applyWardState();
-
-    const onSourceData = (e: maplibregl.MapDataEvent) => {
-      if (e.sourceId === SRC_WARDS && e.isSourceLoaded) {
-        applyWardState();
-      }
-    };
-    m.on("sourcedata", onSourceData);
-
-    return () => m.off("sourcedata", onSourceData);
-  }, [readings, wards, styleReady]);
+    src.setData(wardGeoJSON as unknown as GeoJSON.FeatureCollection);
+  }, [wardGeoJSON, styleReady]);
 
   // ---- selection outline --------------------------------------------------
   const prevSelected = useRef<string | null>(null);
@@ -513,7 +499,7 @@ export function MapCanvas({
       type: "FeatureCollection",
       features: feats.filter((f) => f.geometry?.type === "Polygon"),
     } as unknown as GeoJSON.FeatureCollection);
-  }, [trajectory, styleReady]);
+  }, [trajectory, selectedWardId, styleReady]);
 
   // Flowing dash: the signature "air moving toward the ward" animation.
   useEffect(() => {
@@ -598,7 +584,7 @@ export function MapCanvas({
       new maplibregl.LngLatBounds(pts[0], pts[0]),
     );
     m.fitBounds(b, { padding: { top: 70, bottom: 60, left: 300, right: 400 }, duration: 1100, maxZoom: 10 });
-  }, [trajectory, evidence, styleReady]);
+  }, [trajectory, selectedWardId, evidence, styleReady]);
 
   // ---- layer toggles ------------------------------------------------------
   useEffect(() => {
