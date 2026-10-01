@@ -110,7 +110,7 @@ export function DataPills({ statuses, loading }: { statuses?: DataStatus[]; load
         aria-expanded={open}
         data-testid="data-sources"
         title="Data sources & freshness"
-        className="flex items-center gap-1.5 rounded-md border border-edge bg-surface-2 px-2.5 py-1.5 text-xs font-medium text-slate-200 transition-colors hover:border-data/50"
+        className="flex items-center gap-1.5 rounded-lg border border-edge/90 bg-surface-2/80 px-2.5 py-1.5 shadow-sm text-xs font-medium text-slate-200 transition-colors hover:border-data/50"
       >
         <Database className="h-3.5 w-3.5 text-slate-400" aria-hidden />
         <span className="hidden sm:inline">Sources</span>
@@ -131,7 +131,7 @@ export function DataPills({ statuses, loading }: { statuses?: DataStatus[]; load
         <div
           role="dialog"
           aria-label="Data sources"
-          className="absolute right-0 top-full z-50 mt-1.5 w-80 animate-slide-in-right rounded-md border border-edge bg-surface p-2 shadow-2xl"
+          className="absolute right-0 top-full z-50 mt-1.5 w-80 animate-slide-in-right rounded-xl border border-edge bg-surface p-2 shadow-[0_18px_45px_rgba(0,0,0,0.28)]"
         >
           <p className="px-1.5 py-1 text-[10px] font-medium uppercase tracking-wider text-slate-500">
             Data sources & freshness
