@@ -1,19 +1,19 @@
 <div align="center">
 
-# Aeris — Pune Airshed Intelligence
+# Aeris — Delhi & Pune Airshed Intelligence
 
-**Aeris turns Pune's air-quality data into ward-level intelligence, forecasts, source attribution, and evidence-led interventions.**
+**Aeris turns Delhi and Pune air-quality data into ward-level intelligence, forecasts, source attribution, and evidence-led interventions.**
 
-*Aeris — a Pune-focused air-quality intelligence platform.*
+*Aeris — a Delhi and Pune air-quality intelligence platform.*
 
-[![Scope](https://img.shields.io/badge/scope-Pune%20only-16A34A?style=for-the-badge)](#pune-study-area)
+[![Scope](https://img.shields.io/badge/scope-Delhi%20%26%20Pune-16A34A?style=for-the-badge)](#study-area)
 [![Tests](https://img.shields.io/badge/tests-324%2F324_passing-22C55E?style=for-the-badge)](#testing)
 [![Google AI](https://img.shields.io/badge/Google_AI-Gemini-8E75B2?style=for-the-badge)](#8--citizen-photograph--gemini-vision--corroboration)
-[![Pune](https://img.shields.io/badge/study%20area-Pune-16A34A?style=for-the-badge)](#pune-study-area)
+[![Delhi & Pune](https://img.shields.io/badge/study%20area-Pune-16A34A?style=for-the-badge)](#study-area)
 [![Python](https://img.shields.io/badge/python-3.11%2B-3776AB?style=flat-square)](requirements.txt)
 [![Next.js](https://img.shields.io/badge/Next.js-16-000000?style=flat-square)](apps/web/package.json)
 
-**Pune study area** · **Ward-level analysis** · **Air-quality forecasting**
+**Delhi & Delhi & Pune study areass** · **Ward-level analysis** · **Air-quality forecasting**
 
 
 
@@ -31,7 +31,7 @@
 | | | | | | |
 |:--:|:--:|:--:|:--:|:--:|:--:|
 | **Pune** | **AQI** | **Forecast** | **Attribution** | **Interventions** | **Verification** |
-| Pune spatial cells | satellite pollutant channels | economic Pune spatial areas | real fire detections | CNN-LSTM Pearson r | tests passing |
+| Delhi & Pune spatial cells | satellite pollutant channels | economic Delhi & Pune spatial areas | real fire detections | CNN-LSTM Pearson r | tests passing |
 
 *Only publish metrics reproduced using the current Pune data and test suite.*
 
@@ -42,12 +42,12 @@
 ## Table of contents
 
 - [The problem](#the-problem)
-- [What Aeris does](#what-vayu-does)
+- [What Aeris does](#what-aeris-does)
 - [A five-minute tour](#a-five-minute-tour)
 - [Screens](#screens)
 - [System architecture](#system-architecture)
 - [Request lifecycle](#request-lifecycle)
-- [How Aeris actually works](#how-vayu-actually-works)
+- [How Aeris actually works](#how-aeris-actually-works)
   - [1 · CPCB AQI conversion](#1--cpcb-aqi-conversion--and-the-sub-index-inversion-bug-it-fixes)
   - [2 · Short-term forecast](#2--short-term-forecast--lightgbm-quantile-regression)
   - [3 · Source attribution](#3--source-attribution--multi-evidence-fusion)
@@ -63,7 +63,7 @@
 - [The dataset](#the-dataset)
 - [Data sources & API keys](#data-sources--api-keys)
 - [Deployment](#deployment)
-- [How Aeris differs](#how-vayu-differs)
+- [How Aeris differs](#how-aeris-differs)
 - [Tech stack](#tech-stack)
 - [Getting started](#getting-started)
 - [Environment variables](#environment-variables)
@@ -77,9 +77,9 @@
 
 ---
 
-## Pune study area
+## Delhi & Pune study areas
 
-Aeris is focused on Pune Municipal Corporation (PMC). Pimpri-Chinchwad (PCMC) is outside the default boundary unless deliberately included as a separate study area. Ward-level results depend on the selected boundary dataset. Station readings are measurements; interpolated ward values and forecasts are estimates; generated fixtures are synthetic/demo data. Keep these categories visibly distinct.
+Aeris is focused on Delhi and Pune municipal study areas. Pimpri-Chinchwad (PCMC) is outside the default boundary unless deliberately included as a separate study area. Ward-level results depend on the selected boundary dataset. Station readings are measurements; interpolated ward values and forecasts are estimates; generated fixtures are synthetic/demo data. Keep these categories visibly distinct.
 
 ## The problem
 
@@ -91,7 +91,7 @@ connected to those readings.
 |---|---|
 | CPCB SAMEER measures, but does not act | A reading with no owner and no deadline |
 | SAFAR forecasts, but only 4 cities | Everywhere else flies blind on tomorrow |
-| IITM's Pune DSS attributes sources — Pune-only, winter-only, supercomputer-bound | Not something a smaller city, or a different season, can run |
+| IITM's Pune DSS attributes sources — Delhi and Pune, winter-only, supercomputer-bound | Not something a smaller city, or a different season, can run |
 | No system federates across state lines | Pollution crosses seven states on the Amritsar–Kolkata corridor; no bulletin does |
 | No system verifies a citizen's own evidence | A photo report is either ignored or trusted blindly — never checked |
 
@@ -118,9 +118,9 @@ interval and an honest null-result verdict when the data says so.
 
 </td><td width="33%" valign="top">
 
-### 🛰️ Pune satellite intelligence
+### 🛰️ Delhi & Pune satellite intelligence
 
-**Pune-focused spatial grid**
+**Delhi and Delhi and Pune-focused spatial grid**
 Six pollutant channels (HCHO, NO₂, SO₂, CO, O₃, AOD) from two independent
 satellite sources, unified into one schema.
 
@@ -144,8 +144,8 @@ severity, likely source, confidence — never a guessed numeric AQI.
 A citizen's claim is trusted only when real satellite/fire data in the same
 cell/day backs it up — never by reporter reputation.
 
-**Federated Pune ward-level summaries**
-Pune wards and surrounding airshed, each a versioned (`vayu.corridor.v1`),
+**Federated Delhi and Pune ward-level summaries**
+Delhi and Delhi and Pune wards and surrounding airshed, each a versioned (`vayu.corridor.v1`),
 self-describing daily bulletin any state can consume over plain HTTP.
 
 </td></tr>
@@ -160,14 +160,14 @@ the [live application](http://localhost:3000):
 
 ```mermaid
 flowchart LR
-    C["1. Command"] --> I["2. Interventions"] --> R["3. Pune spatial analysis"] --> P["4. Report"] --> V["5. Verify"]
+    C["1. Command"] --> I["2. Interventions"] --> R["3. Delhi & Delhi & Pune spatial analysis"] --> P["4. Report"] --> V["5. Verify"]
 ```
 
 | Stop | What to look at | Why it matters |
 |---|---|---|
-| **1 · Command** | The ward choropleth and hazard-alert rail | Pune ward polygons, coloured using available observations or clearly labelled estimates |
+| **1 · Command** | The ward choropleth and hazard-alert rail | Delhi and Pune ward polygons, coloured using available observations or clearly labelled estimates |
 | **2 · Interventions** | Expand a candidate's rationale | Every ROI number cites *which* evidence it came from — click through to the source |
-| **3 · Pune spatial analysis** | Switch to the IGP spine, change the date | Coverage is shown next to every number — a cell the satellite couldn't see is never mistaken for a clean one |
+| **3 · Delhi & Delhi & Pune spatial analysis** | Switch to the IGP spine, change the date | Coverage is shown next to every number — a cell the satellite couldn't see is never mistaken for a clean one |
 | **4 · Report** | Submit a photo, or read `/api/v1/citizen/reports` | The corroboration verdict names the real HCHO z-score or fire count behind it |
 | **5 · Verify** | Read a dispatched order's diff-in-diff result | Includes a real order that came back statistically insignificant — shown, not hidden |
 
@@ -180,11 +180,11 @@ flowchart LR
 
 | Screen | Route | What it shows |
 |---|---|---|
-| **Command Center** | `/` | Ward choropleth, stations, hazard alerts, trajectory/dispersion cone, KPIs, Pune-only view |
+| **Command Center** | `/` | Ward choropleth, stations, hazard alerts, trajectory/dispersion cone, KPIs, Delhi and Pune view |
 | **Interventions** | `/interventions` | ROI-ranked leaderboard, expandable counterfactuals, one-click dispatch → dossier PDF, GRAP Autopilot card |
 | **Inspector** | `/inspector` | Mobile order list, evidence checklist, dossier download, mark-executed |
 | **Verify** | `/verify` | Difference-in-differences: predicted vs. observed, with a confidence interval |
-| **Pune spatial analysis** | Pune spatial view | Pune wards and surrounding airshed, each with a versioned daily bulletin |
+| **Delhi & Delhi & Pune spatial analysis** | Delhi & Delhi & Pune spatial view | Delhi and Delhi and Pune wards and surrounding airshed, each with a versioned daily bulletin |
 | **Citizen report** | `/report` | Submit a pollution photo or sensor reading; Gemini + satellite/fire cross-check it |
 | **Public Citizen view** | `/citizen` | Public AQI + clean-hours + health advisories in **English, हिंदी, ਪੰਜਾਬੀ** |
 | **Methodology** | `/methodology` | Backtest tables, formulas, and a limitations section written for a skeptical judge |
@@ -197,7 +197,7 @@ flowchart LR
 ```mermaid
 flowchart TB
     subgraph client["Browser"]
-        WEB["apps/web — Next.js 16 + React 19 — Command, Interventions, Pune spatial analysis, Report — MapLibre GL, TanStack Query, Zustand"]
+        WEB["apps/web — Next.js 16 + React 19 — Command, Interventions, Delhi & Delhi & Pune spatial analysis, Report — MapLibre GL, TanStack Query, Zustand"]
     end
 
     subgraph container["Single Cloud Run container"]
@@ -208,7 +208,7 @@ flowchart TB
         subgraph core["vayu_core — the science, framework-agnostic"]
             FC["forecast/ — LightGBM quantile"]
             ATTR["attribution/ — evidence fusion, trajectory, ROI"]
-            NAT["national/ — CNN-LSTM, HCHO hotspots, Pune spatial areas"]
+            NAT["national/ — CNN-LSTM, HCHO hotspots, Delhi & Pune spatial areas"]
             CIT["citizen/ — ingest, crosscheck"]
             GAI["google_ai/ — Gemini client, vision"]
             VER["verification/ — diff-in-diff"]
@@ -257,7 +257,7 @@ the same image — Next proxies `/api/v1` to a local FastAPI process on
 latency, and one `gcloud run deploy` instead of coordinating two.
 
 **DuckDB, not a managed database.** A single embedded file is columnar-fast
-enough to score Pune wards live and small enough to bake directly into the
+enough to score Delhi and Delhi and Pune wards live and small enough to bake directly into the
 container image. There is nothing to provision, nothing to point a connection
 string at, and no separate billing surface for a hackathon-scale workload.
 
@@ -386,7 +386,7 @@ as instantaneous.
 **Nine independent models**, not one. `QUANTILES = {p10: 0.1, p50: 0.5, p90: 0.9}`
 × `HORIZONS = (24, 48, 72)` — each an `LGBMRegressor` with fixed hyperparameters
 (`num_leaves=64, learning_rate=0.05, n_estimators=600` — "don't tune long,"
-per the code's own TRD reference), trained on Pune dataset pooled via a
+per the code's own TRD reference), trained on Delhi and Pune datasets pooled via a
 `city_code` feature.
 
 **The model predicts a residual, not a level.** The docstring cites a
@@ -475,7 +475,7 @@ dispersion cone widens from a 15° half-angle at 0.4°/km, capped at 45°.
 **`SCALE` is calibrated, not fitted** (`calibrate.py`) — there is no per-ward
 ground truth to fit against, so the constants are iteratively adjusted (40
 damped iterations) until Aeris's mean per-category share across 60 sampled
-Pune wards lands inside the *published* IITM DSS / SAFAR Pune-winter
+Delhi and Delhi and Pune wards lands inside the *published* IITM DSS / SAFAR Pune-winter
 attribution ranges, and `cross_check()` writes exactly where Aeris lands
 relative to those ranges to `docs/attribution_crosscheck.json` for anyone to
 audit.
@@ -873,7 +873,7 @@ The repository's original bundled database and evaluation artifacts were created
 
 | Dataset component | Pune version |
 |---|---|
-| Pune ward boundaries | Use the selected PMC boundary dataset; record its source and version |
+| Delhi and Pune ward boundaries | Use the selected PMC boundary dataset; record its source and version |
 | Monitoring stations | Pune-area station registry with IDs, coordinates, pollutants, and active dates |
 | Ground observations | CPCB/MPCB/OpenAQ records that are actually available for Pune |
 | Weather | Pune-area historical and forecast variables with timestamps |
@@ -888,7 +888,7 @@ The integrations below are available in the project, but **availability of a con
 
 | Layer | Source / approach | Key needed? |
 |---|---|---|
-| Pune ward boundaries | PMC / Pune GIS or a verified municipal boundary dataset | Depends on source |
+| Delhi and Pune ward boundaries | PMC / Pune GIS or a verified municipal boundary dataset | Depends on source |
 | Station identity + AQI | CPCB CAAQMS / data.gov.in; verify Pune station coverage | Usually no / public API key may apply |
 | Maharashtra monitoring data | MPCB published monitoring data | Depends on access method |
 | Historical air quality | Available CPCB/MPCB station archives; OpenAQ where coverage exists | OpenAQ key for API |
@@ -956,7 +956,7 @@ Two non-obvious things the deploy scripts handle for you:
 | **Pune-filtered satellite data** | — | — | — | — | ✅ (Pune extent; coverage depends on source) |
 | **Surface AQI from satellite alone** | — | — | — | — | ✅ (CNN-LSTM) |
 | **Citizen photo → verified evidence** | — | — | — | — | ✅ (Gemini + corroboration) |
-| **Federated Pune ward-level summaries** | — | — | — | — | ✅ (Pune ward-level outputs) |
+| **Federated Delhi and Pune ward-level summaries** | — | — | — | — | ✅ (Delhi and Pune ward-level outputs) |
 | **Ranked intervention** | — | — | — | — | ✅ |
 | **Dispatch-ready order** | — | — | — | — | ✅ |
 | **Verified outcome** | — | — | — | — | ✅ |
@@ -1015,7 +1015,7 @@ cp .env.example .env      # every key is optional; the app runs with none
 ### 2 · Seed real data and train the forecaster
 
 ```bash
-make seed        # Pune ward boundaries, station metadata, available AQ history, weather →
+make seed        # Delhi and Pune ward boundaries, station metadata, available AQ history, weather →
                   # DuckDB, trains/scores only when suitable Pune training data is available, and seeds labelled demo records
 ```
 
@@ -1071,14 +1071,14 @@ command reads keys from your shell/`.env` and passes them to Cloud Run as
 ```
 vayu/
 ├── apps/web/                    Next.js 16 · React 19 · Tailwind · MapLibre · TanStack Query
-│   ├── src/app/                 one route per page — (command), interventions, Pune spatial areas,
+│   ├── src/app/                 one route per page — (command), interventions, Delhi & Pune spatial areas,
 │   │                            report, citizen, verify, inspector, methodology
 │   └── src/components/map/      MapCanvas.tsx — the declarative MapLibre layer registry
 │
 ├── services/
 │   ├── api/                     FastAPI · pydantic · RFC7807 errors · SSE audit stream
 │   │   └── routers/             meta, cities, forecast, attribution, interventions,
-│   │                            verification, citizen, citizen_reports, Pune spatial areas,
+│   │                            verification, citizen, citizen_reports, Delhi & Pune spatial areas,
 │   │                            grap, audit  (33 endpoints)
 │   └── pipeline/                ingestors — each retry → cache → bundled fallback
 │       ├── cpcb.py, openaq.py, firms.py, meteo.py, osm.py    city-scale ingestion
@@ -1095,7 +1095,7 @@ vayu/
 │   ├── attribution/             fusion.py (evidence scoring), trajectory.py (kinematic
 │   │                            back-trajectory), calibrate.py, confidence.py
 │   ├── national/                surface_aqi.py (CNN-LSTM) · hotspots.py (HCHO detection)
-│   │                            · Pune spatial areas.py
+│   │                            · Delhi & Pune spatial areas.py
 │   ├── citizen/                 ingest.py, crosscheck.py — photo/sensor intake + corroboration
 │   ├── google_ai/                client.py (Gemini REST) · vision.py (photo classification)
 │   ├── interventions/           roi.py (ROI ranking + Gaussian plume), dossier.py, grap.py
@@ -1104,7 +1104,7 @@ vayu/
 ├── config/
 │   ├── cities/                  one JSON per city — the only city-specific artifact
 │   ├── regions/india.json       the Pune-region satellite layer definition
-│   └── Pune spatial areas/india.json     the Pune wards and surrounding airshed
+│   └── Delhi & Pune spatial areas/india.json     the Delhi and Delhi and Pune wards and surrounding airshed
 │
 ├── scripts/
 │   ├── build_deploy_db.py       slim DB for the container image
@@ -1159,7 +1159,7 @@ the live instance.
 | `verification` | difference-in-differences results for dispatched orders |
 | `citizen` | public advisory surfaces |
 | `citizen_reports` | `POST /citizen/report/photo`, `POST /citizen/report/sensor`, `GET /citizen/reports` |
-| Pune spatial outputs | use the configured Pune API routes |
+| Delhi & Pune spatial outputs | use the configured Pune API routes |
 | `grap` | GRAP-stage autopilot + approval flow |
 | `audit` | `GET /audit` — SSE stream of every automated decision |
 
@@ -1203,9 +1203,9 @@ Climate Resilience. The requirement checklist and where Aeris answers it:
 | Mandatory Google AI integration | Gemini Vision classifies every citizen photo report (`vayu_core/google_ai/`) |
 | Federated platform combining citizen data + satellite + meteorology | `/report` (citizen photo/sensor intake) + Pune-filtered satellite data + Open-Meteo, where coverage is available |
 | Detect hidden pollution hotspots | HCHO hotspot detection against a rolling per-cell baseline (`vayu_core/national/hotspots.py`), filtered to Pune where supported |
-| Forecast spikes across major economic Pune spatial areas | LightGBM forecaster trained/evaluated on Pune data + ward-level summaries |
+| Forecast spikes across major economic Delhi & Pune spatial areas | LightGBM forecaster trained/evaluated on Pune data + ward-level summaries |
 | Interoperability across states | Pune-scoped API outputs with explicit schema, provenance, and data-status fields |
-| Pune-only study area | Pune-focused map and analysis; validation depends on available Pune ground truth |
+| Delhi and Pune study area | Delhi and Delhi and Pune-focused map and analysis; validation depends on available Pune ground truth |
 | Deployed link | Local development: `http://localhost:3000` |
 
 ## Pune data provenance
