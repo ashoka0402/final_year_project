@@ -220,7 +220,7 @@ def test_citation_matches_the_stage_actually_in_force():
 
 
 def test_non_grap_city_falls_back_to_the_air_act():
-    """GRAP is Delhi-NCR only. Lucknow still needs a legal basis."""
+    """GRAP applies to Delhi in this study configuration; Pune uses its non-GRAP legal basis."""
     c = cite_regulation("industrial_curb", city_aqi=420, grap_applicable=False)
     assert c is not None
     assert c["stage"] is None
