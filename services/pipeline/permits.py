@@ -1,6 +1,6 @@
 """Construction permits — the ONE curated layer in VAYU.
 
-There is no public machine-readable feed of Delhi/Lucknow construction permits
+There is no public machine-readable construction-permit feed for the two configured cities
 with dust-control compliance status. Master prompt §2 allows a curated sample
 precisely here, on two conditions, both enforced in code:
 
