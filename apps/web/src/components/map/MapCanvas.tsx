@@ -174,12 +174,14 @@ export function MapCanvas({
 
   const wardGeoJSON = useMemo(() => {
     const features = (wards?.features ?? []).map((feature) => {
-      const reading = readings.get(feature.properties.ward_id);
+      const wardId = feature.properties.ward_id;
+      const reading = readings.get(wardId);
       return {
         ...feature,
         properties: {
           ...feature.properties,
           aqi: reading?.aqi ?? null,
+          selected: wardId === selectedWardId,
         },
       };
     });
@@ -187,7 +189,7 @@ export function MapCanvas({
       type: "FeatureCollection" as const,
       features,
     };
-  }, [wards, readings]);
+  }, [wards, readings, selectedWardId]);
 
   const stationGeoJSON = useMemo(
     () => ({
@@ -315,7 +317,7 @@ export function MapCanvas({
         paint: {
           "line-color": [
             "case",
-            ["boolean", ["feature-state", "selected"], false],
+            ["boolean", ["get", "selected"], false],
             "#22D3EE",
             "#1F2A44",
           ] as unknown as maplibregl.ExpressionSpecification,
