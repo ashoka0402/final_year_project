@@ -66,36 +66,57 @@ def seed_city(city: CityConfig, force: bool = False) -> dict[str, str]:
     statuses["wards"] = wards_status
 
     # ---- 2. Stations + current readings -------------------------------------
+    # Source priority for CURRENT observations:
+    #   1. Official CPCB/MPCB-compatible CAAQMS feed (CPCB is the stable API path here).
+    #   2. OpenAQ v3 measured observations.
+    #   3. Bundled sample data as the final offline safety net.
+    #
+    # We never silently mix sources for the same current snapshot: one source
+    # populates the active station registry, keeping map markers and IDW weights
+    # internally consistent. Source provenance remains on every measurement row.
     st_path, me_path = _sample(f"stations_{city.id}.parquet"), _sample(f"measurements_{city.id}.parquet")
     stations = pd.DataFrame()
     current = pd.DataFrame()
     aq_status = "sample"
+    aq_detail = "Bundled offline sample"
 
     start, end = airquality.demo_window(now)
 
-    if openaq.available():
-        try:
-            stations = openaq.fetch_locations(city, start, end)
+    try:
+        stations, current = cpcb.fetch_stations(city)
+        if not stations.empty and not current.empty:
             aq_status = "live"
-        except FetchError as exc:
-            logger.warning(f"[{city.id}] OpenAQ locations failed: {exc}")
+            aq_detail = "Official CPCB CAAQMS observation"
+        else:
+            stations = pd.DataFrame()
+            current = pd.DataFrame()
+            raise FetchError("CPCB returned no usable current measurements")
+    except FetchError as exc:
+        logger.warning(f"[{city.id}] official CPCB unavailable: {exc}")
+        if openaq.available():
+            try:
+                stations, current = openaq.fetch_current(city, now)
+                if not stations.empty and not current.empty:
+                    aq_status = "live"
+                    aq_detail = "OpenAQ v3 measured observation (secondary source)"
+                else:
+                    stations = pd.DataFrame()
+                    current = pd.DataFrame()
+                    logger.warning(f"[{city.id}] OpenAQ returned no usable current measurements")
+            except FetchError as oa_exc:
+                logger.warning(f"[{city.id}] OpenAQ current fallback failed: {oa_exc}")
 
-    if stations.empty:
-        try:
-            stations, current = cpcb.fetch_stations(city)
-            aq_status = "live"
-        except FetchError as exc:
-            logger.warning(f"[{city.id}] CPCB unavailable ({exc}) — falling back to bundle")
+        if stations.empty:
             stations = _read_parquet(st_path)
             aq_status = "sample"
+            aq_detail = "Bundled offline sample; official feeds unavailable"
 
     if stations.empty:
-        logger.error(f"[{city.id}] no stations from any source — skipping city")
+        logger.error(f"[{city.id}] no stations from official, OpenAQ, or bundled sources — skipping city")
         return {**statuses, "stations": "unavailable"}
 
     stations.drop(columns=["sensors"], errors="ignore").to_parquet(st_path, index=False)
     statuses["stations"] = aq_status
-
     # ---- 3. Historical hourly series ----------------------------------------
     history = pd.DataFrame()
     hist_status = "sample"
