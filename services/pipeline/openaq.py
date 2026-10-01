@@ -137,6 +137,32 @@ def fetch_locations(city: CityConfig, start: date, end: date) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
+def fetch_current(city: CityConfig, at=None) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Fetch measured OpenAQ observations around the app's current instant.
+
+    This is the secondary live-measurement path: official CPCB/MPCB should be
+    attempted first, then OpenAQ. Using the same time-windowed sensor-hours path
+    keeps DEMO_MODE deterministic instead of accidentally pulling today's real
+    measurements into a historical demo clock.
+    """
+    target = at or get_settings().now()
+    day = target.date()
+    stations = fetch_locations(city, day, day)
+    if stations.empty:
+        return pd.DataFrame(), pd.DataFrame()
+
+    measurements = fetch_measurements(city, stations, day, day)
+    if measurements.empty:
+        return stations, measurements
+
+    measurements["ts"] = pd.to_datetime(measurements["ts"], utc=True)
+    cutoff = pd.Timestamp(target) - pd.Timedelta(hours=6)
+    measurements = measurements[(measurements["ts"] <= pd.Timestamp(target)) & (measurements["ts"] >= cutoff)]
+    if measurements.empty:
+        logger.warning(f"[{city.id}] OpenAQ returned stations but no measurements in the 6h current window")
+    return stations, measurements
+
+
 def fetch_measurements(city: CityConfig, stations: pd.DataFrame, start: date, end: date) -> pd.DataFrame:
     """Hourly measurements per sensor over [start, end].
 
