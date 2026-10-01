@@ -185,7 +185,7 @@ def cite_regulation(action_type: str, city_aqi: int | None, grap_applicable: boo
     Prefers a GRAP stage clause that is actually in force at the observed AQI —
     citing a Stage IV measure during Stage II air would be legally wrong and is
     the kind of error that gets an order thrown out. Falls back to the Air Act,
-    which applies at any time and in any city (GRAP is Delhi-NCR only).
+    which applies to the Delhi study city; Pune uses its configured non-GRAP legal basis.
     """
     clauses = load_corpus()
     if not clauses:
