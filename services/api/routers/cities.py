@@ -10,6 +10,7 @@ from fastapi import APIRouter, Response
 from vayu_core.config import get_settings, list_cities
 from vayu_core.db import read_conn
 from vayu_core.observations import snapshot
+from services.pipeline.wards import load_wards
 
 from ..deps import get_city, read_data_status, read_measurements, read_stations, read_wards
 from ..schemas import CitySummary, CurrentOut, DataStatus, GeoJSON, StationOut, WardOut
@@ -91,22 +92,24 @@ def get_current(city_id: str) -> CurrentOut:
 
 @router.get("/{city_id}/wards.geojson", response_model=GeoJSON)
 def get_ward_geometry(city_id: str) -> Response:
-    """Ward polygons, served separately from values.
+    """Canonical municipal ward geometry from the configured source file.
 
-    The geometry is ~700 KB for Delhi and never changes between runs, while
-    /current changes every refresh. Splitting them lets the browser cache the
-    expensive half and keeps the choropleth update small.
+    The ward source is immutable geometry; current AQI values are fetched
+    separately. Reading the configured GeoJSON here avoids serving stale or
+    mismatched geometry from DuckDB after a boundary/source refresh.
     """
     city = get_city(city_id)
-    wards = read_wards(city.id, with_geom=True)
+    wards, status = load_wards(city, force=False)
+    if wards.empty:
+        raise HTTPException(404, f"No ward geometry available for {city_id}")
 
     features = [
         {
             "type": "Feature",
-            "id": w.ward_id,
+            "id": str(w.ward_id),
             "properties": {
-                "ward_id": w.ward_id,
-                "name": w.name,
+                "ward_id": str(w.ward_id),
+                "name": str(w["name"]),
                 "population": int(w.population),
                 "area_km2": round(float(w.area_km2), 3),
                 "centroid": [round(float(w.centroid_lon), 5), round(float(w.centroid_lat), 5)],
@@ -124,7 +127,12 @@ def get_ward_geometry(city_id: str) -> Response:
     return Response(
         content=json.dumps(payload),
         media_type="application/geo+json",
-        headers={"Cache-Control": "public, max-age=86400"},
+        headers={
+            # Boundary geometry is stable but must not remain stuck behind an
+            # old browser cache when the configured source changes.
+            "Cache-Control": "public, max-age=3600, must-revalidate",
+            "X-Ward-Source": status,
+        },
     )
 
 
