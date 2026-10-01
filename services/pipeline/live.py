@@ -15,7 +15,7 @@ from __future__ import annotations
 import pandas as pd
 from loguru import logger
 
-from vayu_core.config import load_city
+from vayu_core.config import get_settings, load_city
 from vayu_core.db import read_conn, set_data_status, upsert_df, write_conn
 
 from . import airquality, cpcb, openaq
@@ -27,8 +27,9 @@ def refresh_live_measurements(city_ids: tuple[str, ...]) -> None:
     """Refresh current measured air quality with explicit source priority.
 
     Official CPCB/MPCB-compatible CAAQMS is attempted first. If it is
-    unavailable, OpenAQ v3 is used as the measured secondary source. If both
-    fail, the last-known database values remain untouched.
+    unavailable, OpenAQ v3 is used as the measured secondary source. If
+    both measured sources fail, CAMS/Open-Meteo is used as a modelled fallback;
+    only when that also fails do last-known values remain untouched.
     """
     for city_id in city_ids:
         city = load_city(city_id)
@@ -55,8 +56,9 @@ def refresh_live_measurements(city_ids: tuple[str, ...]) -> None:
                             "SELECT city, station_id, name, lat, lon, provider FROM stations WHERE city = ?",
                             [city.id],
                         ).df()
-                    current = airquality.fetch_history(city, stations, pd.Timestamp.now(tz="UTC").date(), pd.Timestamp.now(tz="UTC").date())
-                    now = pd.Timestamp.utcnow()
+                    at = get_settings().now()
+                    current = airquality.fetch_history(city, stations, at.date(), at.date())
+                    now = pd.Timestamp(at)
                     current["ts"] = pd.to_datetime(current["ts"], utc=True)
                     current = current[(current["ts"] <= now) & (current["ts"] >= now - pd.Timedelta(hours=6))]
                     if stations.empty or current.empty:
