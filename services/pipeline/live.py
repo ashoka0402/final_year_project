@@ -34,14 +34,18 @@ def refresh_live_measurements(city_ids: tuple[str, ...]) -> None:
 
         try:
             stations, current = cpcb.fetch_stations(city)
+            if stations.empty or current.empty:
+                raise RuntimeError("official source returned no usable current measurements")
             source_label = "Official CPCB CAAQMS observation"
         except Exception as official_exc:  # noqa: BLE001 - secondary measured source
-            logger.warning(f"[live] {city_id}: official feed failed: {official_exc}")
+            logger.warning(f"[live] {city_id}: official feed unavailable: {official_exc}")
             try:
                 stations, current = openaq.fetch_current(city)
+                if stations.empty or current.empty:
+                    raise RuntimeError("OpenAQ returned no usable current measurements")
                 source_label = "OpenAQ v3 measured observation (secondary source)"
             except Exception as oa_exc:  # noqa: BLE001 - keep last-known data
-                logger.warning(f"[live] {city_id}: OpenAQ fallback failed: {oa_exc}")
+                logger.warning(f"[live] {city_id}: OpenAQ fallback unavailable: {oa_exc}")
                 logger.warning(f"[live] {city_id}: keeping last-known readings")
                 continue
 
