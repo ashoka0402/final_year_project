@@ -110,7 +110,7 @@ export default function CommandCenter() {
       <div className="flex h-screen items-center justify-center bg-base">
         <div className="panel max-w-md p-6">
           <ErrorState
-            title="Cannot reach the VAYU API"
+            title="Cannot reach the Aeris API"
             detail={
               fatal.status === 0
                 ? "The API is not responding on :8000. Start it with `make dev`, or seed first with `make seed`."
@@ -141,7 +141,6 @@ export default function CommandCenter() {
             evidence={evidence}
             hoveredEvidence={hoveredEvidence}
             flyTo={flyTo}
-            selectedWardId={selectedWardId}
           />
         )}
         {loading && !city && <MapSkeleton />}
@@ -205,10 +204,10 @@ export default function CommandCenter() {
       {/* Footer strip: impact ticker + demo-mode disclosure (§12, App Flow §7).
           A real footer rather than a floating overlay, so neither can collide
           with the map controls at any viewport width. */}
-      <footer className="flex h-7 shrink-0 items-center justify-between gap-4 border-t border-edge bg-surface/60 px-3 backdrop-blur-md">
-        <ImpactTicker />
+      <footer className="flex h-8 shrink-0 items-center justify-between gap-4 border-t border-edge bg-surface/70 px-4 backdrop-blur-md">
+        <div className="min-w-0 truncate"><ImpactTicker /></div>
         {current.data?.demo_mode ? (
-          <p className="shrink-0 whitespace-nowrap text-[10px] text-slate-500">
+          <p className="shrink-0 whitespace-nowrap rounded-md border border-warn/15 bg-warn/5 px-2 py-1 text-[10px] text-slate-500">
             Running on bundled sample data · clock pinned to{" "}
             <span className="numeral text-slate-400">
               {new Date(current.data.as_of).toLocaleString("en-IN", {
@@ -220,7 +219,7 @@ export default function CommandCenter() {
             </span>
           </p>
         ) : (
-          <span className="shrink-0 text-[10px] text-verified">Live feeds</span>
+          <span className="shrink-0 rounded-md border border-verified/15 bg-verified/5 px-2 py-1 text-[10px] font-medium text-verified">Live feeds</span>
         )}
       </footer>
     </div>
