@@ -444,12 +444,29 @@ export function MapCanvas({
   useEffect(() => {
     const m = map.current;
     if (!m || !styleReady || !wards?.features?.length) return;
-    // removeFeatureState clears stale values from the previous city before the
-    // new ones land — otherwise a ward id present in both would keep its colour.
-    m.removeFeatureState({ source: SRC_WARDS });
-    readings.forEach((w, id) => {
-      m.setFeatureState({ source: SRC_WARDS, id }, { aqi: w.aqi ?? null });
-    });
+
+    // GeoJSON setData() is asynchronous. On a large source such as Delhi's
+    // 290 wards, applying feature-state immediately can race the source load:
+    // the state is set before the features exist and the fill then stays on the
+    // "no AQI" grey branch. Re-apply after the source reports that it is loaded.
+    const applyWardState = () => {
+      if (!m.isSourceLoaded(SRC_WARDS)) return;
+      m.removeFeatureState({ source: SRC_WARDS });
+      readingsRef.current.forEach((w, id) => {
+        m.setFeatureState({ source: SRC_WARDS, id }, { aqi: w.aqi ?? null });
+      });
+    };
+
+    applyWardState();
+
+    const onSourceData = (e: maplibregl.MapDataEvent) => {
+      if (e.sourceId === SRC_WARDS && e.isSourceLoaded) {
+        applyWardState();
+      }
+    };
+    m.on("sourcedata", onSourceData);
+
+    return () => m.off("sourcedata", onSourceData);
   }, [readings, wards, styleReady]);
 
   // ---- selection outline --------------------------------------------------
