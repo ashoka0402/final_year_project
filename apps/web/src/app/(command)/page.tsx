@@ -132,6 +132,7 @@ export default function CommandCenter() {
             evidence={evidence}
             hoveredEvidence={hoveredEvidence}
             flyTo={flyTo}
+            selectedWardId={selectedWardId}
           />
         )}
         {loading && !city && <MapSkeleton />}
