@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import maplibregl, { type MapGeoJSONFeature, type MapMouseEvent } from "maplibre-gl";
 
+import { AQI_BANDS } from "@/lib/aqi";
 import type {
   AttributionEvidence,
   City,
@@ -37,18 +38,6 @@ import { WardTooltip } from "./WardTooltip";
  * without adding a second renderer.
  */
 
-/** CPCB bands as a MapLibre `step` expression over ward feature-state AQI. */
-const AQI_STEP_EXPRESSION: maplibregl.ExpressionSpecification = [
-  "step",
-  ["feature-state", "aqi"],
-  "#009865",
-  51, "#A3C853",
-  101, "#FFF833",
-  201, "#F29C33",
-  301, "#E93F33",
-  401, "#AF2D24",
-] as unknown as maplibregl.ExpressionSpecification;
-
 const EVIDENCE_COLOR: Record<string, string> = {
   fire: "#EF4444",
   industry: "#22D3EE",
@@ -58,9 +47,9 @@ const EVIDENCE_COLOR: Record<string, string> = {
 };
 
 // Basemaps as RASTER layers inside one persistent style, switched by toggling
-// visibility — never setStyle. setStyle wipes VAYU's layers and its completion
+// visibility — never setStyle. setStyle wipes Aeris's layers and its completion
 // depends on the render loop (which can hang), so a visibility toggle is the
-// robust design: VAYU's vector layers never move, feature-state survives, and
+// robust design: Aeris's vector layers never move, feature-state survives, and
 // switching is instant with no race. All keyless (master prompt §3).
 type Basemap = "dark" | "light" | "satellite";
 
@@ -92,7 +81,7 @@ const BASEMAP_LAYER: Record<Basemap, string> = {
   satellite: "basemap-satellite",
 };
 
-// One style holding all three basemaps; only the active one is visible. VAYU's
+// One style holding all three basemaps; only the active one is visible. Aeris's
 // layers are added on top by the registration effect and stay put forever.
 function baseStyle(active: Basemap): maplibregl.StyleSpecification {
   return {
@@ -125,6 +114,14 @@ const LYR_TRAJ = "vayu-traj-line";
 const LYR_TRAJ_HEAD = "vayu-traj-head";
 const LYR_EVIDENCE = "vayu-evidence-pts";
 
+/** CPCB bands as a MapLibre `step` expression over the ward's feature-state. */
+const AQI_STEP_EXPRESSION: maplibregl.ExpressionSpecification = [
+  "step",
+  ["feature-state", "aqi"],
+  AQI_BANDS[0].color,
+  ...AQI_BANDS.slice(1).flatMap((b) => [b.min, b.color] as [number, string]),
+] as unknown as maplibregl.ExpressionSpecification;
+
 interface Props {
   city: City;
   current?: Current;
@@ -152,7 +149,7 @@ export function MapCanvas({
   const map = useRef<maplibregl.Map | null>(null);
   // Monotonic epoch, not a boolean: every style load bumps it, so switching the
   // basemap (which wipes all sources/layers) produces a NEW value and forces the
-  // registration + data effects below to re-run and rebuild VAYU's layers. A
+  // registration + data effects below to re-run and rebuild Aeris's layers. A
   // boolean false->true would get batched by React and the layers would vanish.
   // 0 = no style loaded yet; any positive value = ready. `!styleReady` still
   // gates correctly (0 is falsy).
@@ -160,10 +157,7 @@ export function MapCanvas({
   const [mapError, setMapError] = useState<string | null>(null);
   const [hover, setHover] = useState<HoverInfo>(null);
 
-  const showWardAqi = useCommandStore((s) => s.layers.wardChoropleth);
-  const showStations = useCommandStore((s) => s.layers.stations);
-  const showTrajectories = useCommandStore((s) => s.layers.trajectories);
-  const showEvidence = useCommandStore((s) => s.layers.fires);
+  const layersOn = useCommandStore((s) => s.layers);
   const basemap = useCommandStore((s) => s.basemap);
   const selectWard = useCommandStore((s) => s.selectWard);
   const selectedWardId = useCommandStore((s) => s.selectedWardId);
@@ -178,8 +172,6 @@ export function MapCanvas({
   const readingsRef = useRef(readings);
   readingsRef.current = readings;
 
-  // Ward geometry remains immutable; AQI is written separately as feature-state.
-  // This is important for Delhi because the geometry endpoint is cached forever.
   const stationGeoJSON = useMemo(
     () => ({
       type: "FeatureCollection" as const,
@@ -246,12 +238,12 @@ export function MapCanvas({
       setStyleReady(0);
     };
     // Init-only: a city change flies the camera rather than rebuilding the GL
-    // context, so Delhi -> Pune stays instant (PRD G1).
+    // context, so Delhi → Pune stays instant (PRD G1).
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // ---- basemap switch ------------------------------------------------------
-  // Just toggle raster-layer visibility — no setStyle, so VAYU's layers and
+  // Just toggle raster-layer visibility — no setStyle, so Aeris's layers and
   // feature-state are untouched and the switch is instant and race-free.
   useEffect(() => {
     const m = map.current;
@@ -291,7 +283,7 @@ export function MapCanvas({
             "case",
             ["boolean", ["feature-state", "hover"], false],
             0.85,
-            ["==", ["get", "aqi"], null],
+            ["==", ["feature-state", "aqi"], null],
             0.35,
             0.68,
           ] as unknown as maplibregl.ExpressionSpecification,
@@ -306,13 +298,13 @@ export function MapCanvas({
         paint: {
           "line-color": [
             "case",
-            ["boolean", ["get", "selected"], false],
+            ["boolean", ["feature-state", "selected"], false],
             "#22D3EE",
             "#1F2A44",
           ] as unknown as maplibregl.ExpressionSpecification,
           "line-width": [
             "case",
-            ["boolean", ["get", "selected"], false],
+            ["boolean", ["feature-state", "selected"], false],
             2.5,
             0.6,
           ] as unknown as maplibregl.ExpressionSpecification,
@@ -448,21 +440,16 @@ export function MapCanvas({
     );
   }, [wards, styleReady]);
 
-  // ---- push ward AQI values as feature-state -------------------------------
+  // ---- push ward values as feature-state ----------------------------------
   useEffect(() => {
     const m = map.current;
     if (!m || !styleReady || !wards?.features?.length) return;
-
-    // Clear the previous city's AQI state before applying the new city.
+    // removeFeatureState clears stale values from the previous city before the
+    // new ones land — otherwise a ward id present in both would keep its colour.
     m.removeFeatureState({ source: SRC_WARDS });
-    readings.forEach((ward, id) => {
-      m.setFeatureState(
-        { source: SRC_WARDS, id },
-        { aqi: ward.aqi ?? null },
-      );
+    readings.forEach((w, id) => {
+      m.setFeatureState({ source: SRC_WARDS, id }, { aqi: w.aqi ?? null });
     });
-    // Force a render so the freshly applied feature-state is visible immediately.
-    m.triggerRepaint();
   }, [readings, wards, styleReady]);
 
   // ---- selection outline --------------------------------------------------
@@ -509,7 +496,7 @@ export function MapCanvas({
       type: "FeatureCollection",
       features: feats.filter((f) => f.geometry?.type === "Polygon"),
     } as unknown as GeoJSON.FeatureCollection);
-  }, [trajectory, selectedWardId, styleReady]);
+  }, [trajectory, styleReady]);
 
   // Flowing dash: the signature "air moving toward the ward" animation.
   useEffect(() => {
@@ -594,26 +581,22 @@ export function MapCanvas({
       new maplibregl.LngLatBounds(pts[0], pts[0]),
     );
     m.fitBounds(b, { padding: { top: 70, bottom: 60, left: 300, right: 400 }, duration: 1100, maxZoom: 10 });
-  }, [trajectory, selectedWardId, evidence, styleReady]);
+  }, [trajectory, evidence, styleReady]);
 
   // ---- layer toggles ------------------------------------------------------
   useEffect(() => {
     const m = map.current;
-    if (!m || !styleReady || !m.isStyleLoaded()) return;
-
+    if (!m || !styleReady) return;
     const set = (id: string, on: boolean) => {
-      if (m.getLayer(id)) {
-        m.setLayoutProperty(id, "visibility", on ? "visible" : "none");
-      }
+      if (m.getLayer(id)) m.setLayoutProperty(id, "visibility", on ? "visible" : "none");
     };
-
-    set(LYR_WARD_FILL, showWardAqi);
-    set(LYR_WARD_LINE, showWardAqi);
-    set(LYR_STATIONS, showStations);
-    set(LYR_TRAJ, showTrajectories);
-    set(LYR_CONE, showTrajectories);
-    set(LYR_EVIDENCE, showEvidence);
-  }, [showWardAqi, showStations, showTrajectories, showEvidence, styleReady]);
+    set(LYR_WARD_FILL, layersOn.wardChoropleth);
+    set(LYR_WARD_LINE, layersOn.wardChoropleth);
+    set(LYR_STATIONS, layersOn.stations);
+    set(LYR_TRAJ, layersOn.trajectories);
+    set(LYR_CONE, layersOn.trajectories);
+    set(LYR_EVIDENCE, layersOn.fires);
+  }, [layersOn, styleReady]);
 
   // ---- city switch: fly, don't rebuild ------------------------------------
   useEffect(() => {
