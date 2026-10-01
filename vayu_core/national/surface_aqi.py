@@ -3,8 +3,7 @@
 **What this is validated on, stated plainly.** The satellite layer (HCHO, NO2,
 SO2, CO, O3, AOD) is genuinely national — 15,360 cells over India. Ground-truth
 CPCB readings and meteorological reanalysis are NOT: this project has real,
-matched daily data only for the Delhi-NCR + Lucknow corridor (188 stations, the
-same region the rest of VAYU already models). Training and reporting RMSE/MAE/R
+matched daily ground-truth data for the Delhi and Pune study cities used by this deployment. Training and reporting RMSE/MAE/R
 against stations outside that corridor would be a claim this repository cannot
 back up, so the model is trained and evaluated there — and architected to extend
 nationally the moment national CPCB history and ERA5/IMDAA reanalysis access
