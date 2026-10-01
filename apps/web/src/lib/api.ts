@@ -109,7 +109,7 @@ export const api = {
   health: () => get<Health>("/health"),
   cities: () => get<City[]>("/cities"),
   current: (cityId: string) => get<Current>(`/cities/${cityId}/current`),
-  wards: (cityId: string) => get<WardCollection>(`/cities/${cityId}/wards.geojson`),
+  wards: (cityId: string) => get<WardCollection>(`/cities/${cityId}/wards.geojson?v=2`),
   forecast: (cityId: string, h: number) => get<Forecast>(`/cities/${cityId}/forecast?h=${h}`),
   alerts: (cityId: string) => get<HazardAlert[]>(`/cities/${cityId}/alerts`),
   explain: (cityId: string, wardId: string, h: number) =>
