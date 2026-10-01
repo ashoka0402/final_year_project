@@ -362,7 +362,7 @@ def train(
        every other input already is fixes it.
     2. The first version of this inner split carved off the LAST `holdout_days`
        of TRAIN as validation (mirroring the outer split). That is wrong here
-       specifically because Delhi-NCR's PM2.5 roughly triples from early
+       specifically because Delhi's PM2.5 rises sharply from early
        October to the mid-November stubble-burning peak: a trailing-days split
        leaves FIT holding only the calm early season (mean ~95) while VAL and
        the real HOLDOUT both land in the high-pollution tail (mean ~215-220) —
