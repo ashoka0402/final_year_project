@@ -139,31 +139,114 @@ def fetch_locations(city: CityConfig, start: date, end: date) -> pd.DataFrame:
 
 
 def fetch_current(city: CityConfig, at=None) -> tuple[pd.DataFrame, pd.DataFrame]:
-    """Fetch measured OpenAQ observations around the app's current instant.
-
-    This is the secondary live-measurement path: official CPCB/MPCB should be
-    attempted first, then OpenAQ. Using the same time-windowed sensor-hours path
-    keeps DEMO_MODE deterministic instead of accidentally pulling today's real
-    measurements into a historical demo clock.
-    """
-    target = at or get_settings().now()
-    day = target.date()
-    stations = fetch_locations(city, day, day)
-    if stations.empty:
+    """Fetch current measured OpenAQ observations using the location latest resource."""
+    if not available():
         return pd.DataFrame(), pd.DataFrame()
 
-    measurements = fetch_measurements(city, stations, day, day)
+    target = at or get_settings().now()
+    target_ts = pd.Timestamp(target)
+    cutoff = target_ts - pd.Timedelta(hours=6)
+
+    payload = fetch_json(
+        f"{BASE}/locations",
+        params={"bbox": city.bbox_str("wsen"), "limit": 1000},
+        headers=_headers(),
+        ttl=timedelta(hours=1),
+        limiter=_limiter,
+    )
+    locations = payload.get("results", []) or []
+    logger.info(f"[{city.id}] OpenAQ: {len(locations)} locations in bbox — checking latest measurements")
+
+    station_rows = []
+    measurement_rows = []
+    skipped = 0
+
+    for loc in locations:
+        coords = loc.get("coordinates") or {}
+        lat, lon = coords.get("latitude"), coords.get("longitude")
+        if lat is None or lon is None:
+            continue
+
+        sensor_params = {}
+        for sensor in loc.get("sensors", []) or []:
+            sid = sensor.get("id")
+            pname = ((sensor.get("parameter") or {}).get("name") or "").lower()
+            if sid is not None and pname in PARAM_MAP:
+                sensor_params[int(sid)] = PARAM_MAP[pname]
+
+        if not sensor_params:
+            skipped += 1
+            continue
+
+        try:
+            latest = fetch_json(
+                f"{BASE}/locations/{int(loc["id"])}/latest",
+                params={
+                    "limit": 1000,
+                    "datetime_min": cutoff.isoformat().replace("+00:00", "Z"),
+                },
+                headers=_headers(),
+                ttl=timedelta(minutes=5),
+                limiter=_limiter,
+            )
+        except FetchError as exc:
+            logger.warning(f"OpenAQ latest for location {loc["id"]}: {exc}")
+            skipped += 1
+            continue
+
+        location_measurements = 0
+        for item in latest.get("results", []) or []:
+            sensor_id = item.get("sensorsId")
+            param = sensor_params.get(int(sensor_id)) if sensor_id is not None else None
+            if param is None:
+                continue
+            dt = (item.get("datetime") or {}).get("utc")
+            value = item.get("value")
+            if not dt or value is None:
+                continue
+            ts = pd.Timestamp(dt)
+            if ts.tzinfo is None:
+                ts = ts.tz_localize("UTC")
+            else:
+                ts = ts.tz_convert("UTC")
+            if ts < cutoff or ts > target_ts:
+                continue
+            station_id = f"{city.id}:oaq{loc["id"]}"
+            measurement_rows.append({
+                "city": city.id,
+                "station_id": station_id,
+                "param": param,
+                "ts": ts,
+                "value": float(value),
+                "unit": "ug/m3",
+                "source": SOURCE_OPENAQ,
+            })
+            location_measurements += 1
+
+        if location_measurements:
+            station_rows.append({
+                "city": city.id,
+                "station_id": f"{city.id}:oaq{loc["id"]}",
+                "name": (loc.get("name") or f"OpenAQ {loc["id"]}").strip(),
+                "lat": float(lat),
+                "lon": float(lon),
+                "provider": f"OpenAQ · {(loc.get("provider") or {}).get("name", "unknown")}",
+                "first_seen": None,
+                "last_seen": None,
+            })
+        else:
+            skipped += 1
+
+    stations = pd.DataFrame(station_rows)
+    measurements = pd.DataFrame(measurement_rows)
     if measurements.empty:
+        logger.warning(f"[{city.id}] OpenAQ returned no usable current measurements ({len(locations)} locations checked, {skipped} skipped)")
         return stations, measurements
 
-    measurements["ts"] = pd.to_datetime(measurements["ts"], utc=True)
-    cutoff = pd.Timestamp(target) - pd.Timedelta(hours=6)
-    measurements = measurements[(measurements["ts"] <= pd.Timestamp(target)) & (measurements["ts"] >= cutoff)]
-    if measurements.empty:
-        logger.warning(f"[{city.id}] OpenAQ returned stations but no measurements in the 6h current window")
+    measurements = measurements.drop_duplicates(subset=["city", "station_id", "param", "ts"])
+    measurements = screen(measurements, f"[{city.id}] OpenAQ")
+    logger.info(f"[{city.id}] OpenAQ: {len(measurements):,} current measured rows across {measurements["station_id"].nunique()} stations")
     return stations, measurements
-
-
 def fetch_measurements(city: CityConfig, stations: pd.DataFrame, start: date, end: date) -> pd.DataFrame:
     """Hourly measurements per sensor over [start, end].
 
