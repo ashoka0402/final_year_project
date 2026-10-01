@@ -251,3 +251,35 @@ def fetch_measurements(city: CityConfig, stations: pd.DataFrame, start: date, en
         )
     logger.info(f"[{city.id}] OpenAQ: {len(out):,} measured rows across {got} stations")
     return out
+
+
+if __name__ == "__main__":
+    import argparse
+
+    from vayu_core.config import load_city
+
+    parser = argparse.ArgumentParser(description="Check OpenAQ v3 coverage without printing the API key")
+    parser.add_argument("--city", default="pune", help="city id from config/cities/")
+    args = parser.parse_args()
+
+    settings = get_settings()
+    print(f"OPENAQ_API_KEY set: {bool(settings.openaq_api_key)}")
+    if not settings.openaq_api_key:
+        print("OpenAQ check: SKIPPED (set OPENAQ_API_KEY in .env)")
+        raise SystemExit(2)
+
+    city = load_city(args.city)
+    at = settings.now()
+    stations, measurements = fetch_current(city, at)
+    print(f"City: {city.name}")
+    print(f"OpenAQ locations with matching sensor coverage: {len(stations)}")
+    print(f"OpenAQ measurements in current 6h window: {len(measurements)}")
+    if not measurements.empty:
+        print(f"Stations with measured data: {measurements['station_id'].nunique()}")
+        print(f"Parameters: {', '.join(sorted(measurements['param'].unique()))}")
+        latest = measurements['ts'].max()
+        print(f"Latest measurement: {latest}")
+        print("OpenAQ check: OK")
+        raise SystemExit(0)
+    print("OpenAQ check: NO CURRENT MEASUREMENTS")
+    raise SystemExit(1)
