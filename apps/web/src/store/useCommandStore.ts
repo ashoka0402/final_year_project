@@ -6,7 +6,7 @@ import type { AttributionEvidence, SourceCategory } from "@/lib/types";
  * Map/UI state (TRD §9: Zustand for map & UI, TanStack Query for server cache).
  * Layer toggles live here so they persist across a city switch.
  */
-export type LayerId = "wardChoropleth" | "stations" | "heatGrid" | "fires" | "trajectories";
+export type LayerId = "wardChoropleth" | "stations" | "fires" | "trajectories";
 export type Basemap = "dark" | "light" | "satellite";
 
 interface CommandState {
@@ -38,9 +38,6 @@ export const useCommandStore = create<CommandState>((set) => ({
   layers: {
     wardChoropleth: true,
     stations: true,
-    // Off until the agents that produce them land (Phases 2-3). Shown in the
-    // layer bar as disabled so the roadmap is legible rather than invisible.
-    heatGrid: false,
     // On by default: selecting a ward should show its evidence and trajectory
     // immediately — that IS the product.
     fires: true,
