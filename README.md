@@ -8,7 +8,7 @@
 
 [![Scope](https://img.shields.io/badge/scope-Delhi%20%26%20Pune-16A34A?style=for-the-badge)](#study-area)
 [![Tests](https://img.shields.io/badge/tests-324%2F324_passing-22C55E?style=for-the-badge)](#testing)
-[![Google AI](https://img.shields.io/badge/Google_AI-Gemini-8E75B2?style=for-the-badge)](#8--citizen-photograph--gemini-vision--corroboration)
+[![Google AI](https://img.shields.io/badge/Google_AI-Gemini-8E75B2?style=for-the-badge)](#7--citizen-photograph--gemini-vision--corroboration)
 [![Delhi & Pune](https://img.shields.io/badge/study%20area-Pune-16A34A?style=for-the-badge)](#study-area)
 [![Python](https://img.shields.io/badge/python-3.11%2B-3776AB?style=flat-square)](requirements.txt)
 [![Next.js](https://img.shields.io/badge/Next.js-16-000000?style=flat-square)](apps/web/package.json)
@@ -28,10 +28,10 @@
 
 <div align="center">
 
-| | | | | | |
-|:--:|:--:|:--:|:--:|:--:|:--:|
-| **Pune** | **AQI** | **Forecast** | **Attribution** | **Interventions** | **Verification** |
-| Delhi & Pune spatial cells | satellite pollutant channels | economic Delhi & Pune spatial areas | real fire detections | CNN-LSTM Pearson r | tests passing |
+| | | | | |
+|:--:|:--:|:--:|:--:|:--:|
+| **Pune** | **AQI** | **Forecast** | **Attribution** | **Interventions** |
+| Delhi & Pune spatial cells | satellite pollutant channels | ward-level spatial areas | real fire detections | dispatch-ready actions |
 
 *Only publish metrics reproduced using the current Delhi and Pune data and test suite.*
 
@@ -52,10 +52,9 @@
   - [2 · Short-term forecast](#2--short-term-forecast--lightgbm-quantile-regression)
   - [3 · Source attribution](#3--source-attribution--multi-evidence-fusion)
   - [4 · Ranked interventions](#4--ranked-interventions--roi--gaussian-plume-counterfactual)
-  - [5 · Outcome verification](#5--outcome-verification--difference-in-differences)
-  - [6 · National satellite grid & HCHO hotspots](#6--national-satellite-grid--hcho-hotspot-detection)
-  - [7 · Surface AQI from orbit](#7--surface-aqi-from-orbit--cnn-lstm)
-  - [8 · Citizen photo → Gemini](#8--citizen-photograph--gemini-vision--corroboration)
+  - [5 · National satellite grid & HCHO hotspots](#5--national-satellite-grid--hcho-hotspot-detection)
+  - [6 · Surface AQI from orbit](#6--surface-aqi-from-orbit--cnn-lstm)
+  - [7 · Citizen photo → Gemini](#7--citizen-photograph--gemini-vision--corroboration)
 - [The data pipeline](#the-data-pipeline)
 - [Model registry](#model-registry)
 - [Training and evaluation](#training-and-evaluation)
@@ -92,8 +91,8 @@ connected to those readings.
 | CPCB SAMEER measures, but does not act | A reading with no owner and no deadline |
 | SAFAR forecasts, but only 4 cities | Everywhere else flies blind on tomorrow |
 | IITM's Pune DSS attributes sources — Delhi and Pune, winter-only, supercomputer-bound | Not something a smaller city, or a different season, can run |
-| No system federates across state lines | Pollution crosses seven states on the Amritsar–Kolkata corridor; no bulletin does |
-| No system verifies a citizen's own evidence | A photo report is either ignored or trusted blindly — never checked |
+| No system unifies evidence across data sources | Pollution signals are fragmented across feeds; no ward-level picture does |
+| No system corroborates a citizen's own evidence | A photo report is either ignored or trusted blindly — never cross-checked |
 
 Aeris focuses these capabilities on Pune, combining city-level observations with spatial, satellite, and meteorological evidence where available.
 
@@ -104,17 +103,13 @@ Aeris focuses these capabilities on Pune, combining city-level observations with
 
 ### 🏙️ City enforcement loop
 
-**Closed-loop engine**
-`READING → RESPONSIBLE SOURCE → RANKED INTERVENTION → ENFORCEMENT ORDER → VERIFIED OUTCOME`,
+**Decision loop**
+`READING → RESPONSIBLE SOURCE → RANKED INTERVENTION → ENFORCEMENT ORDER`,
 for Pune, on a laptop, subject to the availability of Pune-specific data.
 
 **Dispatch-ready dossiers**
 A ranked intervention becomes a PDF with a map, an evidence table, a
 regulation citation, a predicted impact and a sign-off block — not a chart.
-
-**Outcome verification**
-Difference-in-differences against real CPCB history, with a confidence
-interval and an honest null-result verdict when the data says so.
 
 </td><td width="33%" valign="top">
 
@@ -144,9 +139,9 @@ severity, likely source, confidence — never a guessed numeric AQI.
 A citizen's claim is trusted only when real satellite/fire data in the same
 cell/day backs it up — never by reporter reputation.
 
-**Federated Delhi and Pune ward-level summaries**
-Delhi and Pune wards and surrounding airshed, each a versioned (`vayu.corridor.v1`),
-self-describing daily bulletin any state can consume over plain HTTP.
+**Delhi and Pune ward-level summaries**
+Delhi and Pune wards and surrounding airshed, each with a versioned,
+self-describing daily bulletin any service can consume over plain HTTP.
 
 </td></tr>
 </table>
@@ -160,7 +155,7 @@ the [live application](http://localhost:3000):
 
 ```mermaid
 flowchart LR
-    C["1. Command"] --> I["2. Interventions"] --> R["3. Delhi & Pune spatial analysis"] --> P["4. Report"] --> V["5. Verify"]
+    C["1. Command"] --> I["2. Interventions"] --> R["3. Ward-level spatial analysis"] --> P["4. Report"]
 ```
 
 | Stop | What to look at | Why it matters |
@@ -169,7 +164,6 @@ flowchart LR
 | **2 · Interventions** | Expand a candidate's rationale | Every ROI number cites *which* evidence it came from — click through to the source |
 | **3 · Delhi & Pune spatial analysis** | Switch to the IGP spine, change the date | Coverage is shown next to every number — a cell the satellite couldn't see is never mistaken for a clean one |
 | **4 · Report** | Submit a photo, or read `/api/v1/citizen/reports` | The corroboration verdict names the real HCHO z-score or fire count behind it |
-| **5 · Verify** | Read a dispatched order's diff-in-diff result | Includes a real order that came back statistically insignificant — shown, not hidden |
 
 > **The one thing to click:** an evidence link on the Interventions page. Everything
 > else is a number — that link is the proof behind it.
@@ -183,8 +177,6 @@ flowchart LR
 | **Command Center** | `/` | Ward choropleth, stations, hazard alerts, trajectory/dispersion cone, KPIs, Delhi and Pune view |
 | **Interventions** | `/interventions` | ROI-ranked leaderboard, expandable counterfactuals, one-click dispatch → dossier PDF, GRAP Autopilot card |
 | **Inspector** | `/inspector` | Mobile order list, evidence checklist, dossier download, mark-executed |
-| **Verify** | `/verify` | Difference-in-differences: predicted vs. observed, with a confidence interval |
-| **Delhi & Pune spatial analysis** | Delhi & Pune spatial view | Delhi and Pune wards and surrounding airshed, each with a versioned daily bulletin |
 | **Citizen report** | `/report` | Submit a pollution photo or sensor reading; Gemini + satellite/fire cross-check it |
 | **Public Citizen view** | `/citizen` | Public AQI + clean-hours + health advisories in **English, हिंदी, ਪੰਜਾਬੀ** |
 | **Methodology** | `/methodology` | Backtest tables, formulas, and a limitations section written for a skeptical judge |
@@ -197,7 +189,7 @@ flowchart LR
 ```mermaid
 flowchart TB
     subgraph client["Browser"]
-        WEB["apps/web — Next.js 16 + React 19 — Command, Interventions, Delhi & Pune spatial analysis, Report — MapLibre GL, TanStack Query, Zustand"]
+        WEB["apps/web — Next.js 16 + React 19 — Command, Interventions, Report — MapLibre GL, TanStack Query, Zustand"]
     end
 
     subgraph container["Single Cloud Run container"]
@@ -323,7 +315,6 @@ flowchart LR
         I2["station history, weather, fires"]
         I3["fire, NO2, OSM, trajectory"]
         I4["attributed clusters"]
-        I5["dispatched order + history"]
         I6["satellite grid + fire_grid"]
         I7["3x3 satellite patch, 5-day"]
         I8["citizen photo"]
@@ -333,7 +324,6 @@ flowchart LR
         E2["LightGBM quantile x9"]
         E3["evidence fusion"]
         E4["ROI plus Gaussian plume"]
-        E5["diff-in-diff plus bootstrap CI"]
         E6["median MAD z-score"]
         E7["CNN into LSTM"]
         E8["Gemini Vision plus crosscheck"]
@@ -530,42 +520,13 @@ Pango/Cairo dependency chain isn't available on a clean macOS without
 Homebrew, a documented deviation) contains: headline impact table, a
 schematic (not photographic) locator map with source pin, ward polygon, wind
 vector and scale bar, an evidence table, a regulation citation with an
-explicit *"abridged restatement — verify against the applicable current Maharashtra/Pune order or guideline"*
+explicit *"abridged restatement — check against the applicable current Maharashtra/Pune order or guideline"*
 warning, full data-source and method provenance, and a blank signature block —
 *"Aeris recommends; a human authorises."* Every page is watermarked
 **"PROTOTYPE — not an official document."**
 
 ---
 
-### 5 · Outcome verification — difference-in-differences
-
-**Screen** `/verify` · **Code** [`vayu_core/verification/did.py`](vayu_core/verification/did.py)
-
-```
-observed_reduction = −[(target_post − target_pre) − mean(control_post − control_pre)]
-```
-
-**Controls are chosen from pre-period data only** — filtered to 8–30 km from
-the source (outside the plume, but sharing regional weather), ranked by how
-well they tracked the target *before* the order, with a population-density
-tiebreak. Choosing controls from post-period behaviour would let a verdict
-flatter itself; the code refuses to.
-
-**Confidence interval** — a 6-hour block bootstrap, 500 resamples, seeded
-(`np.random.default_rng(42)`) so a verdict does not move between runs.
-Six-hour blocks specifically because resampling single autocorrelated hourly
-readings as if independent would understate the interval.
-
-**A verdict needs at least 40 post-order hours**; below that, `did.py` returns
-a `Pending` object rather than a number — *"a verdict drawn from six hours of
-readings would be a coin flip dressed as a measurement."* And when the result
-comes back near zero, it is **published as computed**: *"`pct_realized` near
-zero means the order did nothing, and the honest thing is to say so."* The
-bundled demo record does exactly that — a real dispatched order whose
-diff-in-diff verdict is statistically insignificant, shown on `/verify`
-rather than swapped for a better-looking one.
-
----
 
 ### 6 · National satellite grid & HCHO hotspot detection
 
@@ -615,7 +576,7 @@ epsilon to tune).
 
 ---
 
-### 7 · Surface AQI from orbit — CNN-LSTM
+### 6 · Surface AQI from orbit — CNN-LSTM
 
 **Code** [`vayu_core/national/surface_aqi.py`](vayu_core/national/surface_aqi.py) · training-only, never imported by the live API
 
@@ -623,8 +584,7 @@ Per station-day, a small CNN reads a **3×3 satellite patch** (5 channels — O�
 is deliberately excluded from training; see [Known limitations](#known-limitations))
 into a spatial embedding; an LSTM reads a **5-day sequence** of that embedding
 plus meteorology and yesterday's PM2.5 into a predicted PM2.5 today. Trained
-and evaluated on the one corridor with real matched ground truth (Pune,
-Pune, Pune — 3,727 legacy station-days (not a Pune evaluation)), with a genuine time-based holdout
+and evaluated on the 3,727 legacy station-days with matched ground truth (not a Pune evaluation), with a genuine time-based holdout
 and a persistence baseline as the honesty check:
 
 | | RMSE (µg/m³) | MAE (µg/m³) | Pearson r |
@@ -644,7 +604,7 @@ trailing-days split) is documented in
 
 ---
 
-### 8 · Citizen photograph → Gemini Vision → corroboration
+### 7 · Citizen photograph → Gemini Vision → corroboration
 
 **Endpoint** `POST /citizen/report/photo` · **Code** [`vayu_core/google_ai/vision.py`](vayu_core/google_ai/vision.py), [`client.py`](vayu_core/google_ai/client.py), [`citizen/crosscheck.py`](vayu_core/citizen/crosscheck.py)
 
@@ -772,7 +732,6 @@ live feed (see [Known limitations](#known-limitations)).
 | Surface-AQI CNN-LSTM | **PyTorch CNN → LSTM** | PM2.5 from satellite alone | 3,727 legacy station-days (not a Pune evaluation), Pune/NCR/Pune | RMSE 51.14 · **Pearson r 0.838** |
 | Source attribution | rule-based evidence fusion | 5-category source share | fire/NO2/OSM/trajectory, calibrated (not fitted) vs. published IITM/SAFAR ranges | — |
 | ROI ranking | Gaussian plume (Briggs 1973) | intervention impact + ranking | attributed clusters + emission-rate physics | monotonic, refuses upwind/out-of-range sources |
-| Outcome verification | difference-in-differences | did an order work? | pre/post CPCB history, 3 matched controls | 6h block bootstrap, 500 resamples, seed 42 |
 | HCHO hotspot detector | robust z-score (median/MAD) | anomaly detection | 60-day per-cell baseline | z ≥ 2.5σ, cross-checked vs. VIIRS fires |
 | Citizen vision | **Google Gemini** (`gemini-3.6-flash`) | photo → structured observation | zero-shot, schema-constrained | never estimates a numeric AQI |
 
@@ -955,11 +914,10 @@ Two non-obvious things the deploy scripts handle for you:
 | Source attribution | — | — | ✅ (Pune, winter) | — | ✅ |
 | **Pune-filtered satellite data** | — | — | — | — | ✅ (Pune extent; coverage depends on source) |
 | **Surface AQI from satellite alone** | — | — | — | — | ✅ (CNN-LSTM) |
-| **Citizen photo → verified evidence** | — | — | — | — | ✅ (Gemini + corroboration) |
+| **Citizen photo → corroborated evidence** | — | — | — | — | ✅ (Gemini + corroboration) |
 | **Federated Delhi and Pune ward-level summaries** | — | — | — | — | ✅ (Delhi and Pune ward-level outputs) |
 | **Ranked intervention** | — | — | — | — | ✅ |
 | **Dispatch-ready order** | — | — | — | — | ✅ |
-| **Verified outcome** | — | — | — | — | ✅ |
 | Runs on a laptop, any city | — | — | supercomputer | — | ✅ (1 config file) |
 
 ---
@@ -1072,13 +1030,13 @@ command reads keys from your shell/`.env` and passes them to Cloud Run as
 vayu/
 ├── apps/web/                    Next.js 16 · React 19 · Tailwind · MapLibre · TanStack Query
 │   ├── src/app/                 one route per page — (command), interventions, Delhi & Pune spatial areas,
-│   │                            report, citizen, verify, inspector, methodology
+│   │                            report, citizen, inspector, methodology
 │   └── src/components/map/      MapCanvas.tsx — the declarative MapLibre layer registry
 │
 ├── services/
 │   ├── api/                     FastAPI · pydantic · RFC7807 errors · SSE audit stream
 │   │   └── routers/             meta, cities, forecast, attribution, interventions,
-│   │                            verification, citizen, citizen_reports, Delhi & Pune spatial areas,
+│   │                            citizen, citizen_reports, Delhi & Pune spatial areas,
 │   │                            grap, audit  (33 endpoints)
 │   └── pipeline/                ingestors — each retry → cache → bundled fallback
 │       ├── cpcb.py, openaq.py, firms.py, meteo.py, osm.py    city-scale ingestion
@@ -1099,7 +1057,6 @@ vayu/
 │   ├── citizen/                 ingest.py, crosscheck.py — photo/sensor intake + corroboration
 │   ├── google_ai/                client.py (Gemini REST) · vision.py (photo classification)
 │   ├── interventions/           roi.py (ROI ranking + Gaussian plume), dossier.py, grap.py
-│   └── verification/            did.py (difference-in-differences), series.py
 │
 ├── config/
 │   ├── cities/                  one JSON per city — the only city-specific artifact
@@ -1132,11 +1089,11 @@ The suite pins the claims that would silently corrupt an enforcement order —
 or a national bulletin — if they broke: the CPCB AQI conversion band-edge by
 band-edge; the Gaussian plume against its closed form and mass conservation;
 the ROI ranking's monotonicity and its refusal to recommend an upwind source;
-the diff-in-diff refusing to credit the weather; every advisory in all three
-languages never telling a citizen to go outside in severe air; the HCHO
-hotspot detector's robustness to a collapsed-variance cell; the corridor
-distance math's `cos(latitude)` correction; the citizen corroboration logic
-never claiming "no fire" when fires are actually present; and the CNN-LSTM's
+every advisory in all three languages never telling a citizen to go outside in
+severe air; the HCHO hotspot detector's robustness to a collapsed-variance
+cell; the spatial distance math's `cos(latitude)` correction; the citizen
+corroboration logic never claiming "no fire" when fires are actually present;
+and the CNN-LSTM's
 time-based train/holdout split never leaking future data backward.
 
 `pytest-timeout` is wired in as a dev dependency after the memory-blowup hang
@@ -1156,7 +1113,6 @@ the live instance.
 | `forecast` | `GET /cities/{id}/forecast?h=24\|48\|72` |
 | `attribution` | `GET /cities/{id}/attribution/{ward_id}`, `GET /cities/{id}/trajectory/{ward_id}` |
 | `interventions` | `GET /cities/{id}/interventions?ward_id=`, `POST /interventions/dispatch`, `POST /interventions/{id}/execute`, `GET /interventions/{id}/dossier` |
-| `verification` | difference-in-differences results for dispatched orders |
 | `citizen` | public advisory surfaces |
 | `citizen_reports` | `POST /citizen/report/photo`, `POST /citizen/report/sensor`, `GET /citizen/reports` |
 | Delhi & Pune spatial outputs | use the configured Pune API routes |
@@ -1177,7 +1133,7 @@ These limitations are especially important when adapting the original multi-city
 | 4 | **Ward-level values may be estimates** | IDW or other spatial interpolation can fill map gaps, but cannot create ground truth. Mark estimated areas and confidence. |
 | 5 | **Satellite products have limits** | Cloud cover, revisit frequency, pixel size, and product latency can affect Pune-area analysis. A satellite signal is not automatically a surface AQI measurement. |
 | 6 | **Attribution is evidence-based, not definitive** | Source shares depend on assumptions, inventories, meteorology, and calibration. Present uncertainty and avoid claiming causal certainty without validation. |
-| 7 | **Intervention impact requires evaluation** | A predicted impact is not a verified outcome. Use a suitable comparison period/control and report uncertainty before making effectiveness claims. |
+| 7 | **Intervention impact requires evaluation** | A predicted impact is an estimate. Use a suitable comparison period/control and report uncertainty before making effectiveness claims. |
 | 8 | **Legacy data and code may remain multi-city** | The README's Pune scope does not itself change the code, bundled database, city configuration, or UI. These must be migrated and tested separately. |
 
 ## Roadmap
@@ -1233,7 +1189,7 @@ like to use it and a license hasn't been added yet.
 **Built for Build with AI: Code for Communities · Track 2 — Clean Air & Climate Resilience**
 
 *Prototype. Not an official government system. Regulation text is an abridged
-restatement for demonstration — verify against the applicable current Maharashtra/Pune order or guideline before
+restatement for demonstration — check against the applicable current Maharashtra/Pune order or guideline before
 any real enforcement.*
 
 Local app: `http://localhost:3000` · API docs: `http://localhost:8000/docs` (if running locally)
