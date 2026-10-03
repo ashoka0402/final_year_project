@@ -19,7 +19,7 @@
 
 `air-quality` · `environmental-monitoring` · `machine-learning` · `computer-vision` · `satellite-imagery`
 `google-gemini` · `google-earth-engine` · `sentinel-5p` · `lightgbm` · `pytorch` · `cnn-lstm` · `duckdb`
-`fastapi` · `nextjs` · `maplibre` · `google-cloud-run` · `causal-inference` · `difference-in-differences`
+`fastapi` · `nextjs` · `maplibre` · `google-cloud-run`
 `gaussian-plume` · `india` · `gov-data` · `enforcement` · `hackathon`
 
 </div>
@@ -203,7 +203,6 @@ flowchart TB
             NAT["national/ — CNN-LSTM, HCHO hotspots, Delhi & Pune spatial areas"]
             CIT["citizen/ — ingest, crosscheck"]
             GAI["google_ai/ — Gemini client, vision"]
-            VER["verification/ — diff-in-diff"]
         end
         DB[("data/vayu.duckdb — embedded, single file")]
     end
