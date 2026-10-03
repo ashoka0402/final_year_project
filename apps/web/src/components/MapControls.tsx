@@ -1,6 +1,6 @@
 "use client";
 
-import { Flame, Layers, MapPin, Moon, Route, Satellite, Sun, Thermometer } from "lucide-react";
+import { Flame, Layers, MapPin, Moon, Route, Satellite, Sun } from "lucide-react";
 
 import { AQI_BANDS, readableOn } from "@/lib/aqi";
 import { cn } from "@/lib/cn";
@@ -55,7 +55,6 @@ const LAYERS: { id: LayerId; label: string; icon: React.ReactNode; phase?: strin
     icon: <Route className="h-3 w-3" aria-hidden />,
     hint: "Back-trajectory and dispersion cone for the selected ward",
   },
-  { id: "heatGrid", label: "Heat grid", icon: <Thermometer className="h-3 w-3" aria-hidden />, phase: "Phase 6" },
 ];
 
 /** Layer toggle chips, top-left of the map (master prompt §8, Screen 1). */
