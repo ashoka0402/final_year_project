@@ -13,7 +13,7 @@ import { DataPills } from "./DataPills";
 
 /**
  * Top nav (App Flow §1): Aeris ◆ [City switcher] | Command | Interventions |
- * Verify | Methodology + data pills.
+ * Report | Methodology + data pills.
  *
  * Routes for phases not yet built are rendered disabled with their phase noted,
  * rather than as dead links — the demo path stays obvious.
@@ -22,8 +22,6 @@ const NAV = [
   { label: "Command", href: "/", enabled: true },
   { label: "Interventions", href: "/interventions", enabled: true },
   { label: "Report", href: "/report", enabled: true },
-  { label: "Corridors", href: "/corridors", enabled: true },
-  { label: "Verify", href: "/verify", enabled: true },
   { label: "Methodology", href: "/methodology", enabled: true },
 ];
 
