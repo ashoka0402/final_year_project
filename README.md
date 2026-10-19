@@ -196,7 +196,7 @@ flowchart TB
     end
 
     WEB -->|"same-origin, no CORS"| NEXTPROC --> ROUTERS
-    ROUTERS --> FC & ATTR & NAT & VER
+    ROUTERS --> FC & ATTR & NAT
     FC & ATTR & NAT --> DB
     ROUTERS --> DB
     CPCB & S5P & SAT & LIVE --> DB
@@ -262,7 +262,6 @@ flowchart LR
     I3 --> E3 --> O3["5-category attribution"]
     O3 --> E4
     I4 --> E4 --> O4["ranked orders plus dossier PDF"]
-    I5 --> E5 --> O5["verified outcome plus CI"]
     I6 --> E6 --> O6["hotspot cells plus fire correlation"]
     I7 --> E7 --> O7["predicted PM2.5"]
 
@@ -271,7 +270,7 @@ flowchart LR
 
 ### 1 · CPCB AQI conversion — and the sub-index inversion bug it fixes
 
-**Code** [AQI conversion module](core/aqi.py) · pure function, no model
+**Code** AQI conversion module · pure function, no model
 
 CPCB's official scheme (`sub_index()`, line 105) is piecewise-linear per
 pollutant: `I = I_lo + (I_hi − I_lo) × (C − C_lo) / (C_hi − C_lo)`, and the
@@ -299,7 +298,7 @@ as instantaneous.
 
 ### 2 · Short-term forecast — LightGBM quantile regression
 
-**Endpoint** `GET /cities/{id}/forecast?h=24|48|72` · **Code** [forecast model module](core/forecast/model.py), [`features.py`](core/forecast/features.py)
+**Endpoint** `GET /cities/{id}/forecast?h=24|48|72` · **Code** forecast model and feature-engineering modules
 
 **Nine independent models**, not one. `QUANTILES = {p10: 0.1, p50: 0.5, p90: 0.9}`
 × `HORIZONS = (24, 48, 72)` — each an `LGBMRegressor` with fixed hyperparameters
@@ -345,7 +344,7 @@ only). Results in [Training and evaluation](#training-and-evaluation).
 
 ### 3 · Source attribution — multi-evidence fusion
 
-**Endpoint** `GET /cities/{id}/attribution/{ward_id}` · **Code** [source-attribution module](core/attribution/fusion.py)
+**Endpoint** `GET /cities/{id}/attribution/{ward_id}` · **Code** source-attribution module
 
 Five source categories are scored independently and normalised into a share:
 `open_burning`, `traffic`, `construction`, `industry`, `regional_transport`.
@@ -409,7 +408,7 @@ truth exists to fit them to.
 
 ### 4 · Ranked interventions — ROI + Gaussian-plume counterfactual
 
-**Endpoint** `POST /interventions/dispatch` · **Code** [intervention-ranking module](core/interventions/roi.py), [`dossier.py`](core/interventions/dossier.py)
+**Endpoint** `POST /interventions/dispatch` · **Code** intervention-ranking and dossier modules
 
 ```
 ROI = (population-weighted mean Δµg/m³ averted at t+24h) × population_protected
@@ -443,7 +442,7 @@ floor: not worth a team's day"* — and computes ROI from the **rounded, display
 averted value rather than the raw float, specifically so a reader can multiply
 the visible leaderboard columns by hand and get the number shown.
 
-**The dossier** (`dossier.py`, rendered with ReportLab — WeasyPrint's native
+**The dossier** (dossier module, rendered with ReportLab — WeasyPrint's native
 Pango/Cairo dependency chain isn't available on a clean macOS without
 Homebrew, a documented deviation) contains: headline impact table, a
 schematic (not photographic) locator map with source pin, ward polygon, wind
@@ -458,7 +457,7 @@ warning, full data-source and method provenance, and a blank signature block —
 
 ### 6 · National satellite grid & HCHO hotspot detection
 
-**Code** [satellite hotspot module](core/national/hotspots.py)
+**Code** satellite hotspot module
 
 Two methodological choices, both about not fooling the detector:
 
@@ -504,212 +503,127 @@ epsilon to tune).
 
 ---
 
-### 6 · Surface AQI from orbit — CNN-LSTM
+### 6 · Surface AQI from satellite inputs — CNN-LSTM
 
-**Code** [offline surface-AQI model module](core/national/surface_aqi.py) · training-only, never imported by the live API
+The CNN-LSTM is an **offline experimental model**, not a live API fallback.
+A CNN encodes a 3×3 satellite patch; an LSTM processes a multi-day sequence
+of spatial embeddings with meteorological and historical features to estimate
+ground-level PM2.5. Training and scoring are performed separately from the
+web request path.
 
-Per station-day, a small CNN reads a **3×3 satellite patch** (5 channels — O₃
-is deliberately excluded from training; see [Known limitations](#known-limitations))
-into a spatial embedding; an LSTM reads a **5-day sequence** of that embedding
-plus meteorology and yesterday's PM2.5 into a predicted PM2.5 today. Trained
-and evaluated on the 3,727 legacy station-days with matched ground truth (not a Pune evaluation), with a genuine time-based holdout
-and a persistence baseline as the honesty check:
-
-| | RMSE (µg/m³) | MAE (µg/m³) | Pearson r |
-|---|---:|---:|---:|
-| **CNN-LSTM v1** | 51.14 | 39.01 | **0.838** |
-| Persistence baseline | 43.37 | — | — |
-
-Read honestly: **the legacy evaluation reported R = 0.838; this is not a Pune result**,
-but the model does not yet beat "today looks like yesterday" on RMSE for this
-holdout — reported in `docs/surface_aqi_evaluation.json` rather than hidden.
-The satellite inputs can be spatially filtered to Pune; the legacy evaluation does not establish Pune model performance against — extending
-that is a region-config change, not a rewrite (every other national layer in
-this codebase already works that way). The random-day-interleaved validation
-split that got this model to R = 0.838 (up from **−0.51** with a naive
-trailing-days split) is documented in
-[Two bugs found by testing](#two-bugs-found-by-testing-not-by-reading).
+**Pune evaluation status:** no metric should be presented as Pune performance
+unless it is reproduced using verified Pune ground observations, a documented
+time-based holdout, and a persistence baseline. Satellite coverage alone does
+not validate ground-level PM2.5 predictions. Until that evaluation is complete,
+treat this model as experimental and do not quote a Pune RMSE, MAE, or
+correlation score.
 
 ---
 
 ## The data pipeline
 
-Nine core datasets feed the two loops — five measured, four derived or
-generated by Aeris's own pipeline. Every derived dataset has a reproducible
-build path in `services/pipeline/` or `scripts/` — nothing here is a mystery
-blob.
+Aeris combines measured observations with weather, satellite, fire, and
+geospatial context. Derived values must retain their provenance so that a
+forecast, interpolated ward estimate, reanalysis value, or generated fixture
+cannot be mistaken for a direct station measurement.
 
-| Dataset | Rows | Origin |
-|---|---:|---|
-| `satellite_grid` (national) | legacy bundle: 3,936,738 rows (not Pune-specific) | DLR S5P L3 + Google Earth Engine, unified schema |
-| `fires` (city-scoped) | legacy bundle: 74,386 rows (not Pune-specific) | NASA FIRMS VIIRS |
-| `fire_grid` (national) | legacy bundle: 23,456 rows (not Pune-specific) | NASA FIRMS VIIRS |
-| `measurements` | 9 years hourly, per station | CPCB CAAQMS + ECMWF CAMS reanalysis (Open-Meteo) |
-| `stations` | legacy bundle: 270 stations across 3 cities (not Pune-specific) | CPCB CAAQMS metadata |
-| `wards` | 290 Pune · 333 Pune · 112 Pune | DataMeet municipal spatial data |
-| `aqi_grid` (CNN-LSTM output) | 466 | trained + scored by `scripts/train_surface_aqi.py` |
+| Dataset | Pune-specific handling | Provenance rule |
+|---|---|---|
+| Station measurements | Use CPCB/MPCB/OpenAQ records whose station coordinates and timestamps are verified for Pune | Store source, station ID, timestamp, pollutant, and units |
+| Weather | Join observations and forecasts by timestamp and location | Keep forecast weather distinct from observed weather |
+| Satellite grid | Clip supported products to the configured Pune study area and record product/version | Satellite column values are not ground-level AQI |
+| Fire detections | Filter NASA FIRMS VIIRS observations to the relevant area and time window | A detection is evidence, not proof of a pollution source |
+| Ward boundaries | Use a documented Pune municipal boundary dataset | Record boundary version and ward identifiers |
+| Forecast features | Build lags, rolling windows, calendar, weather, upwind, and fire features using data available at issue time | Prevent future-data leakage |
+| Derived AQI and ward values | Apply CPCB conversion and spatial interpolation rules | Mark estimates separately from direct measurements |
+| Synthetic fixtures | Use only for development and UI tests | Never include in real-world evaluation metrics |
 
-### Cleaning and transformation: what the data actually required
+### Data cleaning and transformation
 
-**CPCB's real-time feed is not what its field names claim.** As covered in
-[section 1](#1--cpcb-aqi-conversion--and-the-sub-index-inversion-bug-it-fixes),
-`data.gov.in`'s CAAQMS feed publishes CPCB *sub-indices* under a field named
-`avg_value`, not raw concentrations. Read literally, every Pune station shows
-"AQI 500 Severe" through monsoon. AQI conversion module inverts the same
-monotonic breakpoint table CPCB used to build the index, recovering a real
-24-hour-average concentration — the fix is exact up to CPCB's own integer
-rounding, not a heuristic correction.
+**CPCB sub-indices versus concentrations.** Some feeds expose CPCB sub-index
+values through fields whose names can be mistaken for raw concentrations.
+Convert values according to the source schema before calculating or displaying
+AQI; do not interpret a sub-index as a pollutant concentration.
 
-**Ward population is split equally, not by polygon area.** India's
-delimitation principle draws ward boundaries to hold roughly equal
-population — a large rural-edge ward and a small dense-core ward can carry
-similar populations on very different areas. Weighting population impact by
-polygon area (a natural first implementation) systematically favours large,
-sparse wards and **inverts the ROI leaderboard**; Aeris splits population
-equally per ward per the actual delimitation principle instead.
+**Population weighting.** Intervention impact should use an explicit,
+documented population estimate rather than assuming polygon area is a proxy
+for population. Where ward population data is missing, mark the estimate and
+its uncertainty.
 
-**Pune's stubble-burning source sits outside a local plume's range.**
-November's stubble burns 200–300 km upwind in Punjab — beyond the Gaussian
-plume model's 50 km range and outside any city's jurisdiction to enforce
-against. Rather than fabricate an averted-µg/m³ number for that share (which
-[section 4](#4--ranked-interventions--roi--gaussian-plume-counterfactual)'s
-range-refusal logic already declines to do), Aeris issues an escalation
-advisory to CAQM — the actual inter-state authority — instead of a city-level
-order it has no power to enforce.
+**Regional fire evidence.** Fires beyond a local intervention's effective
+range may contribute to regional attribution, but should not automatically
+produce a city-level enforcement order. Explain the geographic and evidential
+limits of each recommendation.
 
-**Fire correlation required stratification, not a single coefficient.** As
-covered in [section 6](#6--national-satellite-grid--hcho-hotspot-detection),
-Pearson r on fire-count vs. HCHO anomaly reads as "no relationship" (~0.03)
-purely because ~97% of cell-days have zero fires and the true response
-saturates almost immediately — a step function, not a line. Reporting the
-median HCHO stratified by fire-count bin instead surfaces the real,
-monotonic +86% / +107% / +120% relationship a single r would have hidden.
-
-**Live CPCB is blocked by network, not by data quality.** `services/pipeline/live.py`
-was built and tested against real data and works correctly — but
-`api.data.gov.in` rejects connections from Google Cloud's IP ranges
-specifically, identically across every city once deployed. This is documented
-plainly as a network-egress limitation, not silently patched over with a fake
-live feed (see [Known limitations](#known-limitations)).
+**Sparse and unavailable feeds.** If a live source is unreachable, surface the
+data as unavailable or use clearly labelled cached/demo data. Do not fabricate
+live observations or silently replace measured values with reanalysis.
 
 ---
 
 ## Model registry
 
-| Model | Algorithm | Task | Training data | Held-out result |
-|---|---|---|---|---|
-| Short-term forecaster | **LightGBM** (quantile, ×9) | PM2.5, p10/p50/p90 @ 24/48/72h | station history + weather + fires | RMSE 85.9 vs. persistence 86.1 @ 24h |
-| Surface-AQI CNN-LSTM | **PyTorch CNN → LSTM** | Experimental PM2.5 estimation from satellite inputs | Evaluation data is not a Pune result; do not present it as Pune validation | Not reported as a Pune metric |
-| Source attribution | rule-based evidence fusion | 5-category source share | fire/NO2/OSM/trajectory, calibrated (not fitted) vs. published IITM/SAFAR ranges | — |
-| ROI ranking | Gaussian plume (Briggs 1973) | intervention impact + ranking | attributed clusters + emission-rate physics | monotonic, refuses upwind/out-of-range sources |
-| HCHO hotspot detector | robust z-score (median/MAD) | anomaly detection | 60-day per-cell baseline | z ≥ 2.5σ, cross-checked vs. VIIRS fires |
-| Citizen vision | **Google Gemini** (`gemini-3.6-flash`) | photo → structured observation | zero-shot, schema-constrained | never estimates a numeric AQI |
+| Model/component | Method | Purpose | Pune evaluation status |
+|---|---|---|---|
+| Short-term forecaster | LightGBM quantile regression; p10/p50/p90 for 24/48/72-hour horizons | Estimate future PM2.5 and uncertainty | Report metrics only after a verified Pune holdout evaluation |
+| Surface-AQI estimator | Offline PyTorch CNN-LSTM | Experimental PM2.5 estimation from satellite and temporal inputs | Experimental; no Pune performance claim without local validation |
+| Source attribution | Evidence fusion across fires, satellite indicators, roads, and trajectories | Estimate plausible source contributions | Heuristic/evidence-based; not definitive causal proof |
+| Intervention ranking | Gaussian-plume counterfactual and impact ranking | Prioritize candidate actions | Predictions are estimates and require field validation |
+| HCHO hotspot detection | Per-cell median/MAD anomaly score and fire cross-check | Flag unusual satellite observations | Coverage and baseline must be reported for Pune |
 
 ---
 
 ## Training and evaluation
 
-**Short-term city forecast** — rolling-origin holdout, the last 30 days held
-out entirely, models see only data before each issue time, compared against
-two honest baselines:
+Do not copy model scores from an unrelated dataset into Pune project results.
+For each model, build a reproducible Pune dataset and report:
 
-| Model (t+24 h) | RMSE | MAE | Crossing precision | Crossing recall |
-|---|---:|---:|---:|---:|
-| **Aeris** (LightGBM quantile) | **85.9** | **58.1** | 85% | 84% |
-| Persistence (tomorrow = today) | 86.1 | 59.6 | 86% | 84% |
-| Climatology (seasonal normal) | 114.1 | 92.2 | 73% | 91% |
+1. **Data provenance:** sources, station IDs, date range, missingness, and whether values are measured, reanalysis, interpolated, or synthetic.
+2. **Temporal split:** reserve a chronological holdout that is not used for fitting or feature selection.
+3. **Baselines:** compare forecasts with persistence and a training-period-only seasonal climatology.
+4. **Metrics:** report RMSE and MAE; for quantile forecasts, also report interval coverage and quantile crossing; for threshold alerts, report precision and recall.
+5. **Geographic coverage:** state the number of stations, ward coverage, and holdout period. Do not imply a ward has ground truth when it only has an interpolated estimate.
+6. **Reproducibility:** retain the configuration, data cutoff, model version, and evaluation output.
 
-At 24 h, persistence is a genuinely strong PM2.5 baseline — Aeris beats it by a
-narrow margin on error and matches it on the crossing recall an operator can't
-afford to miss. Interval calibration (p10–p90, target 80% coverage): **77.3% /
-75.1% / 68.2%** at 24/48/72 h — well-calibrated near-term, slightly
-overconfident at 72 h, stated not smoothed. Full charts in `docs/img/` and
-`docs/evaluation.md`; regenerate with `make backtest`.
-
-**National surface-AQI (CNN-LSTM)** — see
-[section 7](#7--surface-aqi-from-orbit--cnn-lstm) above for the full table and
-honest read.
+Example commands, where the corresponding targets and dependencies are configured:
 
 ```bash
-make backtest                        # regenerate the forecaster's rolling-origin evaluation
-python -m scripts.train_surface_aqi  # train + evaluate the CNN-LSTM, writes aqi_grid
-python -m services.pipeline.national.calibrate  # re-derive attribution SCALE constants
+make backtest
+python -m scripts.train_surface_aqi
 ```
 
----
-
-## Two bugs found by testing, not by reading
-
-Both surfaced by actually running the deployed system against real data —
-not by auditing the source — and both are fixed. Kept here because the
-*process* is as much the point as the fix.
-
-<details>
-<summary><b>A "hung" test that was actually an out-of-memory allocation, not an infinite loop</b></summary>
-
-<br/>
-
-A full test-suite run sat for **2+ hours** with zero growing CPU time — the
-signature of a process blocked on memory, not stuck in a loop. The culprit,
-forecast feature-engineering module's `_add_fires`, builds one dense
-`(hours × nearby_fires)` array per station. That was fine when written
-against a few months of history and ~4.4k fire detections — but
-`measurements` has since grown to **9 years** of hourly rows per station and
-`fires` to **~21k** detections, so the one caller that ever passes full
-history tried to allocate an array with tens of billions of elements per
-station.
-
-Fix: chunk the same computation along the hours axis (`_FIRE_ROW_CHUNK_ELEMENTS
-= 5_000_000`), bounding peak allocation regardless of how much history
-accumulates. Same math, same results, no numerical difference — verified by
-re-running the full-vs-windowed equivalence test, which now completes in
-**104.57 s** instead of hanging indefinitely.
-
-</details>
-
-<details>
-<summary><b>The CNN-LSTM's holdout R went to -0.51 because of *how* the validation split was chosen, not the model</b></summary>
-
-<br/>
-
-Early stopping needs an inner slice of TRAIN to pick an epoch count without
-leaking the real holdout. The first version carved off the **last**
-`holdout_days` of TRAIN for that — mirroring the outer split. That is wrong
-specifically because Pune's PM2.5 roughly **triples** from early
-October (mean ~95 µg/m³) to the mid-November stubble-burning peak (mean
-~215–220 µg/m³): a trailing-days split left FIT holding only the calm early
-season while VAL and the real HOLDOUT both landed in the high-pollution
-tail — the model never trained on anything resembling what it was evaluated
-on.
-
-| Validation split | Holdout RMSE | Holdout R |
-|---|---:|---:|
-| Trailing days of TRAIN (wrong) | 138.15 | **-0.515** |
-| Random 20% of TRAIN days, interleaved (fixed) | **51.14** | **0.838** |
-
-Fix: sample the inner validation set as a random 20% of TRAIN *days*,
-interleaved with FIT rather than appended after it — every VAL day is still
-strictly before the outer holdout cutoff, so nothing leaks, but both FIT and
-VAL now see the full range of pollution regimes the season actually has.
-
-</details>
+A successful command is not, by itself, evidence of good model performance.
+The report must include generated metrics and baseline comparisons.
 
 ---
 
-## The dataset
+## Dataset and provenance
 
-Bundled records and evaluation artifacts must not be presented as verified Pune measurements unless their provenance confirms that they are Pune-specific. For an Aeris Pune build, regenerate the dataset from Pune-specific sources and record its provenance.
+Bundled records and evaluation artifacts must not be presented as verified
+Pune measurements unless their provenance confirms that they are Pune-specific.
+Regenerate Pune-specific datasets where provenance is incomplete, and document
+the time range, filtering rules, missing-data handling, and boundary version.
 
-| Dataset component | Pune version |
+| Dataset component | Required Pune evidence |
 |---|---|
-| Pune ward boundaries | Use the selected PMC boundary dataset; record its source and version |
-| Monitoring stations | Pune-area station registry with IDs, coordinates, pollutants, and active dates |
-| Ground observations | CPCB/MPCB/OpenAQ records that are actually available for Pune |
-| Weather | Pune-area historical and forecast variables with timestamps |
-| Satellite/fire data | Filtered to Pune and the selected study period |
-| Model training samples | Report only after building the Pune-specific training set |
-| Forecast evaluation | Pune holdout period, baseline, metrics, and data coverage |
-| Synthetic fixtures | Clearly labelled; excluded from real-world validation |
+| Ward boundaries | Source, version, ward IDs, and geometry validation |
+| Monitoring stations | Station IDs, coordinates, pollutant coverage, and active dates |
+| Ground observations | Source, units, timestamps, missingness, and duplicate handling |
+| Weather | Location, timestamp, observed/forecast distinction, and units |
+| Satellite/fire data | Product, acquisition time, spatial extent, and filtering method |
+| Training samples | Feature-generation version and temporal cutoff |
+| Forecast evaluation | Holdout dates, baseline, metrics, and coverage |
+| Synthetic fixtures | Explicit demo label and exclusion from real-world metrics |
+
+## Data-quality checks
+
+Test that AQI conversion follows the source's measurement semantics; forecast
+features do not look into the future; quantile predictions are ordered; missing
+data is not converted into clean-air readings; and an intervention is not
+recommended when evidence is outside the method's supported range. Keep those
+checks in the automated test suite.
+
+---
 
 ## Data sources & API keys
 
@@ -910,12 +824,10 @@ make test        # pytest — current suite
 make lint        # ruff + tsc
 ```
 
-The suite pins the claims that would silently corrupt an enforcement order —
-or a national bulletin — if they broke: the CPCB AQI conversion band-edge by
+The suite checks critical calculations and data-handling rules, including: the CPCB AQI conversion band-edge by
 band-edge; the Gaussian plume against its closed form and mass conservation;
 the ROI ranking's monotonicity and its refusal to recommend an upwind source;
-every advisory in all three languages never telling a citizen to go outside in
-severe air; the HCHO hotspot detector's robustness to a collapsed-variance
+the HCHO hotspot detector's robustness to a collapsed-variance
 cell; the spatial distance math's `cos(latitude)` correction; the citizen
 corroboration logic never claiming "no fire" when fires are actually present;
 and the CNN-LSTM's
@@ -946,7 +858,7 @@ the live instance.
 
 ## Known limitations
 
-These limitations define the current Pune study and must be reported alongside results.
+These limitations define the Pune study and must be reported alongside results.
 
 | # | Limitation | Implication for Aeris Pune |
 |---|---|---|
