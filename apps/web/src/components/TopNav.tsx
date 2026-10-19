@@ -101,7 +101,6 @@ function CitySwitcher({ cities }: { cities: City[] }) {
 
 export function TopNav({
   cities,
-  statuses,
   loading,
 }: {
   cities: City[];
