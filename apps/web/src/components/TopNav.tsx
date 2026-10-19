@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 
 import { cn } from "@/lib/cn";
-import type { City, DataStatus } from "@/lib/types";
+import type { City } from "@/lib/types";
 import { useCommandStore } from "@/store/useCommandStore";
 import { ClockControl } from "./ClockControl";
 
@@ -104,7 +104,6 @@ export function TopNav({
   loading,
 }: {
   cities: City[];
-  statuses?: DataStatus[];
   loading: boolean;
 }) {
   const pathname = usePathname();
