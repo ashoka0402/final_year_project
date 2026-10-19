@@ -9,11 +9,10 @@ import { cn } from "@/lib/cn";
 import type { City, DataStatus } from "@/lib/types";
 import { useCommandStore } from "@/store/useCommandStore";
 import { ClockControl } from "./ClockControl";
-import { DataPills } from "./DataPills";
 
 /**
  * Top nav (App Flow §1): Aeris ◆ [City switcher] | Command | Interventions |
- * Report | Methodology + data pills.
+ * Methodology.
  *
  * Routes for phases not yet built are rendered disabled with their phase noted,
  * rather than as dead links — the demo path stays obvious.
@@ -21,7 +20,6 @@ import { DataPills } from "./DataPills";
 const NAV = [
   { label: "Command", href: "/", enabled: true },
   { label: "Interventions", href: "/interventions", enabled: true },
-  { label: "Report", href: "/report", enabled: true },
   { label: "Methodology", href: "/methodology", enabled: true },
 ];
 
@@ -167,18 +165,9 @@ export function TopNav({
               </span>
             ),
           )}
-          {/* Public surface — a separate URL, linked quietly rather than in the
-              commissioner nav proper (App Flow §1). */}
-          <a
-            href="/citizen"
-            className="ml-1 hidden rounded-md px-2.5 py-1.5 text-xs font-medium text-slate-500 transition-colors hover:bg-surface-2 hover:text-slate-300 xl:block"
-          >
-            Citizen ↗
-          </a>
         </nav>
       </div>
 
-      <DataPills statuses={statuses} loading={loading} />
     </header>
   );
 }
