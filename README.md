@@ -1,18 +1,18 @@
 <div align="center">
 
-# Aeris — Pune Airshed Intelligence
+# Aeris — Pune & Delhi Air-Quality Intelligence
 
-**Aeris turns Pune air-quality data into ward-level intelligence, forecasts, source attribution, and evidence-led interventions.**
+**Aeris turns air-quality data for Pune and Delhi into ward-level intelligence, forecasts, source attribution, and evidence-led interventions.**
 
-*Aeris — a Pune air-quality intelligence platform.*
+*Aeris — a two-city air-quality intelligence platform for Pune and Delhi.*
 
-[![Scope](https://img.shields.io/badge/scope-Pune-16A34A?style=for-the-badge)](#study-area)
+[![Scope](https://img.shields.io/badge/scope-Pune%20%26%20Delhi-16A34A?style=for-the-badge)](#study-area)
 [![Tests](https://img.shields.io/badge/tests-324%2F324_passing-22C55E?style=for-the-badge)](#testing)
-[![Pune](https://img.shields.io/badge/study%20area-Pune-16A34A?style=for-the-badge)](#study-area)
+[![Pune and Delhi](https://img.shields.io/badge/study%20areas-Pune%20%26%20Delhi-16A34A?style=for-the-badge)](#study-area)
 [![Python](https://img.shields.io/badge/python-3.11%2B-3776AB?style=flat-square)](requirements.txt)
 [![Next.js](https://img.shields.io/badge/Next.js-16-000000?style=flat-square)](apps/web/package.json)
 
-**Pune study area** · **Ward-level analysis** · **Air-quality forecasting**
+**Pune + Delhi study areas** · **Ward-level analysis** · **Air-quality forecasting**
 
 
 
@@ -29,10 +29,10 @@
 
 | | | | | |
 |:--:|:--:|:--:|:--:|:--:|
-| **Pune** | **AQI** | **Forecast** | **Attribution** | **Interventions** |
-| Pune ward-level cells | satellite pollutant channels | ward-level spatial areas | real fire detections | dispatch-ready actions |
+| **Pune + Delhi** | **AQI** | **Forecast** | **Attribution** | **Interventions** |
+| City-specific ward cells | satellite pollutant channels | ward-level spatial analysis | fire detections where available | ranked interventions |
 
-*Only publish metrics reproduced using the current Pune data and test suite.*
+*Current model metrics in this project are from Delhi; Pune performance must not be claimed until verified Pune observations are evaluated.*
 
 </div>
 
@@ -73,9 +73,9 @@
 
 ---
 
-## Pune study area
+## Study areas: Pune and Delhi
 
-Aeris focuses on the Pune municipal study area. Pimpri-Chinchwad (PCMC) is outside the default boundary unless deliberately included as a separate study area. Ward-level results depend on the selected boundary dataset. Station readings are measurements; interpolated ward values and forecasts are estimates; generated fixtures are synthetic/demo data. Keep these categories visibly distinct.
+Aeris is designed for two study areas: Pune, Maharashtra, and Delhi. Each city must use its own boundary, station registry, data filters, and configuration; observations must never be silently substituted across cities. Pune-specific ground observations were not present in the training/evaluation dataset used for the current reported model metrics. The available LightGBM training/evaluation results are for Delhi only. Do not present those results as Pune validation. Ward-level outputs depend on the selected boundary dataset. Station readings are measurements; interpolated ward values and forecasts are estimates; generated fixtures are synthetic/demo data. Keep these categories visibly distinct.
 
 ## The problem
 
@@ -90,7 +90,7 @@ connected to those readings.
 | IITM's Pune DSS attributes sources — Pune, winter-only, resource-intensive | Not something a smaller city, or a different season, can run |
 | No system unifies evidence across data sources | Pollution signals are fragmented across feeds; no ward-level picture does |
 
-Aeris focuses these capabilities on Pune, combining city-level observations with spatial, satellite, and meteorological evidence where available.
+Aeris brings these capabilities to Pune and Delhi, combining city-level observations with spatial, satellite, and meteorological evidence where available. Source coverage and validation status must be stated separately for each city.
 
 ## What Aeris does
 
@@ -101,7 +101,7 @@ Aeris focuses these capabilities on Pune, combining city-level observations with
 
 **Decision loop**
 `READING → RESPONSIBLE SOURCE → RANKED INTERVENTION → ENFORCEMENT ORDER`,
-for Pune, on a laptop, subject to the availability of Pune-specific data.
+for the selected city, subject to the availability and provenance of city-specific data.
 
 **Dispatch-ready dossiers**
 A ranked intervention becomes a PDF with a map, an evidence table, a
@@ -109,11 +109,11 @@ regulation citation, a predicted impact and a sign-off block — not a chart.
 
 </td><td width="33%" valign="top">
 
-### 🛰️ Pune satellite intelligence
+### 🛰️ City-specific satellite intelligence
 
-**Pune spatial grid**
-Six pollutant channels (HCHO, NO₂, SO₂, CO, O₃, AOD) from two independent
-satellite sources, unified into one schema.
+**City-specific spatial grid**
+Six pollutant channels (HCHO, NO₂, SO₂, CO, O₃, AOD) from supported satellite
+sources, unified into one schema and filtered to the selected city where coverage allows.
 
 **HCHO hotspot detection**
 Robust per-cell anomaly scoring (median/MAD, not mean/std) against a 60-day
@@ -140,7 +140,7 @@ flowchart LR
 
 | Stop | What to look at | Why it matters |
 |---|---|---|
-| **1 · Command** | The ward choropleth and hazard-alert rail | Pune ward polygons, coloured using available observations or clearly labelled estimates |
+| **1 · Command** | The ward choropleth and hazard-alert rail | City-specific ward polygons, coloured using available observations or clearly labelled estimates |
 | **2 · Interventions** | Expand a candidate's rationale | Every ROI number cites *which* evidence it came from — click through to the source |
 | **3 · Pune spatial analysis** | Switch to the IGP spine, change the date | Coverage is shown next to every number — a cell the satellite couldn't see is never mistaken for a clean one |
 
@@ -153,7 +153,7 @@ flowchart LR
 
 | Screen | Route | What it shows |
 |---|---|---|
-| **Command Center** | `/` | Ward choropleth, stations, hazard alerts, trajectory/dispersion cone, KPIs, Pune view |
+| **Command Center** | `/` | Ward choropleth, stations, hazard alerts, trajectory/dispersion cone, KPIs, city view |
 | **Interventions** | `/interventions` | ROI-ranked leaderboard, expandable counterfactuals, one-click dispatch → dossier PDF, GRAP Autopilot card |
 | **Inspector** | `/inspector` | Mobile order list, evidence checklist, dossier download, mark-executed |
 | **Methodology** | `/methodology` | Backtest tables, formulas, and a limitations section written for a skeptical reviewer |
@@ -211,7 +211,7 @@ flowchart TB
     style ext fill:#231a2a,stroke:#8E75B2,color:#f3e8ff
 ```
 
-Aeris is intended to use a Pune-specific city configuration and Pune boundary/station datasets. Keep the implementation configuration-driven, and do not silently fall back to another city's data.
+Aeris uses city-specific configurations and boundary/station datasets for Pune and Delhi. Keep the implementation configuration-driven, and do not silently fall back to another city's data.
 
 ### Three decisions worth explaining
 
@@ -221,7 +221,7 @@ the same image — Next proxies `/api/v1` to a local FastAPI process on
 latency, and one `gcloud run deploy` instead of coordinating two.
 
 **DuckDB, not a managed database.** A single embedded file is columnar-fast
-enough to score Pune wards live and small enough to bake directly into the
+enough to score city wards live and small enough to bake directly into the
 container image. There is nothing to provision, nothing to point a connection
 string at, and no separate billing surface for a final-year project workload.
 
@@ -279,7 +279,7 @@ worst-pollutant-wins rule (`aqi_from_concentrations()`, line 193).
 
 **The bug this file exists to fix.** India's real-time feed (CPCB CAAQMS via
 data.gov.in) publishes **sub-indices**, not concentrations, despite field
-names like `avg_value` implying otherwise. Read naively, every Pune station
+names like `avg_value` implying otherwise. Read naively, a station
 reads *"AQI 500 Severe"* in monsoon. The giveaway is CO: a published value of
 ~52 is impossible as mg/m³ (severe poisoning) and impossible as µg/m³ (below
 ambient) — but exact as a *sub-index* of 52. `concentration_from_sub_index()`
@@ -303,8 +303,7 @@ as instantaneous.
 **Nine independent models**, not one. `QUANTILES = {p10: 0.1, p50: 0.5, p90: 0.9}`
 × `HORIZONS = (24, 48, 72)` — each an `LGBMRegressor` with fixed hyperparameters
 (`num_leaves=64, learning_rate=0.05, n_estimators=600` — "don't tune long,"
-per the code's own TRD reference), trained on Pune datasets pooled via a
-`city_code` feature.
+per the code's own TRD reference). The currently available training/evaluation results are Delhi-only; verified Pune observations are not present in that evaluation dataset.
 
 **The model predicts a residual, not a level.** The docstring cites a
 measured failure of the level-target version: it lost to plain persistence by
@@ -392,7 +391,7 @@ dispersion cone widens from a 15° half-angle at 0.4°/km, capped at 45°.
 **`SCALE` is calibrated, not fitted** (`calibrate.py`) — there is no per-ward
 ground truth to fit against, so the constants are iteratively adjusted (40
 damped iterations) until Aeris's mean per-category share across 60 sampled
-Pune wards lands inside the *published* IITM DSS / SAFAR winter reference
+the evaluated ward set lands inside the *published* IITM DSS / SAFAR winter reference
 attribution ranges, and `cross_check()` writes exactly where Aeris lands
 relative to those ranges to `docs/attribution_crosscheck.json` for anyone to
 audit.
@@ -511,12 +510,7 @@ of spatial embeddings with meteorological and historical features to estimate
 ground-level PM2.5. Training and scoring are performed separately from the
 web request path.
 
-**Pune evaluation status:** no metric should be presented as Pune performance
-unless it is reproduced using verified Pune ground observations, a documented
-time-based holdout, and a persistence baseline. Satellite coverage alone does
-not validate ground-level PM2.5 predictions. Until that evaluation is complete,
-treat this model as experimental and do not quote a Pune RMSE, MAE, or
-correlation score.
+**Evaluation status:** the current reported model metrics are for Delhi, not Pune. Pune-specific ground observations were not present in that evaluation dataset. No metric should be presented as Pune performance unless it is reproduced using verified Pune ground observations, a documented time-based holdout, and a persistence baseline. Satellite coverage alone does not validate ground-level PM2.5 predictions. Treat Pune model performance as unvalidated until that evaluation is complete.
 
 ---
 
@@ -527,13 +521,13 @@ geospatial context. Derived values must retain their provenance so that a
 forecast, interpolated ward estimate, reanalysis value, or generated fixture
 cannot be mistaken for a direct station measurement.
 
-| Dataset | Pune-specific handling | Provenance rule |
+| Dataset | Pune and Delhi handling | Provenance rule |
 |---|---|---|
-| Station measurements | Use CPCB/MPCB/OpenAQ records whose station coordinates and timestamps are verified for Pune | Store source, station ID, timestamp, pollutant, and units |
+| Station measurements | Use CPCB/MPCB/OpenAQ records whose station coordinates and timestamps are verified for the selected city | Store source, station ID, timestamp, pollutant, and units |
 | Weather | Join observations and forecasts by timestamp and location | Keep forecast weather distinct from observed weather |
-| Satellite grid | Clip supported products to the configured Pune study area and record product/version | Satellite column values are not ground-level AQI |
+| Satellite grid | Clip supported products to the selected city and record product/version | Satellite column values are not ground-level AQI |
 | Fire detections | Filter NASA FIRMS VIIRS observations to the relevant area and time window | A detection is evidence, not proof of a pollution source |
-| Ward boundaries | Use a documented Pune municipal boundary dataset | Record boundary version and ward identifiers |
+| Ward boundaries | Use a documented municipal boundary dataset for the selected city | Record boundary version and ward identifiers |
 | Forecast features | Build lags, rolling windows, calendar, weather, upwind, and fire features using data available at issue time | Prevent future-data leakage |
 | Derived AQI and ward values | Apply CPCB conversion and spatial interpolation rules | Mark estimates separately from direct measurements |
 | Synthetic fixtures | Use only for development and UI tests | Never include in real-world evaluation metrics |
@@ -575,8 +569,7 @@ live observations or silently replace measured values with reanalysis.
 
 ## Training and evaluation
 
-Do not copy model scores from an unrelated dataset into Pune project results.
-For each model, build a reproducible Pune dataset and report:
+Do not copy Delhi model scores into Pune results. Current reported metrics are based on Delhi data only; Pune-specific ground observations were not present in that evaluation dataset. For a Pune evaluation, build a reproducible local dataset and report:
 
 1. **Data provenance:** sources, station IDs, date range, missingness, and whether values are measured, reanalysis, interpolated, or synthetic.
 2. **Temporal split:** reserve a chronological holdout that is not used for fitting or feature selection.
@@ -599,20 +592,17 @@ The report must include generated metrics and baseline comparisons.
 
 ## Dataset and provenance
 
-Bundled records and evaluation artifacts must not be presented as verified
-Pune measurements unless their provenance confirms that they are Pune-specific.
-Regenerate Pune-specific datasets where provenance is incomplete, and document
-the time range, filtering rules, missing-data handling, and boundary version.
+The available model metrics in this README are from Delhi data only. Pune-specific ground observations were not present in that training/evaluation dataset, so Delhi metrics must not be described as Pune results. For both cities, verify the geographic provenance of bundled records before presenting them as measurements. Regenerate city-specific datasets where provenance is incomplete, and document the time range, filtering rules, missing-data handling, and boundary version.
 
-| Dataset component | Required Pune evidence |
+| Dataset component | Required evidence for the selected city |
 |---|---|
-| Ward boundaries | Source, version, ward IDs, and geometry validation |
-| Monitoring stations | Station IDs, coordinates, pollutant coverage, and active dates |
+| Ward boundaries | City, source, version, ward IDs, and geometry validation |
+| Monitoring stations | City, station IDs, coordinates, pollutant coverage, and active dates |
 | Ground observations | Source, units, timestamps, missingness, and duplicate handling |
 | Weather | Location, timestamp, observed/forecast distinction, and units |
 | Satellite/fire data | Product, acquisition time, spatial extent, and filtering method |
 | Training samples | Feature-generation version and temporal cutoff |
-| Forecast evaluation | Holdout dates, baseline, metrics, and coverage |
+| Forecast evaluation | City, holdout dates, baseline, metrics, and coverage |
 | Synthetic fixtures | Explicit demo label and exclusion from real-world metrics |
 
 ## Data-quality checks
@@ -627,18 +617,18 @@ checks in the automated test suite.
 
 ## Data sources & API keys
 
-The integrations below are available in the project, but **availability of a connector does not guarantee complete Pune coverage**. Check each source's station list, dates, spatial resolution, terms, and response schema. Any non-measured output must be labelled in the database, API, and UI.
+The integrations below are available in the project, but **availability of a connector does not guarantee complete coverage in either city**. Check each source's station list, dates, spatial resolution, terms, and response schema. Any non-measured output must be labelled in the database, API, and UI.
 
 | Layer | Source / approach | Key needed? |
 |---|---|---|
-| Pune ward boundaries | PMC / Pune GIS or a verified municipal boundary dataset | Depends on source |
+| Ward boundaries | Verified municipal boundary datasets for Pune and Delhi | Depends on source |
 | Current station observations | Official CPCB CAAQMS / data.gov.in first; OpenAQ v3 measured fallback | CPCB public demo key or own key; OpenAQ key for fallback |
 | Maharashtra monitoring data | MPCB published monitoring data where a stable machine-readable feed is available | Depends on access method |
 | Historical air quality | OpenAQ v3 where measured coverage exists; CAMS reanalysis only when measured history is unavailable | OpenAQ key for API |
 | Weather history + forecast | Open-Meteo; IMD data where available and licensed | Usually no for Open-Meteo |
-| Roads / industry / schools | OpenStreetMap (Overpass) filtered to Pune | No |
-| Satellite indicators | Sentinel-5P / other supported satellite products clipped to Pune | Some pipelines may require GEE credentials |
-| Fire detections | NASA FIRMS VIIRS filtered to Pune and chosen dates | FIRMS key for live API |
+| Roads / industry / schools | OpenStreetMap (Overpass) filtered to the selected city | No |
+| Satellite indicators | Sentinel-5P / other supported satellite products clipped to the selected city | Some pipelines may require GEE credentials |
+| Fire detections | NASA FIRMS VIIRS filtered to the selected city and chosen dates | FIRMS key for live API |
 | Google Gemini | Optional generated advisories, where configured | Google API key / Vertex configuration |
 | Synthetic/demo records | Generated locally for UI and pipeline testing | No |
 
@@ -696,9 +686,9 @@ Two non-obvious things the deploy scripts handle for you:
 | Measurement | ✅ | ✅ | ✅ | ✅ | ✅ |
 | Forecast | — | ✅ (4 cities) | ✅ | some | ✅ |
 | Source attribution | — | — | ✅ (Pune, winter) | — | ✅ |
-| **Pune-area satellite data** | — | — | — | — | ✅ (Pune extent; coverage depends on source) |
+| **City-filtered satellite data** | — | — | — | — | ✅ (selected city extent; coverage depends on source) |
 | **Surface AQI from satellite alone** | — | — | — | — | ✅ (CNN-LSTM) |
-| **Federated Pune ward-level summaries** | — | — | — | — | ✅ (Pune ward-level outputs) |
+| **Ward-level summaries** | — | — | — | — | ✅ (city-specific outputs where data is available) |
 | **Ranked intervention** | — | — | — | — | ✅ |
 | **Dispatch-ready order** | — | — | — | — | ✅ |
 | Runs on a laptop, any city | — | — | supercomputer | — | ✅ (1 config file) |
@@ -754,8 +744,8 @@ cp .env.example .env      # every key is optional; the app runs with none
 ### 2 · Seed real data and train the forecaster
 
 ```bash
-make seed        # Pune ward boundaries, station metadata, available AQ history, weather →
-                  # DuckDB, trains/scores only when suitable Pune training data is available, and seeds labelled demo records
+make seed        # city ward boundaries, station metadata, available AQ history, weather →
+                  # DuckDB, trains/scores only when suitable city-specific training data is available, and seeds labelled demo records
 ```
 
 ### 3 · Run locally
@@ -792,7 +782,7 @@ Full reference in [`.env.example`](.env.example). The short version:
 | `OPENAQ_API_KEY` | — | Enables OpenAQ v3 as the measured secondary source when official current data is unavailable; also supplies measured history when OpenAQ is the active station registry |
 | `FIRMS_API_KEY` | — | Live NASA FIRMS fire detections (else a bundled 7-day CSV) |
 | `GOOGLE_API_KEY` | — | Optional Gemini-powered advisory generation |
-| `GEE_SERVICE_ACCOUNT_JSON` | — | Path to a GCP service-account key — enables GEE-based satellite ingestion for the configured Pune area |
+| `GEE_SERVICE_ACCOUNT_JSON` | — | Path to a GCP service-account key — enables GEE-based satellite ingestion for the configured city area |
 | `NEXT_PUBLIC_MAPPLS_KEY` | — | Official India-boundary basemap (Mappls/MapmyIndia); falls back to Carto + Esri |
 
 **Never commit real keys.** `.env` and `secrets/` are gitignored; the deploy
@@ -860,27 +850,27 @@ These limitations define the Pune study and must be reported alongside results.
 
 | # | Limitation | Implication for Aeris Pune |
 |---|---|---|
-| 1 | **Pune model performance is not established by legacy metrics** | Metrics are only valid for Pune if produced from verified Pune observations under a documented holdout protocol. Train/evaluate on Pune data and report the holdout period and baseline. |
-| 2 | **Coverage is not the same as validation** | Satellite products may cover Pune, but ground-truth station observations may be sparse or unevenly distributed. State the coverage and uncertainty for each ward. |
+| 1 | **Pune model performance is not established by Delhi metrics** | The available reported metrics are Delhi-only. Evaluate Pune separately using verified Pune observations, a documented holdout protocol, and a baseline. |
+| 2 | **Coverage is not the same as validation** | Satellite products may cover either city, but ground-truth station observations may be sparse or unevenly distributed. State the coverage and uncertainty for each ward. |
 | 3 | **Live ingestion depends on source access** | Test CPCB/MPCB endpoints from the actual runtime environment. If access fails, show the data as unavailable or use clearly labelled cached/demo data. |
 | 4 | **Ward-level values may be estimates** | IDW or other spatial interpolation can fill map gaps, but cannot create ground truth. Mark estimated areas and confidence. |
-| 5 | **Satellite products have limits** | Cloud cover, revisit frequency, pixel size, and product latency can affect Pune-area analysis. A satellite signal is not automatically a surface AQI measurement. |
+| 5 | **Satellite products have limits** | Cloud cover, revisit frequency, pixel size, and product latency can affect city-area analysis. A satellite signal is not automatically a surface AQI measurement. |
 | 6 | **Attribution is evidence-based, not definitive** | Source shares depend on assumptions, inventories, meteorology, and calibration. Present uncertainty and avoid claiming causal certainty without validation. |
 | 7 | **Intervention impact requires evaluation** | A predicted impact is an estimate. Use a suitable comparison period/control and report uncertainty before making effectiveness claims. |
-| 8 | **Geographic provenance must be enforced** | Configuration, bundled records, and UI layers must be checked to ensure that only Pune data is presented as Pune data. |
+| 8 | **Geographic provenance must be enforced** | Configuration, bundled records, and UI layers must be checked to ensure that only city-verified data is presented under the correct city. |
 
 ## Roadmap
 
 | Priority | Item |
 |---|---|
-| 1 | Add and validate Pune Municipal Corporation boundary and ward IDs |
-| 2 | Build a Pune station registry and ingest available CPCB/MPCB observations |
-| 3 | Add Pune weather history and forecast features |
-| 4 | Filter satellite products, fire detections, roads, and land-use context to Pune |
-| 5 | Train or recalibrate forecasting models on Pune data; evaluate against a baseline |
-| 6 | Calibrate source attribution using Pune-specific inventory and evidence |
-| 7 | Replace city-specific intervention rules with applicable Maharashtra/Pune context |
-| 8 | Add provenance labels and tests preventing Pune/other-city data from appearing as Pune observations |
+| 1 | Validate municipal boundaries and ward IDs for Pune and Delhi |
+| 2 | Build and validate city-specific station registries and ingest available CPCB/MPCB observations |
+| 3 | Validate weather history and forecast features separately for Pune and Delhi |
+| 4 | Filter satellite products, fire detections, roads, and land-use context by selected city |
+| 5 | Collect verified Pune ground observations, then train/evaluate Pune models separately against baselines |
+| 6 | Calibrate source attribution using city-specific inventories and evidence |
+| 7 | Replace city-specific intervention rules with applicable Maharashtra/Pune and Delhi context |
+| 8 | Add provenance labels and tests preventing observations from one city appearing under the other city's label |
 
 
 ## Air-quality source priority
@@ -891,9 +881,9 @@ For current measured observations, Aeris follows an explicit provenance hierarch
 
 CPCB is the current official machine-readable path implemented in this repository. OpenAQ is used as a secondary measured source when the official current feed is unavailable. For historical training data, the available measured archive is preferred; CAMS/Open-Meteo reanalysis is used only when measured history cannot be fetched. Modeled/reanalysis values are never labelled as station measurements.
 
-## Pune data provenance
+## Data provenance for Pune and Delhi
 
-Use CPCB/MPCB station observations and Pune-specific weather and boundary data where available. Use OpenStreetMap for roads and land-use context, NASA FIRMS for fire detections, and satellite products only where their spatial/temporal coverage supports the analysis. Any ward-level interpolation, forecast, source contribution, or intervention impact is an estimate—not a direct measurement. Label synthetic/demo data clearly.
+Use CPCB/MPCB station observations and city-specific weather and boundary data where available. Use OpenStreetMap for roads and land-use context, NASA FIRMS for fire detections, and satellite products only where their spatial/temporal coverage supports the analysis. Any ward-level interpolation, forecast, source contribution, or intervention impact is an estimate—not a direct measurement. Label synthetic/demo data clearly.
 
 ## License
 
