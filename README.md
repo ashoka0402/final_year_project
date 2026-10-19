@@ -8,7 +8,6 @@
 
 [![Scope](https://img.shields.io/badge/scope-Delhi%20%26%20Pune-16A34A?style=for-the-badge)](#study-area)
 [![Tests](https://img.shields.io/badge/tests-324%2F324_passing-22C55E?style=for-the-badge)](#testing)
-[![Google AI](https://img.shields.io/badge/Google_AI-Gemini-8E75B2?style=for-the-badge)](#7--citizen-photograph--gemini-vision--corroboration)
 [![Delhi & Pune](https://img.shields.io/badge/study%20area-Pune-16A34A?style=for-the-badge)](#study-area)
 [![Python](https://img.shields.io/badge/python-3.11%2B-3776AB?style=flat-square)](requirements.txt)
 [![Next.js](https://img.shields.io/badge/Next.js-16-000000?style=flat-square)](apps/web/package.json)
@@ -54,7 +53,6 @@
   - [4 · Ranked interventions](#4--ranked-interventions--roi--gaussian-plume-counterfactual)
   - [5 · National satellite grid & HCHO hotspots](#5--national-satellite-grid--hcho-hotspot-detection)
   - [6 · Surface AQI from orbit](#6--surface-aqi-from-orbit--cnn-lstm)
-  - [7 · Citizen photo → Gemini](#7--citizen-photograph--gemini-vision--corroboration)
 - [The data pipeline](#the-data-pipeline)
 - [Model registry](#model-registry)
 - [Training and evaluation](#training-and-evaluation)
@@ -92,7 +90,6 @@ connected to those readings.
 | SAFAR forecasts, but only 4 cities | Everywhere else flies blind on tomorrow |
 | IITM's Pune DSS attributes sources — Delhi and Pune, winter-only, supercomputer-bound | Not something a smaller city, or a different season, can run |
 | No system unifies evidence across data sources | Pollution signals are fragmented across feeds; no ward-level picture does |
-| No system corroborates a citizen's own evidence | A photo report is either ignored or trusted blindly — never cross-checked |
 
 Aeris focuses these capabilities on Pune, combining city-level observations with spatial, satellite, and meteorological evidence where available.
 
@@ -127,22 +124,6 @@ baseline, cross-checked against real VIIRS fire counts.
 A CNN-LSTM predicts ground-level PM2.5 from satellite inputs — evaluated
 honestly, including where it does *not* beat its own baseline.
 
-</td><td width="33%" valign="top">
-
-### 🤝 Citizen + Google AI
-
-**Gemini Vision**
-Reads a citizen's pollution photo into a structured observation — haze
-severity, likely source, confidence — never a guessed numeric AQI.
-
-**Independent-evidence corroboration**
-A citizen's claim is trusted only when real satellite/fire data in the same
-cell/day backs it up — never by reporter reputation.
-
-**Delhi and Pune ward-level summaries**
-Delhi and Pune wards and surrounding airshed, each with a versioned,
-self-describing daily bulletin any service can consume over plain HTTP.
-
 </td></tr>
 </table>
 
@@ -155,7 +136,7 @@ the [live application](http://localhost:3000):
 
 ```mermaid
 flowchart LR
-    C["1. Command"] --> I["2. Interventions"] --> R["3. Ward-level spatial analysis"] --> P["4. Report"]
+    C["1. Command"] --> I["2. Interventions"] --> R["3. Ward-level spatial analysis"]
 ```
 
 | Stop | What to look at | Why it matters |
@@ -163,7 +144,6 @@ flowchart LR
 | **1 · Command** | The ward choropleth and hazard-alert rail | Delhi and Pune ward polygons, coloured using available observations or clearly labelled estimates |
 | **2 · Interventions** | Expand a candidate's rationale | Every ROI number cites *which* evidence it came from — click through to the source |
 | **3 · Delhi & Pune spatial analysis** | Switch to the IGP spine, change the date | Coverage is shown next to every number — a cell the satellite couldn't see is never mistaken for a clean one |
-| **4 · Report** | Submit a photo, or read `/api/v1/citizen/reports` | The corroboration verdict names the real HCHO z-score or fire count behind it |
 
 > **The one thing to click:** an evidence link on the Interventions page. Everything
 > else is a number — that link is the proof behind it.
@@ -177,10 +157,7 @@ flowchart LR
 | **Command Center** | `/` | Ward choropleth, stations, hazard alerts, trajectory/dispersion cone, KPIs, Delhi and Pune view |
 | **Interventions** | `/interventions` | ROI-ranked leaderboard, expandable counterfactuals, one-click dispatch → dossier PDF, GRAP Autopilot card |
 | **Inspector** | `/inspector` | Mobile order list, evidence checklist, dossier download, mark-executed |
-| **Citizen report** | `/report` | Submit a pollution photo or sensor reading; Gemini + satellite/fire cross-check it |
-| **Public Citizen view** | `/citizen` | Public AQI + clean-hours + health advisories in **English, हिंदी, ਪੰਜਾਬੀ** |
 | **Methodology** | `/methodology` | Backtest tables, formulas, and a limitations section written for a skeptical judge |
-| **Agent Activity drawer** | everywhere | Streams every automated decision with its reasoning and confidence (SSE) |
 
 ---
 
@@ -257,47 +234,6 @@ trains and scores **offline**, writing its predictions to `aqi_grid`. The live
 API never imports `torch` per request, so the deployed container's memory
 floor doesn't have to assume a ~800 MB dependency it only needs at training
 time.
-
----
-
-## Request lifecycle
-
-What actually happens between a citizen submitting a pollution photo and the
-report appearing, corroborated, on `/api/v1/citizen/reports`:
-
-```mermaid
-sequenceDiagram
-    autonumber
-    participant C as Citizen
-    participant W as Next.js (apps/web)
-    participant A as FastAPI (citizen_reports router)
-    participant G as Gemini client (google_ai)
-    participant X as crosscheck.py
-    participant DB as DuckDB
-
-    C->>W: uploads photo at /report
-    W->>A: POST /citizen/report/photo (multipart)
-    A->>G: generate_json(image + schema prompt, temperature=0)
-    Note over G: retries on 429/500/503, 3 attempts, 1s/3s backoff — maxOutputTokens floored at 800 since thinking tokens share the budget
-    G-->>A: is_outdoor, haze_severity, source_type, visible_smoke, confidence, reasoning
-    A->>A: _coerce() clamps to schema — bad enum or confidence never reaches callers
-    A->>DB: read satellite_grid HCHO z-score and fire_grid count for this cell/day
-    A->>X: corroborate(haze_rank, source_type, hcho_z, fire_count)
-    X->>X: 4-valued verdict — corroborated, unsupported, contradicted, or no_satellite_data
-    X-->>A: Corroboration(verdict, hcho_z, fire_count, detail)
-    A->>DB: persist report + observation + corroboration
-    A-->>W: report id + verdict + evidence detail
-    W-->>C: rendered verdict, in chosen language
-```
-
-Two things are deliberate here. First, `GeminiUnavailable` is raised, never
-swallowed into a guessed reading — `POST /citizen/report/photo` returns an
-honest "unavailable" when no `GOOGLE_API_KEY` is set, rather than fabricating
-an observation. Second, the corroboration verdict is **four-valued, not
-binary** (`vayu_core/citizen/crosscheck.py`): a satellite swath gap over the
-cell is recorded as `no_satellite_data`, never silently folded into
-"unsupported" or, worse, "contradicted" — a cloud gap is a statement about the
-satellite, not about the citizen.
 
 ---
 
@@ -600,63 +536,6 @@ this codebase already works that way). The random-day-interleaved validation
 split that got this model to R = 0.838 (up from **−0.51** with a naive
 trailing-days split) is documented in
 [Two bugs found by testing](#two-bugs-found-by-testing-not-by-reading).
-
----
-
-### 7 · Citizen photograph → Gemini Vision → corroboration
-
-**Endpoint** `POST /citizen/report/photo` · **Code** [`vayu_core/google_ai/vision.py`](vayu_core/google_ai/vision.py), [`client.py`](vayu_core/google_ai/client.py), [`citizen/crosscheck.py`](vayu_core/citizen/crosscheck.py)
-
-**What Gemini is asked, and explicitly refused.** A vision model cannot read
-micrograms-per-cubic-metre off a photograph, and the system prompt says so —
-`"You are NOT able to determine pollutant concentrations from an image and
-must never estimate one."` The schema instead captures what a photo genuinely
-supports: an ordinal `haze_severity` (`clear → severe`, judged from *distant*
-objects, not camera blur or dawn fog), a `source_type` from eight visible
-categories, and the model's own `confidence` — used to weight the reading, not
-to gate it outright. `is_outdoor=false` is preferred over a guess for
-indoor/unrelated photos.
-
-```json
-{
-  "is_outdoor": true,
-  "haze_severity": "severe",
-  "source_type": "crop_burning",
-  "visible_smoke": true,
-  "confidence": 0.87,
-  "reasoning": "..."
-}
-```
-
-`_coerce()` clamps every field to the schema before it reaches a caller — an
-out-of-enum class or a confidence of 1.5 (LLMs occasionally emit both) is
-normalised rather than propagated, so nothing downstream has to re-validate.
-An observation is only `usable` (`is_outdoor and confidence ≥ 0.35`) — kept in
-the audit trail either way, but excluded from anything that aggregates.
-
-**Corroboration is four-valued, not a trust score** (`crosscheck.py`):
-`corroborated`, `unsupported`, `contradicted`, `no_satellite_data` — because
-collapsing "the satellite had no valid pixel here" into "unsupported" would
-let a cloud gap look identical to weak evidence, and collapsing it into
-"contradicted" would let cloud cover look like a lying citizen. Only
-`corroborated` reports (`CORROBORATING_Z = 2.5`, the same threshold the
-hotspot detector uses, so the two layers cannot disagree by construction) are
-allowed to influence hotspot detection; a report is `contradicted` only when
-fire count is zero **and** the HCHO anomaly is genuinely normal (z < 0.5) —
-not merely absent.
-
-**Production hardening found by testing against the live API, not read from
-docs** (`google_ai/client.py`): retry-with-backoff on `429`/`500`/`503` (3
-attempts, 1s/3s backoff) with an immediate raise on `401`/`404`; a
-`maxOutputTokens` floor of **800**, discovered because Gemini 3.x's "thinking"
-tokens draw from the *same* budget as output — a trivial "reply OK" prompt was
-measured burning 86–106 tokens on thoughts alone, so a small requested budget
-silently returns an empty candidate with **no error**, which otherwise looks
-like a broken response body; and JSON recovery (`generate_json`) that strips
-` ```json ` fences or extracts the outermost bracket pair for replies wrapped
-in prose. `GOOGLE_API_KEY` unset raises `GeminiUnavailable` immediately rather
-than ever substituting a guessed reading — the one failure mode this project
-does not accept anywhere in the citizen pipeline.
 
 ---
 
