@@ -6,9 +6,9 @@
 
 *Aeris — a two-city air-quality intelligence platform for Pune and Delhi.*
 
-[![Scope](https://img.shields.io/badge/scope-Pune%20%26%20Delhi-16A34A?style=for-the-badge)](#study-area)
+[![Scope](https://img.shields.io/badge/scope-Pune%20%26%20Delhi-16A34A?style=for-the-badge)](#study-areas-pune-and-delhi)
 [![Tests](https://img.shields.io/badge/tests-324%2F324_passing-22C55E?style=for-the-badge)](#testing)
-[![Pune and Delhi](https://img.shields.io/badge/study%20areas-Pune%20%26%20Delhi-16A34A?style=for-the-badge)](#study-area)
+[![Pune and Delhi](https://img.shields.io/badge/study%20areas-Pune%20%26%20Delhi-16A34A?style=for-the-badge)](#study-areas-pune-and-delhi)
 [![Python](https://img.shields.io/badge/python-3.11%2B-3776AB?style=flat-square)](requirements.txt)
 [![Next.js](https://img.shields.io/badge/Next.js-16-000000?style=flat-square)](apps/web/package.json)
 
@@ -142,7 +142,7 @@ flowchart LR
 |---|---|---|
 | **1 · Command** | The ward choropleth and hazard-alert rail | City-specific ward polygons, coloured using available observations or clearly labelled estimates |
 | **2 · Interventions** | Expand a candidate's rationale | Every ROI number cites *which* evidence it came from — click through to the source |
-| **3 · Pune spatial analysis** | Switch to the IGP spine, change the date | Coverage is shown next to every number — a cell the satellite couldn't see is never mistaken for a clean one |
+| **3 · City spatial analysis** | Switch to the IGP spine, change the date | Coverage is shown next to every number — a cell the satellite couldn't see is never mistaken for a clean one |
 
 > **The one thing to click:** an evidence link on the Interventions page. Everything
 > else is a number — that link is the proof behind it.
@@ -176,7 +176,7 @@ flowchart TB
         subgraph core["core — the science, framework-agnostic"]
             FC["forecast/ — LightGBM quantile"]
             ATTR["attribution/ — evidence fusion, trajectory, ROI"]
-            NAT["national/ — CNN-LSTM, HCHO hotspots, Pune spatial areas"]
+            NAT["satellite analysis — CNN-LSTM, HCHO hotspots, city spatial areas"]
         end
         DB[("the embedded DuckDB database — embedded, single file")]
     end
@@ -446,7 +446,7 @@ Pango/Cairo dependency chain isn't available on a clean macOS without
 Homebrew, a documented deviation) contains: headline impact table, a
 schematic (not photographic) locator map with source pin, ward polygon, wind
 vector and scale bar, an evidence table, a regulation citation with an
-explicit *"abridged restatement — check against the applicable current Maharashtra/Pune order or guideline"*
+explicit *"abridged restatement — check against the applicable current Maharashtra/Pune or Delhi order or guideline"*
 warning, full data-source and method provenance, and a blank signature block —
 *"Aeris recommends; a human authorises."* Every page is watermarked
 **"PROTOTYPE — not an official document."**
@@ -721,7 +721,7 @@ Two non-obvious things the deploy scripts handle for you:
   scores offline, writing to `aqi_grid`; the live app never imports torch
   per request, so the deployed container's memory floor doesn't have to
   assume it.
-- **Gemini is an optional integration and is not required to use the core Pune monitoring and forecasting workflow.
+- **Gemini is an optional integration and is not required to use the core monitoring and forecasting workflow.
 
 ---
 
@@ -755,7 +755,7 @@ make dev          # API :8000 · web :3000
 ```
 
 Open **http://localhost:3000**. No API keys required, no signup — the app
-can run against bundled data, which must be checked and labelled according to its actual geographic provenance. Setting `GOOGLE_API_KEY` enables optional advisory generation; `GEE_SERVICE_ACCOUNT_JSON` enables the configured satellite ingestion where the corresponding services and Pune coverage are available.
+can run against bundled data, which must be checked and labelled according to its actual geographic provenance. Setting `GOOGLE_API_KEY` enables optional advisory generation; `GEE_SERVICE_ACCOUNT_JSON` enables the configured satellite ingestion where the corresponding services and selected-city coverage are available.
 
 ### 4 · (Optional) Train the CNN-LSTM
 
@@ -777,7 +777,7 @@ Full reference in [`.env.example`](.env.example). The short version:
 | Variable | Default | What it unlocks |
 |---|---|---|
 | `DEMO_MODE` | `true` | `true` = bundled data, clock pinned to `DEMO_NOW`, deterministic/rehearsable demo. `false` = live wall clock + a periodic live CPCB refresh for the ground-truth cities |
-| `DEMO_NOW` | configured value | The pinned demo time; any bundled snapshot must be labelled demo data, not a Pune measurement |
+| `DEMO_NOW` | configured value | The pinned demo time; any bundled snapshot must be labelled demo data, not a verified city measurement |
 | `DATA_GOV_IN_API_KEY` | *(public demo key)* | Your own data.gov.in rate limit for the CPCB CAAQMS feed |
 | `OPENAQ_API_KEY` | — | Enables OpenAQ v3 as the measured secondary source when official current data is unavailable; also supplies measured history when OpenAQ is the active station registry |
 | `FIRMS_API_KEY` | — | Live NASA FIRMS fire detections (else a bundled 7-day CSV) |
@@ -800,7 +800,7 @@ The repository is organized into these logical components:
 - **Air-quality core:** CPCB AQI conversion, geographic interpolation, forecast feature engineering, quantile forecasting, source-attribution scoring, trajectory analysis, hotspot detection, and intervention ranking.
 - **Data pipelines:** CPCB/OpenAQ observations, weather, road/land-use context, satellite products, and fire detections, with provenance-aware caching and fallbacks.
 - **Model training and evaluation:** offline LightGBM backtesting and optional CNN-LSTM training/scoring.
-- **Configuration and data:** Pune study-area boundaries, station metadata, source configuration, DuckDB storage, and data-provenance/evaluation documentation.
+- **Configuration and data:** Pune and Delhi study-area boundaries, station metadata, source configuration, DuckDB storage, and data-provenance/evaluation documentation.
 - **Deployment:** a multi-stage Docker build and startup scripts for the web application and API.
 
 This is a component overview rather than a literal filesystem listing. The active code and configuration remain the source of truth for exact paths and availability.
@@ -838,7 +838,7 @@ the live instance.
 | `forecast` | `GET /cities/{id}/forecast?h=24\|48\|72` |
 | `attribution` | `GET /cities/{id}/attribution/{ward_id}`, `GET /cities/{id}/trajectory/{ward_id}` |
 | `interventions` | `GET /cities/{id}/interventions?ward_id=`, `POST /interventions/dispatch`, `POST /interventions/{id}/execute`, `GET /interventions/{id}/dossier` |
-| Pune spatial outputs | use the configured Pune API routes |
+| City spatial outputs | use the configured city API routes |
 | `grap` | GRAP-stage autopilot + approval flow |
 | `audit` | `GET /audit` — SSE stream of every automated decision |
 
