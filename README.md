@@ -52,7 +52,7 @@
   - [3 · Source attribution](#3--source-attribution--multi-evidence-fusion)
   - [4 · Ranked interventions](#4--ranked-interventions--roi--gaussian-plume-counterfactual)
   - [5 · National satellite grid & HCHO hotspots](#5--national-satellite-grid--hcho-hotspot-detection)
-  - [6 · Surface AQI from orbit](#6--surface-aqi-from-orbit--cnn-lstm)
+  - [6 · Surface AQI from satellite inputs](#6--surface-aqi-from-satellite-inputs--cnn-lstm)
 - [The data pipeline](#the-data-pipeline)
 - [Model registry](#model-registry)
 - [Training and evaluation](#training-and-evaluation)
@@ -828,9 +828,7 @@ The suite checks critical calculations and data-handling rules, including: the C
 band-edge; the Gaussian plume against its closed form and mass conservation;
 the ROI ranking's monotonicity and its refusal to recommend an upwind source;
 the HCHO hotspot detector's robustness to a collapsed-variance
-cell; the spatial distance math's `cos(latitude)` correction; the citizen
-corroboration logic never claiming "no fire" when fires are actually present;
-and the CNN-LSTM's
+cell; the spatial distance math's `cos(latitude)` correction; and the CNN-LSTM's
 time-based train/holdout split never leaking future data backward.
 
 `pytest-timeout` is wired in as a dev dependency after the memory-blowup hang
