@@ -60,7 +60,7 @@ def main() -> int:
     # between source and deploy directly, not by reading this list and
     # assuming it was complete.
     for table in [
-        "satellite_grid", "fire_grid", "fires", "hcho_hotspots",
+        "satellite_grid", "fire_grid", "fires", "aqi_grid", "hcho_hotspots",
         "stations", "wards", "ward_roads", "permits", "attributions",
         "interventions", "verifications", "grap_drafts", "data_status",
         "citizen_reports",

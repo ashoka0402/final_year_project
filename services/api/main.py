@@ -18,7 +18,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from loguru import logger
 
-from vayu_core.config import get_settings, list_cities
+from vayu_core.config import get_settings
 
 from .routers import (
     attribution, audit, citizen, citizen_reports, cities, corridors, forecast, grap,
@@ -54,7 +54,7 @@ async def lifespan(_: FastAPI):
 
         from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
-        live_cities = tuple(city.id for city in list_cities())
+        from vayu_core.national.surface_aqi import GROUND_TRUTH_CITIES
         from services.pipeline.live import refresh_live_measurements
 
         # AsyncIOScheduler runs jobs on its own thread-pool executor, not the
@@ -68,11 +68,11 @@ async def lifespan(_: FastAPI):
         scheduler = AsyncIOScheduler()
         scheduler.add_job(
             refresh_live_measurements, "interval",
-            minutes=LIVE_REFRESH_MINUTES, args=[live_cities], id="live_cpcb_refresh",
+            minutes=LIVE_REFRESH_MINUTES, args=[GROUND_TRUTH_CITIES], id="live_cpcb_refresh",
             next_run_time=dt.datetime.now(),
         )
         scheduler.start()
-        logger.info(f"live CPCB refresh scheduled every {LIVE_REFRESH_MINUTES} min for {live_cities}")
+        logger.info(f"live CPCB refresh scheduled every {LIVE_REFRESH_MINUTES} min for {GROUND_TRUTH_CITIES}")
 
     yield
 
