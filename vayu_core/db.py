@@ -178,14 +178,6 @@ CREATE TABLE IF NOT EXISTS citizen_reports(
   photo_path TEXT,                                 -- local blob path, not the image itself
   note TEXT);
 
--- Predicted surface AQI per grid cell — the CNN-LSTM's deliverable.
--- `model_ver` distinguishes the CNN-LSTM from the LightGBM baseline so both
--- can be stored and compared rather than one silently overwriting the other.
-CREATE TABLE IF NOT EXISTS aqi_grid(
-  region TEXT, grid_lat DOUBLE, grid_lon DOUBLE, date DATE,
-  model_ver TEXT,
-  pm25 DOUBLE, aqi INT, category TEXT,
-  PRIMARY KEY(region, grid_lat, grid_lon, date, model_ver));
 
 -- HCHO hotspots — the hotspot detector's deliverable. A hotspot is a cell whose HCHO
 -- stands out against its own climatology (z-score), optionally grouped into
