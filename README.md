@@ -7,7 +7,6 @@
 *Aeris — a two-city air-quality intelligence platform for Pune and Delhi.*
 
 [![Scope](https://img.shields.io/badge/scope-Pune%20%26%20Delhi-16A34A?style=for-the-badge)](#study-areas-pune-and-delhi)
-[![Tests](https://img.shields.io/badge/tests-324%2F324_passing-22C55E?style=for-the-badge)](#testing)
 [![Pune and Delhi](https://img.shields.io/badge/study%20areas-Pune%20%26%20Delhi-16A34A?style=for-the-badge)](#study-areas-pune-and-delhi)
 [![Python](https://img.shields.io/badge/python-3.11%2B-3776AB?style=flat-square)](requirements.txt)
 [![Next.js](https://img.shields.io/badge/Next.js-16-000000?style=flat-square)](apps/web/package.json)
