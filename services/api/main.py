@@ -54,8 +54,10 @@ async def lifespan(_: FastAPI):
 
         from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
-        from vayu_core.national.surface_aqi import GROUND_TRUTH_CITIES
+        from vayu_core.config import list_cities
         from services.pipeline.live import refresh_live_measurements
+
+        ground_truth_cities = tuple(city.id for city in list_cities())
 
         # AsyncIOScheduler runs jobs on its own thread-pool executor, not the
         # event loop — calling refresh_live_measurements() directly here
@@ -68,11 +70,11 @@ async def lifespan(_: FastAPI):
         scheduler = AsyncIOScheduler()
         scheduler.add_job(
             refresh_live_measurements, "interval",
-            minutes=LIVE_REFRESH_MINUTES, args=[GROUND_TRUTH_CITIES], id="live_cpcb_refresh",
+            minutes=LIVE_REFRESH_MINUTES, args=[ground_truth_cities], id="live_cpcb_refresh",
             next_run_time=dt.datetime.now(),
         )
         scheduler.start()
-        logger.info(f"live CPCB refresh scheduled every {LIVE_REFRESH_MINUTES} min for {GROUND_TRUTH_CITIES}")
+        logger.info(f"live CPCB refresh scheduled every {LIVE_REFRESH_MINUTES} min for {ground_truth_cities}")
 
     yield
 
