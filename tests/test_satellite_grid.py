@@ -1,4 +1,4 @@
-"""S5P L3 -> analysis-grid binning (surface-AQI + hotspot-detection input).
+"""S5P L3 -> analysis-grid binning (hotspot-detection input).
 
 Network-free: `to_grid` is pure array maths, so it is tested with synthetic
 rasters that make each property checkable by construction.
