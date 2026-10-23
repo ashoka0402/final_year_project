@@ -17,7 +17,7 @@
 
 
 `air-quality` · `environmental-monitoring` · `machine-learning` · `computer-vision` · `satellite-imagery`
-`google-gemini` · `google-earth-engine` · `sentinel-5p` · `lightgbm` · `pytorch` · `cnn-lstm` · `duckdb`
+`google-gemini` · `google-earth-engine` · `sentinel-5p` · `lightgbm` · `duckdb`
 `fastapi` · `nextjs` · `maplibre` · `google-cloud-run`
 `gaussian-plume` · `india` · `gov-data` · `enforcement` · `project`
 
@@ -52,7 +52,6 @@
   - [3 · Source attribution](#3--source-attribution--multi-evidence-fusion)
   - [4 · Ranked interventions](#4--ranked-interventions--roi--gaussian-plume-counterfactual)
   - [5 · National satellite grid & HCHO hotspots](#5--national-satellite-grid--hcho-hotspot-detection)
-  - [6 · Surface AQI from satellite inputs](#6--surface-aqi-from-satellite-inputs--cnn-lstm)
 - [The data pipeline](#the-data-pipeline)
 - [Model registry](#model-registry)
 - [Training and evaluation](#training-and-evaluation)
@@ -119,9 +118,8 @@ sources, unified into one schema and filtered to the selected city where coverag
 Robust per-cell anomaly scoring (median/MAD, not mean/std) against a 60-day
 baseline, cross-checked against real VIIRS fire counts.
 
-**Surface AQI from orbit alone**
-A CNN-LSTM predicts ground-level PM2.5 from satellite inputs — evaluated
-honestly, including where it does *not* beat its own baseline.
+**Coverage-aware satellite evidence**
+Satellite products support spatial analysis and hotspot detection; satellite signals are not treated as direct ground-level PM2.5 measurements.
 
 </td></tr>
 </table>
@@ -176,7 +174,7 @@ flowchart TB
         subgraph core["core — the science, framework-agnostic"]
             FC["forecast/ — LightGBM quantile"]
             ATTR["attribution/ — evidence fusion, trajectory, ROI"]
-            NAT["satellite analysis — CNN-LSTM, HCHO hotspots, city spatial areas"]
+            NAT["satellite analysis — HCHO hotspots, city spatial areas"]
         end
         DB[("the embedded DuckDB database — embedded, single file")]
     end
@@ -225,11 +223,7 @@ enough to score city wards live and small enough to bake directly into the
 container image. There is nothing to provision, nothing to point a connection
 string at, and no separate billing surface for a final-year project workload.
 
-**PyTorch stays out of the request path.** The CNN-LSTM (offline surface-AQI model module)
-trains and scores **offline**, writing its predictions to `aqi_grid`. The live
-API never imports `torch` per request, so the deployed container's memory
-floor doesn't have to assume a ~800 MB dependency it only needs at training
-time.
+**Offline model training stays separate from the API request path.** The live API serves forecasts from the LightGBM quantile models and reads precomputed data from DuckDB; it does not train models during requests.
 
 ---
 
@@ -247,7 +241,6 @@ flowchart LR
         I3["fire, NO2, OSM, trajectory"]
         I4["attributed clusters"]
         I6["satellite grid + fire_grid"]
-        I7["3x3 satellite patch, 5-day"]
     end
     subgraph engines["Engines"]
         E1["breakpoint inversion"]
@@ -255,7 +248,6 @@ flowchart LR
         E3["evidence fusion"]
         E4["ROI plus Gaussian plume"]
         E6["median MAD z-score"]
-        E7["CNN into LSTM"]
     end
     I1 --> E1 --> O1["real AQI, not sub-index"]
     I2 --> E2 --> O2["p10 p50 p90 at 24 48 72h"]
@@ -263,7 +255,6 @@ flowchart LR
     O3 --> E4
     I4 --> E4 --> O4["ranked orders plus dossier PDF"]
     I6 --> E6 --> O6["hotspot cells plus fire correlation"]
-    I7 --> E7 --> O7["predicted PM2.5"]
 
     style engines fill:#1a2332,stroke:#0ea5e9,color:#e0f2fe
 ```
@@ -502,18 +493,6 @@ epsilon to tune).
 
 ---
 
-### 6 · Surface AQI from satellite inputs — CNN-LSTM
-
-The CNN-LSTM is an **offline experimental model**, not a live API fallback.
-A CNN encodes a 3×3 satellite patch; an LSTM processes a multi-day sequence
-of spatial embeddings with meteorological and historical features to estimate
-ground-level PM2.5. Training and scoring are performed separately from the
-web request path.
-
-**Evaluation status:** the current reported model metrics are for Delhi, not Pune. Pune-specific ground observations were not present in that evaluation dataset. No metric should be presented as Pune performance unless it is reproduced using verified Pune ground observations, a documented time-based holdout, and a persistence baseline. Satellite coverage alone does not validate ground-level PM2.5 predictions. Treat Pune model performance as unvalidated until that evaluation is complete.
-
----
-
 ## The data pipeline
 
 Aeris combines measured observations with weather, satellite, fire, and
@@ -560,7 +539,6 @@ live observations or silently replace measured values with reanalysis.
 | Model/component | Method | Purpose | Pune evaluation status |
 |---|---|---|---|
 | Short-term forecaster | LightGBM quantile regression; p10/p50/p90 for 24/48/72-hour horizons | Estimate future PM2.5 and uncertainty | Report metrics only after a verified Pune holdout evaluation |
-| Surface-AQI estimator | Offline PyTorch CNN-LSTM | Experimental PM2.5 estimation from satellite and temporal inputs | Experimental; no Pune performance claim without local validation |
 | Source attribution | Evidence fusion across fires, satellite indicators, roads, and trajectories | Estimate plausible source contributions | Heuristic/evidence-based; not definitive causal proof |
 | Intervention ranking | Gaussian-plume counterfactual and impact ranking | Prioritize candidate actions | Predictions are estimates and require field validation |
 | HCHO hotspot detection | Per-cell median/MAD anomaly score and fire cross-check | Flag unusual satellite observations | Coverage and baseline must be reported for Pune |
@@ -582,7 +560,6 @@ Example commands, where the corresponding targets and dependencies are configure
 
 ```bash
 make backtest
-python -m scripts.train_surface_aqi
 ```
 
 A successful command is not, by itself, evidence of good model performance.
@@ -687,7 +664,6 @@ Two non-obvious things the deploy scripts handle for you:
 | Forecast | — | ✅ (4 cities) | ✅ | some | ✅ |
 | Source attribution | — | — | ✅ (Pune, winter) | — | ✅ |
 | **City-filtered satellite data** | — | — | — | — | ✅ (selected city extent; coverage depends on source) |
-| **Surface AQI from satellite alone** | — | — | — | — | ✅ (CNN-LSTM) |
 | **Ward-level summaries** | — | — | — | — | ✅ (city-specific outputs where data is available) |
 | **Ranked intervention** | — | — | — | — | ✅ |
 | **Dispatch-ready order** | — | — | — | — | ✅ |
@@ -701,7 +677,7 @@ Two non-obvious things the deploy scripts handle for you:
 |---|---|---|---|
 | Next.js 16 | FastAPI | DuckDB (embedded, no server) | Google Cloud Run |
 | React 19 | Pydantic v2 | LightGBM (quantile regression) | Single-container deploy |
-| TypeScript | Uvicorn | PyTorch (CNN-LSTM, offline-only) | Docker (multi-stage) |
+| TypeScript | Uvicorn | LightGBM quantile models | Docker (multi-stage) |
 | Tailwind CSS | RFC 7807 errors | scikit-learn | pytest + pytest-timeout |
 | MapLibre GL 5 | SSE audit stream | Google Gemini (`gemini-3.6-flash`) | ruff |
 | deck.gl | APScheduler | DLR Sentinel-5P STAC | GitHub |
@@ -717,10 +693,7 @@ Two non-obvious things the deploy scripts handle for you:
   data-driven styling with no version coupling between two GL renderers.
 - **DuckDB, one embedded file** — columnar OLAP fast enough to score 290
   wards live and small enough to bake straight into a container image.
-- **PyTorch kept out of the API's request path** — the CNN-LSTM trains and
-  scores offline, writing to `aqi_grid`; the live app never imports torch
-  per request, so the deployed container's memory floor doesn't have to
-  assume it.
+- **LightGBM training is offline** — model training and evaluation run as separate pipeline tasks; the API loads saved model artifacts and does not train during requests.
 - **Gemini is an optional integration and is not required to use the core monitoring and forecasting workflow.
 
 ---
@@ -757,19 +730,6 @@ make dev          # API :8000 · web :3000
 Open **http://localhost:3000**. No API keys required, no signup — the app
 can run against bundled data, which must be checked and labelled according to its actual geographic provenance. Setting `GOOGLE_API_KEY` enables optional advisory generation; `GEE_SERVICE_ACCOUNT_JSON` enables the configured satellite ingestion where the corresponding services and selected-city coverage are available.
 
-### 4 · (Optional) Train the CNN-LSTM
-
-A training/offline-scoring-only path, never imported by the live API —
-install PyTorch separately so the deployed container never carries its
-weight:
-
-```bash
-pip install torch --index-url https://download.pytorch.org/whl/cpu
-python -m scripts.train_surface_aqi
-```
-
----
-
 ## Environment variables
 
 Full reference in [`.env.example`](.env.example). The short version:
@@ -799,7 +759,7 @@ The repository is organized into these logical components:
 - **API service:** FastAPI endpoints for current conditions, ward boundaries, forecasts, attribution, interventions, audit events, and health/status checks.
 - **Air-quality core:** CPCB AQI conversion, geographic interpolation, forecast feature engineering, quantile forecasting, source-attribution scoring, trajectory analysis, hotspot detection, and intervention ranking.
 - **Data pipelines:** CPCB/OpenAQ observations, weather, road/land-use context, satellite products, and fire detections, with provenance-aware caching and fallbacks.
-- **Model training and evaluation:** offline LightGBM backtesting and optional CNN-LSTM training/scoring.
+- **Model training and evaluation:** offline LightGBM quantile-model training and chronological backtesting.
 - **Configuration and data:** Pune and Delhi study-area boundaries, station metadata, source configuration, DuckDB storage, and data-provenance/evaluation documentation.
 - **Deployment:** a multi-stage Docker build and startup scripts for the web application and API.
 
@@ -818,8 +778,7 @@ The suite checks critical calculations and data-handling rules, including: the C
 band-edge; the Gaussian plume against its closed form and mass conservation;
 the ROI ranking's monotonicity and its refusal to recommend an upwind source;
 the HCHO hotspot detector's robustness to a collapsed-variance
-cell; the spatial distance math's `cos(latitude)` correction; and the CNN-LSTM's
-time-based train/holdout split never leaking future data backward.
+cell; the spatial distance math's `cos(latitude)` correction; and chronological forecast evaluation checks.
 
 `pytest-timeout` is wired in as a dev dependency after the memory-blowup hang
 described [above](#two-bugs-found-by-testing-not-by-reading) — a future hang
